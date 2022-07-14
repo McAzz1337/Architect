@@ -10,7 +10,7 @@
 namespace archt {
 
 	const std::string GLShader::VS_EXT = ".vert";
-	const std::string GLShader::GS_EXT = ".geo";
+	const std::string GLShader::GS_EXT = ".geom";
 	const std::string GLShader::FS_EXT = ".frag";
 
 	GLShader::GLShader() {}

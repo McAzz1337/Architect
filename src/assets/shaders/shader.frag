@@ -7,6 +7,7 @@ in vec2 _uv;
 
 out vec4 color;
 
+
 void main() {
-	color = vec4((_normal.x + 0.5), (_normal.y + 0.5), _normal.z, 1.0);
+	color = vec4(gl_FragCoord.x / 1080.0, gl_FragCoord.y / 720.0, 0.0, 1.0);
 }

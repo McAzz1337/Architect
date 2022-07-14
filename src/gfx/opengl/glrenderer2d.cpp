@@ -1,6 +1,7 @@
 #include "glrenderer2d.h"
 #include "glinclude.h"
 
+#include "glrenderapi.h"
 
 namespace archt {
 
@@ -15,7 +16,6 @@ namespace archt {
 
 	bool GLRenderer2D::inScene = false;
 
-	int GLRenderer2D::clearMask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
 	VBO* GLRenderer2D::vbo = nullptr;
 	IBO* GLRenderer2D::ibo = nullptr;
 	GLVertexarray* GLRenderer2D::vao = nullptr;
@@ -24,6 +24,10 @@ namespace archt {
 
 	void GLRenderer2D::init() {
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+
+		GLRenderAPI::enable(GL_DEPTH_TEST);
+		GLRenderAPI::setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
 		glEnable(GL_DEPTH_TEST);
 		glFrontFace(GL_CW); 
@@ -96,7 +100,7 @@ namespace archt {
 
 
 	void GLRenderer2D::clear() {
-		glClear(clearMask);
+		glClear(GLRenderAPI::clearMask);
 	}
 
 	void GLRenderer2D::render() {

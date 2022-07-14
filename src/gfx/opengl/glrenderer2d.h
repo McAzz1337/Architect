@@ -19,7 +19,6 @@ namespace archt {
 
 
 		static bool inScene;
-		static int clearMask;
 		static VBO* vbo;
 		static IBO* ibo;
 		static GLVertexarray* vao;
