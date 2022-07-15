@@ -1,0 +1,27 @@
+#pragma once
+
+#include <string>
+
+namespace archt {
+
+	class GLTexture {
+
+		uint32_t id = 0;
+		int w = 0;
+		int h = 0;
+
+	public:
+		GLTexture();
+		GLTexture(const std::string& path);
+		~GLTexture();
+
+		void bind(uint32_t index) const;
+
+		static void createEmptyTexture(GLTexture* tex, int width, int height);
+		static void createTextureFromData(GLTexture* tex, const char* data, int width, int height);
+		static void flipImage(const unsigned char* src, int width, int height, int comp, unsigned char* dst);
+	};
+
+
+
+}

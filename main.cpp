@@ -45,6 +45,8 @@ int main() {
 
 		mesh.setVbo(verteces, vSize);
 		mesh.setIbo(indeces, iSize);
+		GLTexture* tex = new GLTexture("src/assets/img/test.png");
+		mesh.setTexture(tex);
 	}
 	
 
@@ -81,7 +83,7 @@ int main() {
 		GLRenderer2D::clear();
 		GLRenderer2D::beginScene(&cam);
 
-		GLRenderer2D::submit(mesh.getVBO(), mesh.getIBO());
+		GLRenderer2D::submit(&mesh);
 
 		glm::mat4 mvp = cam.getProjectionView() * model;
 		shader.setMat4("mvp", mvp);

@@ -139,10 +139,13 @@
     <ClCompile Include="src\gfx\opengl\glrenderapi.cpp" />
     <ClCompile Include="src\gfx\opengl\glrenderer2d.cpp" />
     <ClCompile Include="src\gfx\opengl\glshader.cpp" />
+    <ClCompile Include="src\gfx\opengl\gltexture.cpp" />
     <ClCompile Include="src\gfx\opengl\glvertexarray.cpp" />
     <ClCompile Include="src\gfx\opengl\glwindow.cpp" />
     <ClCompile Include="src\gfx\vertex.cpp" />
     <ClCompile Include="src\input\input.cpp" />
+    <ClCompile Include="src\stb\stb\stbi_image_write.c" />
+    <ClCompile Include="src\stb\stb\stb_image.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\fileio.h" />
@@ -154,10 +157,13 @@
     <ClInclude Include="src\gfx\opengl\glrenderapi.h" />
     <ClInclude Include="src\gfx\opengl\glrenderer2d.h" />
     <ClInclude Include="src\gfx\opengl\glshader.h" />
+    <ClInclude Include="src\gfx\opengl\gltexture.h" />
     <ClInclude Include="src\gfx\opengl\glvertexarray.h" />
     <ClInclude Include="src\gfx\opengl\glwindow.h" />
     <ClInclude Include="src\gfx\vertex.h" />
     <ClInclude Include="src\input\input.h" />
+    <ClInclude Include="src\stb\stb\stbi_image_write.h" />
+    <ClInclude Include="src\stb\stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\assets\shaders\shader.frag" />

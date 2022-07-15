@@ -19,6 +19,7 @@ namespace archt {
 	VBO* GLRenderer2D::vbo = nullptr;
 	IBO* GLRenderer2D::ibo = nullptr;
 	GLVertexarray* GLRenderer2D::vao = nullptr;
+	GLTexture* GLRenderer2D::texture = nullptr;
 
 	Camera* GLRenderer2D::cam = nullptr;
 
@@ -78,9 +79,14 @@ namespace archt {
 
 	}
 
-	void GLRenderer2D::submit(VBO* v, IBO* i) {
+	void GLRenderer2D::submit(GLMesh* mesh) {
 		if (!inScene)
 			return;
+
+		VBO* v = mesh->getVBO();
+		IBO* i = mesh->getIBO();
+		GLTexture* tex = mesh->getTexture();
+		texture = tex;
 
 		uint32_t vSize = v->getSize();
 		uint32_t iSize = i->getSize();
@@ -111,6 +117,7 @@ namespace archt {
 		ibo->upload(GL_DYNAMIC_DRAW);
 
 		vao->bind();
+		texture->bind(0);
 
 		glDrawElements(GL_TRIANGLES, currentIndex, GL_UNSIGNED_INT, nullptr);
 

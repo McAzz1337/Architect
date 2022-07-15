@@ -24,50 +24,14 @@ namespace archt {
 		int vid = 0;
 		int gid = 0;
 		int fid = 0;
-		
 		compileShader(vsrc, GL_VERTEX_SHADER, vid);
 		if (gsrc.length() > 0)
 			compileShader(gsrc, GL_GEOMETRY_SHADER, gid);
 		compileShader(fsrc, GL_FRAGMENT_SHADER, fid);
 
-		id = glCreateProgram();
-		glAttachShader(id, vid);
-		if (gid != 0)
-			glAttachShader(id, gid);
-		glAttachShader(id, fid);
+		createProgram(id, vid, gid, fid);
 
-		glLinkProgram(id);
-		int isLinked = 0;
-		glGetProgramiv(id, GL_LINK_STATUS, &isLinked);
-
-		if (isLinked == GL_FALSE) {
-			int maxLength = 0;
-			glGetProgramiv(id, GL_INFO_LOG_LENGTH, &maxLength);
-
-			// The maxLength includes the NULL character
-			char* infoLog = new char[maxLength];
-			int length = 0;
-			glGetProgramInfoLog(id, maxLength, &length, infoLog);
-
-			// We don't need the program anymore.
-			glDeleteProgram(id);
-			// Don't leak shaders either.
-			glDeleteShader(vid);
-			if (gid != 0) glDeleteShader(gid);
-			glDeleteShader(fid);
-
-			std::cout << "Shader link failure!" << std::endl;
-			std::cout << infoLog << std::endl;
-
-			__debugbreak();
-		}
-
-
-		glDeleteShader(vid);
-		if (gid > 0)
-			glDeleteShader(gid);
-		glDeleteShader(fid);
-
+		setUniform1f("tex", 0);
 	}
 
 
@@ -99,7 +63,29 @@ namespace archt {
 		return glGetUniformLocation(id, name);
 	}
 
+	void GLShader::setUniformfv(const char* name, float* uniform, int count) const {
+		int location = getLocation(name);
+		if (location > -1)
+			glUniform1fv(location, count, uniform);
+	}
 
+	void GLShader::setUniform1f(const char* name, float uniform) const {
+		int location = getLocation(name);
+		if (location > -1)
+			glUniform1f(location, uniform);
+	}
+
+	void GLShader::setUniform1i(const char* name, int uniform) const {
+		int location = getLocation(name);
+		if (location > -1)
+			glUniform1i(location, uniform);
+	}
+
+	void GLShader::setUniform1ui(const char* name, unsigned int uniform) const {
+		int location = getLocation(name);
+		if (location > -1)
+			glUniform1ui(location, uniform);
+	}
 	void GLShader::setMat4(const char* name, const glm::mat4& matrix) const {
 		int location = getLocation(name);
 		if (location > -1)

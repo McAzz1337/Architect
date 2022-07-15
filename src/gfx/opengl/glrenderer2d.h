@@ -1,5 +1,6 @@
 #pragma once
 
+#include "glmesh.h"
 #include "buffers.h"
 #include "glvertexarray.h"
 #include "camera.h"
@@ -23,7 +24,7 @@ namespace archt {
 		static IBO* ibo;
 		static GLVertexarray* vao;
 		static Camera* cam;
-
+		static GLTexture* texture;
 
 	public:
 		GLRenderer2D() = delete;
@@ -33,7 +34,7 @@ namespace archt {
 		static void beginScene(Camera* camera);
 		static void endScene();
 
-		static void submit(VBO* v, IBO* i);
+		static void submit(GLMesh* meh);
 
 		static void clear();
 		static void render();

@@ -9,20 +9,26 @@ namespace archt {
 
 	GLMesh::GLMesh(VBO* vbo, IBO* ibo) : vbo(vbo), ibo(ibo) {}
 
+	GLMesh::GLMesh(VBO* vbo, IBO* ibo, const std::string& texture) : vbo(vbo), ibo(ibo) {
+
+	}
+	
 	GLMesh::GLMesh(Vertex* verteces, uint32_t vSize, uint32_t* indeces, uint32_t iSize) {
 		vbo = new VBO(verteces, vSize);
 		ibo = new IBO(indeces, iSize);
 
 	}
 	
+
 	GLMesh::~GLMesh() {
 		if (vbo) delete vbo;
 		if (ibo) delete ibo;
+		if (tex) delete tex;
 	}
 
 	void GLMesh::setVbo(VBO* vbo) {
-		if (vbo) 
-			delete vbo;
+		if (this->vbo) 
+			delete this->vbo;
 
 		this->vbo = vbo;
 	}
@@ -35,8 +41,8 @@ namespace archt {
 	}
 
 	void GLMesh::setIbo(IBO* ibo) {
-		if (ibo)
-			delete ibo;
+		if (this->ibo)
+			delete this->ibo;
 
 		this->ibo = ibo;
 	}
@@ -46,6 +52,13 @@ namespace archt {
 			delete ibo;
 
 		ibo = new IBO(indeces, size);
+	}
+
+	void GLMesh::setTexture(GLTexture* tex) {
+		if (this->tex)
+			delete this->tex;
+
+		this->tex = tex;
 	}
 
 }

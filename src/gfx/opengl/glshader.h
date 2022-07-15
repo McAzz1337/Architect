@@ -30,6 +30,12 @@ namespace archt {
 	
 		int getLocation(const char* name) const;
 
+
+		void setUniformfv(const char* name, float* uniform, int count) const;
+		void setUniform1f(const char* name, float uniform) const;
+		void setUniform1i(const char* name, int uniform) const;
+		void setUniform1ui(const char* name, unsigned int uniform) const;
+
 		void setMat4(const char* name, const glm::mat4& matrix) const;
 
 
