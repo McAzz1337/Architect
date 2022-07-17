@@ -7,6 +7,9 @@
 
 #include <iostream>
 
+
+#include "glshaderconstants.h"
+
 namespace archt {
 
 	const std::string GLShader::VS_EXT = ".vert";
@@ -20,6 +23,12 @@ namespace archt {
 		readFile(path + VS_EXT, vsrc);
 		readFile(path + GS_EXT, gsrc);
 		readFile(path + FS_EXT, fsrc);
+
+		GLShaderConstants::modifySahderSource(vsrc);
+		if (gsrc.length() > 0)
+			GLShaderConstants::modifySahderSource(gsrc);
+		GLShaderConstants::modifySahderSource(fsrc);
+		//logShaderSource();
 
 		int vid = 0;
 		int gid = 0;

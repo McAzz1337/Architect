@@ -3,6 +3,8 @@
 
 #include "glrenderapi.h"
 
+#include "glshaderconstants.h"
+
 namespace archt {
 
 
@@ -37,6 +39,7 @@ namespace archt {
 			meshes.push_back(nullptr);
 		}
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextures);
+		GLShaderConstants::setConstant(GLShaderConstants::SUPPORTED_TEXTURES, &maxTextures);
 
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
@@ -45,7 +48,7 @@ namespace archt {
 		GLRenderAPI::setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		GLRenderAPI::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		glEnable(GL_DEPTH_TEST);
+		GLRenderAPI::enable(GL_CULL_FACE);
 		glFrontFace(GL_CW); 
 		glCullFace(GL_BACK);
 

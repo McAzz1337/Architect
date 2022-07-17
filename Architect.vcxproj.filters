@@ -60,6 +60,9 @@
     <ClCompile Include="src\stb\stb\stbi_image_write.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\gfx\opengl\glshaderconstants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\fileio.h">
@@ -108,6 +111,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\stb\stb\stbi_image_write.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gfx\opengl\glshaderconstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

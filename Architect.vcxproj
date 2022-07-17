@@ -139,6 +139,7 @@
     <ClCompile Include="src\gfx\opengl\glrenderapi.cpp" />
     <ClCompile Include="src\gfx\opengl\glrenderer2d.cpp" />
     <ClCompile Include="src\gfx\opengl\glshader.cpp" />
+    <ClCompile Include="src\gfx\opengl\glshaderconstants.cpp" />
     <ClCompile Include="src\gfx\opengl\gltexture.cpp" />
     <ClCompile Include="src\gfx\opengl\glvertexarray.cpp" />
     <ClCompile Include="src\gfx\opengl\glwindow.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="src\gfx\opengl\glrenderapi.h" />
     <ClInclude Include="src\gfx\opengl\glrenderer2d.h" />
     <ClInclude Include="src\gfx\opengl\glshader.h" />
+    <ClInclude Include="src\gfx\opengl\glshaderconstants.h" />
     <ClInclude Include="src\gfx\opengl\gltexture.h" />
     <ClInclude Include="src\gfx\opengl\glvertexarray.h" />
     <ClInclude Include="src\gfx\opengl\glwindow.h" />

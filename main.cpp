@@ -82,7 +82,13 @@ int main() {
 			printf("held s\n");
 		}
 
-	
+		if (Input::isPress(GLFW_KEY_A) || Input::isHeld(GLFW_KEY_A)) {
+			model = glm::rotate(model, (float) -(M_PI / 180.0f), {0.0f, 1.0f, 0.0f});
+		}
+		else if (Input::isPress(GLFW_KEY_D) || Input::isHeld(GLFW_KEY_D)) {
+			model = glm::rotate(model, (float) M_PI / 180.0f, { 0.0f, 1.0f, 0.0f });
+		}
+
 	
 		GLRenderer2D::clear();
 		GLRenderer2D::beginScene(&cam);

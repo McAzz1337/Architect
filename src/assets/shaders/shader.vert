@@ -10,7 +10,7 @@ uniform mat4 mvp;
 
 out vec3 _normal;
 out vec2 _uv;
-out unsigned int _texId;
+out flat unsigned int _texId;
 
 
 void main() {
