@@ -11,8 +11,12 @@ namespace archt {
 	const int GLRenderer2D::MAX_VERTECES = 4 * MAX_QUADS;
 	const int GLRenderer2D::MAX_INDECES = 6 * MAX_QUADS;
 
+	int GLRenderer2D::maxTextures;
+
 	uint32_t GLRenderer2D::currentVertex = 0;
 	uint32_t GLRenderer2D::currentIndex = 0;
+	uint32_t GLRenderer2D::currentTexture = 0;
+	uint32_t GLRenderer2D::currentMesh = 0;
 
 	bool GLRenderer2D::inScene = false;
 
@@ -21,43 +25,35 @@ namespace archt {
 	GLVertexarray* GLRenderer2D::vao = nullptr;
 	GLTexture* GLRenderer2D::texture = nullptr;
 
+	std::vector<GLMesh*> GLRenderer2D::meshes;
+
+
 	Camera* GLRenderer2D::cam = nullptr;
 
 	void GLRenderer2D::init() {
+
+		meshes.reserve(MAX_QUADS);
+		for (int i = 0; i < MAX_QUADS; i++) {
+			meshes.push_back(nullptr);
+		}
+		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextures);
+
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
 		GLRenderAPI::enable(GL_DEPTH_TEST);
+		GLRenderAPI::enable(GL_BLEND);
 		GLRenderAPI::setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+		GLRenderAPI::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glEnable(GL_DEPTH_TEST);
 		glFrontFace(GL_CW); 
 		glCullFace(GL_BACK);
 
 		Vertex* verteces = new Vertex[MAX_VERTECES];
-		for (int i = 0; i < MAX_VERTECES; i += 4) {
-			verteces[i].pos =		{ -0.5f,  0.5f, 0.0f };
-			verteces[i + 1].pos =	{ 0.5f,  0.5f, 0.0f };
-			verteces[i + 2].pos =	{ 0.5f,  -0.5f, 0.0f };
-			verteces[i + 3].pos =	{ -0.5f,  -0.5f, 0.0f };
-		}
-
 		vbo = new VBO(verteces, MAX_VERTECES);
 		vbo->allocateOnGPU();
 
 		uint32_t* indeces = new uint32_t[MAX_INDECES];
-		int j = 0;
-		for (int i = 0; i < MAX_INDECES; i += 6) {
-			indeces[i] =		j;
-			indeces[i + 1] =	j + 1;
-			indeces[i + 2] =	j + 2;
-			indeces[i + 3] =	j;
-			indeces[i + 1] =	j + 2;
-			indeces[i + 2] =	j + 3;
-
-			j += 4;
-		}
-		
 		ibo = new IBO(indeces, MAX_INDECES);
 		ibo->allocateOnGPU();
 
@@ -83,25 +79,8 @@ namespace archt {
 		if (!inScene)
 			return;
 
-		VBO* v = mesh->getVBO();
-		IBO* i = mesh->getIBO();
-		GLTexture* tex = mesh->getTexture();
-		texture = tex;
-
-		uint32_t vSize = v->getSize();
-		uint32_t iSize = i->getSize();
-
-
-		if (currentVertex + vSize >= MAX_VERTECES || currentIndex + iSize >= MAX_INDECES) {
-			render();
-			flush();
-		}
-
-		vbo->write(currentVertex, v->getData(), vSize);
-		ibo->write(currentIndex, i->getData(), iSize);
-
-		currentVertex += vSize;
-		currentIndex += iSize;
+		meshes[currentMesh] = mesh;
+		currentMesh++;
 	}
 
 
@@ -109,23 +88,65 @@ namespace archt {
 		glClear(GLRenderAPI::clearMask);
 	}
 
+	void GLRenderer2D::startBatch() {
+		float tint[4] = {
+			1.0f, 1.0f, 0.0f, 1.0f
+		};
+		meshes[0]->getShader()->bind();
+		meshes[0]->getShader()->setUniform4f("tint", tint);
+		for (int i = 0; i < currentMesh; i++) {
+
+			VBO* vb = meshes[i]->getVBO();
+			IBO* ib = meshes[i]->getIBO();
+
+			uint32_t vSize = vb->getSize();
+			uint32_t iSize = ib->getSize();
+
+			if (currentVertex + vSize >= MAX_VERTECES || 
+				currentIndex + iSize >= MAX_INDECES ||
+				currentTexture == maxTextures) {
+				draw();
+				flush();
+				endBatch();
+			}
+
+			vbo->write(currentVertex, vb->getData(), vSize);
+			ibo->write(currentIndex, ib->getData(), iSize);
+			meshes[i]->getTexture()->bind(currentTexture);
+
+			currentVertex += vSize;
+			currentIndex += iSize;
+			currentTexture++;
+		}
+
+		
+	}
+
+	void GLRenderer2D::endBatch() {
+		currentMesh = 0;
+	}
+
 	void GLRenderer2D::render() {
 		if (!inScene)
 			return;
 
+		startBatch();
+		draw();
+	}
+
+	void GLRenderer2D::draw() {
+		
 		vbo->upload(GL_DYNAMIC_DRAW);
 		ibo->upload(GL_DYNAMIC_DRAW);
-
 		vao->bind();
-		texture->bind(0);
 
 		glDrawElements(GL_TRIANGLES, currentIndex, GL_UNSIGNED_INT, nullptr);
-
 	}
 
 	void GLRenderer2D::flush() {
 		currentVertex = 0;
 		currentIndex = 0;
+		currentTexture = 0;
 	}
 
 

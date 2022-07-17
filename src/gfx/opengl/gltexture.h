@@ -18,7 +18,7 @@ namespace archt {
 		void bind(uint32_t index) const;
 
 		static void createEmptyTexture(GLTexture* tex, int width, int height);
-		static void createTextureFromData(GLTexture* tex, const char* data, int width, int height);
+		static void createTextureFromData(GLTexture* tex, const unsigned char* data, int width, int height);
 		static void flipImage(const unsigned char* src, int width, int height, int comp, unsigned char* dst);
 	};
 

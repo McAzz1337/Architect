@@ -2,6 +2,7 @@
 
 #include "buffers.h"
 #include "gltexture.h"
+#include "glshader.h"
 
 #include <string>
 
@@ -13,6 +14,7 @@ namespace archt {
 		VBO* vbo = nullptr;
 		IBO* ibo = nullptr;
 		GLTexture* tex = nullptr;
+		GLShader* shader = nullptr;
 
 	public:
 		GLMesh();
@@ -27,11 +29,13 @@ namespace archt {
 		void setIbo(IBO* ibo);
 		void setIbo(uint32_t* indeces, uint32_t size);
 		void setTexture(GLTexture* tex);
+		void setShader(GLShader* shader);
 
 
 		inline VBO* getVBO() const { return vbo; }
 		inline IBO* getIBO() const { return ibo; }
 		inline GLTexture* getTexture() const { return tex; }
+		inline GLShader* getShader() const { return shader; }
 
 	};
 

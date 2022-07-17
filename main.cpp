@@ -29,10 +29,10 @@ int main() {
 	{
 		uint32_t vSize = 4;
 		Vertex* verteces = new Vertex[vSize] {
-			Vertex({ -0.5f,  0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 1.0f }),
-			Vertex({  0.5f,  0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 1.0f }),
-			Vertex({  0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 0.0f }),
-			Vertex({ -0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 0.0f })
+			Vertex({ -0.5f,  0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 1.0f }, 0),
+			Vertex({  0.5f,  0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 1.0f }, 0),
+			Vertex({  0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 0.0f }, 0),
+			Vertex({ -0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 0.0f }, 0)
 		};
 	
 
@@ -45,13 +45,17 @@ int main() {
 
 		mesh.setVbo(verteces, vSize);
 		mesh.setIbo(indeces, iSize);
-		GLTexture* tex = new GLTexture("src/assets/img/test.png");
+		
+		
+		GLTexture* tex = new GLTexture("src/assets/img/item.png");
+	
+
 		mesh.setTexture(tex);
 	}
 	
 
 	GLShader shader("src/assets/shaders/shader");
-	shader.bind();
+	mesh.setShader(&shader);
 
 	glm::mat4 model = glm::mat4(1.0f);
 
@@ -86,6 +90,7 @@ int main() {
 		GLRenderer2D::submit(&mesh);
 
 		glm::mat4 mvp = cam.getProjectionView() * model;
+		shader.bind();
 		shader.setMat4("mvp", mvp);
 		GLRenderer2D::render();
 		GLRenderer2D::flush();

@@ -3,13 +3,19 @@
 
 in vec3 _normal;
 in vec2 _uv;
+in unsigned int _texId;
+
+uniform vec4 tint;
 
 uniform sampler2D tex;
 
-out vec4 color;
+
+out vec4 _out;
 
 
 void main() {
-	color = texture(tex, _uv);
-	//color = vec4(gl_FragCoord.x / 1080.0, gl_FragCoord.y / 720.0, 0.0, 1.0);
+	
+	vec4 color = texture(tex, _uv);
+	_out = color * tint;
+	//_out = texture(tex, _uv);
 }

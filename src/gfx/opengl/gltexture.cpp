@@ -1,6 +1,7 @@
 #include "gltexture.h"
 
 #include "glinclude.h"
+#include "gldebug.h"
 
 #include "../stb/stb/stb_image.h"
 
@@ -44,8 +45,8 @@ namespace archt {
 	}
 
 	void GLTexture::bind(uint32_t index) const {
-		glActiveTexture(GL_TEXTURE0 + index);
-		glBindTexture(GL_TEXTURE_2D, id);
+		CALL(glActiveTexture(GL_TEXTURE0 + index));
+		CALL(glBindTexture(GL_TEXTURE_2D, id));
 	}
 
 	void GLTexture::createEmptyTexture(GLTexture* tex, int width, int height) {
@@ -76,7 +77,7 @@ namespace archt {
 	}
 
 	
-	void GLTexture::createTextureFromData(GLTexture * tex, const char* data, int width, int height) {
+	void GLTexture::createTextureFromData(GLTexture * tex, const unsigned char* data, int width, int height) {
 		
 		tex->w = width;
 		tex->h = height;
@@ -96,11 +97,13 @@ namespace archt {
 	}
 
 	void GLTexture::flipImage(const unsigned char* src, int width, int height, int comp, unsigned char* dst) {
+		
+		width *= comp;
 
 		for (int y = 0; y < height; y++) {
-			int srcI = y * width * comp;
-			int dstI = width * comp * height - (y + 1) * width * comp;
-			memcpy_s(&dst[dstI], width * comp, &src[srcI], width * comp);
+			int srcI = y * width;
+			int dstI = width * height - (y + 1) * width;
+			memcpy_s(&dst[dstI], width, &src[srcI], width);
 		}
 		
 	}

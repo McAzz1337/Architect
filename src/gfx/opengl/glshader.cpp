@@ -69,6 +69,12 @@ namespace archt {
 			glUniform1fv(location, count, uniform);
 	}
 
+	void GLShader::setUniform4f(const char* name, float* uniform) const {
+		int location = getLocation(name);
+		if (location > -1)
+			glUniform4f(location, uniform[0], uniform[1], uniform[2], uniform[3]);
+	}
+
 	void GLShader::setUniform1f(const char* name, float uniform) const {
 		int location = getLocation(name);
 		if (location > -1)

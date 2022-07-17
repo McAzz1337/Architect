@@ -61,4 +61,8 @@ namespace archt {
 		this->tex = tex;
 	}
 
+	void GLMesh::setShader(GLShader* shader) {
+		this->shader = shader;
+	}
+
 }
