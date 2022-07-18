@@ -15,7 +15,7 @@ namespace archt {
 		GLTexture(const std::string& path);
 		~GLTexture();
 
-		void bind(uint32_t index) const;
+		void bind(int index) const;
 
 		static void createEmptyTexture(GLTexture* tex, int width, int height);
 		static void createTextureFromData(GLTexture* tex, const unsigned char* data, int width, int height);

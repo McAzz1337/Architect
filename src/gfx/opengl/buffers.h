@@ -20,8 +20,9 @@ namespace archt {
 		void write(uint32_t offset, Vertex* d, uint32_t size);
 		void upload(int mode) const;
 
+		void setTexId(float id);
 
-		void print() const;
+		void print(int end) const;
 
 		inline Vertex* getData() const { return data; }
 		inline int getSize() const { return size; }

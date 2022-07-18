@@ -44,9 +44,9 @@ namespace archt {
 			glDeleteTextures(1, &id);
 	}
 
-	void GLTexture::bind(uint32_t index) const {
+	void GLTexture::bind(int index) const {
 		CALL(glActiveTexture(GL_TEXTURE0 + index));
-		CALL(glBindTexture(GL_TEXTURE_2D, id));
+		CALL(glBindTextureUnit(index, id));
 	}
 
 	void GLTexture::createEmptyTexture(GLTexture* tex, int width, int height) {

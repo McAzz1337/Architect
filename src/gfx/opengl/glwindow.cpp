@@ -61,6 +61,8 @@ namespace archt {
 	GLWindow::~GLWindow() {
 		if (window)
 			glfwDestroyWindow(window);
+		
+		glfwTerminate();
 	}
 
 	void GLWindow::pollEvents() {

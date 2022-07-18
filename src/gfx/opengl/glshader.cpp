@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-
+#include "glrenderapi.h"
 #include "glshaderconstants.h"
 
 namespace archt {
@@ -24,10 +24,12 @@ namespace archt {
 		readFile(path + GS_EXT, gsrc);
 		readFile(path + FS_EXT, fsrc);
 
+		
 		GLShaderConstants::modifySahderSource(vsrc);
 		if (gsrc.length() > 0)
 			GLShaderConstants::modifySahderSource(gsrc);
 		GLShaderConstants::modifySahderSource(fsrc);
+		
 		//logShaderSource();
 
 		int vid = 0;
@@ -40,7 +42,16 @@ namespace archt {
 
 		createProgram(id, vid, gid, fid);
 
-		setUniform1f("tex", 0);
+		
+		
+		int maxTextures = GLRenderAPI::getMaxTextureCount();
+		int* texIndeces = new int[maxTextures];
+		for (int i = 0; i < maxTextures; i++)
+			texIndeces[i] = i;
+
+		setUniform1iv("tex", maxTextures, texIndeces);
+		delete[] texIndeces;
+
 	}
 
 
@@ -69,7 +80,11 @@ namespace archt {
 
 	int GLShader::getLocation(const char* name) const {
 		bind();
-		return glGetUniformLocation(id, name);
+		int location = glGetUniformLocation(id, name);
+		if (location == -1) {
+			printf("failed to retrieve uniform location of variable [%s] in shader [%s]\n", name, file.c_str());
+		}
+		return location;
 	}
 
 	void GLShader::setUniformfv(const char* name, float* uniform, int count) const {
@@ -96,11 +111,18 @@ namespace archt {
 			glUniform1i(location, uniform);
 	}
 
+	void GLShader::setUniform1iv(const char* name, int count, int* uniforms) const {
+		int location = getLocation(name);
+		if (location > -1)
+			glUniform1iv(location, count, uniforms);
+	}
+
 	void GLShader::setUniform1ui(const char* name, unsigned int uniform) const {
 		int location = getLocation(name);
 		if (location > -1)
 			glUniform1ui(location, uniform);
 	}
+	
 	void GLShader::setMat4(const char* name, const glm::mat4& matrix) const {
 		int location = getLocation(name);
 		if (location > -1)

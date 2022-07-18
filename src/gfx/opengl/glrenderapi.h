@@ -8,11 +8,19 @@ namespace archt {
 
 	class GLRenderAPI {
 
-
+		static std::string vendor;
+		static std::string version;
+		static int availableMemory;
 		static uint32_t clearMask;
+
+		static int maxTextures;
 
 	public:
 		GLRenderAPI() = delete;
+
+		static void init();
+		static void terminate();
+
 
 		static void enable(uint32_t feature);
 		static void disable(uint32_t feature);
@@ -25,6 +33,7 @@ namespace archt {
 
 		friend void GLRenderer2D::clear();
 
+		static int getMaxTextureCount();
 
 	};
 }

@@ -42,7 +42,7 @@ namespace archt {
 			this->size = offset + size;
 		}
 		else {
-			memcpy_s(&data[offset], size * sizeof(Vertex), d, size * sizeof(Vertex));
+			memcpy_s(data + offset, size * sizeof(Vertex), d, size * sizeof(Vertex));
 		}
 	}
 
@@ -55,12 +55,21 @@ namespace archt {
 		glGenBuffers(1, &id);
 	}
 
-	void VBO::print() const {
+	void VBO::print(int end) const {
 		printf("VBO data:\n");
+		for (int i = 0; i < end; i++) {
+			data[i].print();
+		}
+		printf("-------------------\n");
+	}
+
+	void VBO::setTexId(float id) {
 		for (int i = 0; i < size; i++) {
-			printf("not implemented!\n");
+			data[i].texId = id;
 		}
 	}
+
+
 
 
 

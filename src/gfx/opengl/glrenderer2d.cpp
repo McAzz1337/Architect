@@ -13,7 +13,6 @@ namespace archt {
 	const int GLRenderer2D::MAX_VERTECES = 4 * MAX_QUADS;
 	const int GLRenderer2D::MAX_INDECES = 6 * MAX_QUADS;
 
-	int GLRenderer2D::maxTextures;
 
 	uint32_t GLRenderer2D::currentVertex = 0;
 	uint32_t GLRenderer2D::currentIndex = 0;
@@ -38,8 +37,7 @@ namespace archt {
 		for (int i = 0; i < MAX_QUADS; i++) {
 			meshes.push_back(nullptr);
 		}
-		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextures);
-		GLShaderConstants::setConstant(GLShaderConstants::SUPPORTED_TEXTURES, &maxTextures);
+	
 
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
@@ -92,11 +90,11 @@ namespace archt {
 	}
 
 	void GLRenderer2D::startBatch() {
-		float tint[4] = {
-			1.0f, 1.0f, 0.0f, 1.0f
-		};
+		
+		static bool printed = false;
+
 		meshes[0]->getShader()->bind();
-		meshes[0]->getShader()->setUniform4f("tint", tint);
+		uint32_t maxTextures = GLRenderAPI::getMaxTextureCount();
 		for (int i = 0; i < currentMesh; i++) {
 
 			VBO* vb = meshes[i]->getVBO();
@@ -112,17 +110,27 @@ namespace archt {
 				flush();
 				endBatch();
 			}
+			
+			meshes[i]->getTexture()->bind(currentTexture);
+			vb->setTexId((float)currentTexture);
+			
+			if (!printed && currentTexture == 1) {
+				vb->print(vb->getSize());
+				printed = true;
+			}
 
 			vbo->write(currentVertex, vb->getData(), vSize);
 			ibo->write(currentIndex, ib->getData(), iSize);
-			meshes[i]->getTexture()->bind(currentTexture);
-
+			
 			currentVertex += vSize;
 			currentIndex += iSize;
 			currentTexture++;
 		}
 
-		
+		if (!printed) {
+			vbo->print(currentVertex);
+			printed = true;
+		}
 	}
 
 	void GLRenderer2D::endBatch() {
@@ -135,6 +143,7 @@ namespace archt {
 
 		startBatch();
 		draw();
+		endBatch();
 	}
 
 	void GLRenderer2D::draw() {

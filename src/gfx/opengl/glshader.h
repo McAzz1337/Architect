@@ -35,6 +35,7 @@ namespace archt {
 		void setUniform4f(const char* name, float* uniform) const;
 		void setUniform1f(const char* name, float uniform) const;
 		void setUniform1i(const char* name, int uniform) const;
+		void setUniform1iv(const char* name, int count, int* uniforms) const;
 		void setUniform1ui(const char* name, unsigned int uniform) const;
 
 		void setMat4(const char* name, const glm::mat4& matrix) const;

@@ -16,7 +16,6 @@ namespace archt {
 		const static int MAX_VERTECES;
 		const static int MAX_INDECES;
 
-		static int maxTextures;
 
 		static uint32_t currentVertex;
 		static uint32_t currentIndex;
