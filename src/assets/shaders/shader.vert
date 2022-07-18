@@ -16,7 +16,7 @@ out float _texId;
 
 void main() {
 
-	if (texId == 1) {
+	if (texId == 1.0) {
 		gl_Position = mvp2 * vec4(pos, 1.0);
 	}
 	else {

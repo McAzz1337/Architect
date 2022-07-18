@@ -43,8 +43,8 @@ namespace archt {
 
 		GLRenderAPI::enable(GL_DEPTH_TEST);
 		GLRenderAPI::enable(GL_BLEND);
-		GLRenderAPI::setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		GLRenderAPI::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		GLRenderAPI::setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		GLRenderAPI::enable(GL_CULL_FACE);
 		glFrontFace(GL_CW); 
@@ -120,7 +120,7 @@ namespace archt {
 			}
 
 			vbo->write(currentVertex, vb->getData(), vSize);
-			ibo->write(currentIndex, ib->getData(), iSize);
+			ibo->write(currentIndex, ib->getData(), iSize, currentVertex);
 			
 			currentVertex += vSize;
 			currentIndex += iSize;

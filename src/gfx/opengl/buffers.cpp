@@ -93,7 +93,7 @@ namespace archt {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
 	}
 
-	void IBO::write(uint32_t offset, uint32_t* d, uint32_t size) {
+	void IBO::write(uint32_t offset, uint32_t* d, uint32_t size, int vertexOffset) {
 		if (!data) {
 			data = new uint32_t[size];
 			memcpy_s(data, size * sizeof(uint32_t), d, size * sizeof(uint32_t));
@@ -110,6 +110,12 @@ namespace archt {
 		else {
 			memcpy_s(&data[offset], size * sizeof(uint32_t), d, size * sizeof(uint32_t));
 		}
+
+		if (vertexOffset > 0) {
+			for (int i = offset; i < offset + size; i++) {
+				data[i] += vertexOffset;
+			}
+		}
 	}
 
 	void IBO::upload(int mode) const {
@@ -123,11 +129,12 @@ namespace archt {
 
 
 
-	void IBO::print() const {
+	void IBO::print(int end) const {
 		printf("IBO data:\n");
-		for (int i = 0; i < size; i++) {
-			printf("%i,", data[i]);
+		for (int i = 0; i < end; i++) {
+			printf("%i ", data[i]);
 		}
+		printf("\n---------------------\n");
 	}
 
 

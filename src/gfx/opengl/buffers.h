@@ -45,10 +45,10 @@ namespace archt {
 
 		void allocateOnGPU();
 		void bind() const;
-		void write(uint32_t offset, uint32_t* d, uint32_t size);
+		void write(uint32_t offset, uint32_t* d, uint32_t size, int vertexOffset);
 		void upload(int mode) const;
 
-		void print() const;
+		void print(int end) const;
 
 
 		inline uint32_t* getData() const { return data; }
