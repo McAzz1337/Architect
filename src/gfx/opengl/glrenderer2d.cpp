@@ -91,7 +91,6 @@ namespace archt {
 
 	void GLRenderer2D::startBatch() {
 		
-		static bool printed = false;
 
 		meshes[0]->getShader()->bind();
 		uint32_t maxTextures = GLRenderAPI::getMaxTextureCount();
@@ -114,10 +113,6 @@ namespace archt {
 			meshes[i]->getTexture()->bind(currentTexture);
 			vb->setTexId((float)currentTexture);
 			
-			if (!printed && currentTexture == 1) {
-				vb->print(vb->getSize());
-				printed = true;
-			}
 
 			vbo->write(currentVertex, vb->getData(), vSize);
 			ibo->write(currentIndex, ib->getData(), iSize, currentVertex);
@@ -127,10 +122,6 @@ namespace archt {
 			currentTexture++;
 		}
 
-		if (!printed) {
-			vbo->print(currentVertex);
-			printed = true;
-		}
 	}
 
 	void GLRenderer2D::endBatch() {
