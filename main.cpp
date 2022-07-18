@@ -79,7 +79,7 @@ int main() {
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 model2 = glm::mat4(1.0f);
 
-	model = glm::translate(model, { -0.5f, 0.0f, 0.0f });
+	model = glm::translate(model, { -0.5005f, 0.0f, 0.0f });
 
 
 	while (true) {
