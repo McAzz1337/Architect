@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\fileio.cpp" />
+    <ClCompile Include="src\filesystem\filemanager.cpp" />
     <ClCompile Include="src\gfx\opengl\buffers.cpp" />
     <ClCompile Include="src\gfx\opengl\camera.cpp" />
     <ClCompile Include="src\gfx\opengl\glmesh.cpp" />
@@ -150,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\fileio.h" />
+    <ClInclude Include="src\filesystem\filemanager.h" />
     <ClInclude Include="src\gfx\opengl\buffers.h" />
     <ClInclude Include="src\gfx\opengl\camera.h" />
     <ClInclude Include="src\gfx\opengl\gldebug.h" />

@@ -11,7 +11,11 @@ namespace archt {
 	GLTexture::GLTexture() {
 	}
 
-	GLTexture::GLTexture(const std::string& path) {
+	GLTexture::GLTexture(const GLTexture& other) : id(other.id), w(other.w), h(other.h) {
+
+	}
+
+	GLTexture::GLTexture(const std::string& path) : file(path) {
 
 		int comp = 0;
 		unsigned char* data = nullptr;

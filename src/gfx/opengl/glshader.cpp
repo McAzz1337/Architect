@@ -18,8 +18,7 @@ namespace archt {
 
 	GLShader::GLShader() {}
 
-	GLShader::GLShader(const std::string& path) {
-		extractFileName(path, file);
+	GLShader::GLShader(const std::string& path) : file(path) {
 		readFile(path + VS_EXT, vsrc);
 		readFile(path + GS_EXT, gsrc);
 		readFile(path + FS_EXT, fsrc);
@@ -82,7 +81,9 @@ namespace archt {
 		bind();
 		int location = glGetUniformLocation(id, name);
 		if (location == -1) {
-			printf("failed to retrieve uniform location of variable [%s] in shader [%s]\n", name, file.c_str());
+			std::string fileName;
+			extractFileName(file, fileName);
+			printf("failed to retrieve uniform location of variable [%s] in shader [%s]\n", name, fileName.c_str());
 		}
 		return location;
 	}

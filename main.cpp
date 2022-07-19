@@ -11,6 +11,7 @@
 #include "src/input/input.h"
 
 #include "src/fileio.h"
+#include "src/filesystem/filemanager.h"
 
 #include <glm/gtx/transform.hpp>
 
@@ -20,6 +21,7 @@ int main() {
 
 	using namespace archt;
 	
+
 	GLWindow* window = GLRenderAPI::init();
 	GLRenderer2D::init();
 	Input::init();
@@ -62,8 +64,8 @@ int main() {
 		mesh2.setVbo(verteces2, vSize);
 		mesh2.setIbo(indeces2, iSize);
 		
-		GLTexture* tex = new GLTexture("src/assets/img/item.png");
-		GLTexture* tex2 = new GLTexture("src/assets/img/item2.png");
+		GLTexture* tex = (GLTexture*) FileManager::instance.loadFile("src/assets/img/item.png", FileManager::FileType::GL_TEXTURE_T);
+		GLTexture* tex2 = (GLTexture*) FileManager::instance.loadFile("src/assets/img/item2.png", FileManager::FileType::GL_TEXTURE_T);
 
 
 		mesh.setTexture(tex);
@@ -71,9 +73,9 @@ int main() {
 	}
 	
 
-	GLShader shader("src/assets/shaders/shader");
-	mesh.setShader(&shader);
-	mesh2.setShader(&shader);
+	GLShader* shader = (GLShader*) FileManager::instance.loadFile("src/assets/shaders/shader", FileManager::FileType::GL_SHADER_T);
+	mesh.setShader(shader);
+	mesh2.setShader(shader);
 
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 model2 = glm::mat4(1.0f);
@@ -115,9 +117,10 @@ int main() {
 		glm::mat4 mvp = cam.getProjectionView() * model;
 		glm::mat4 mvp2 = cam.getProjectionView() * model2;
 
-		shader.bind();
-		shader.setMat4("mvp", mvp);
-		shader.setMat4("mvp2", mvp2);
+		shader->bind();
+		shader->setMat4("mvp", mvp);
+		shader->setMat4("mvp2", mvp2);
+
 		GLRenderer2D::render();
 		GLRenderer2D::flush();
 		GLRenderer2D::endScene();
@@ -130,6 +133,7 @@ int main() {
 		}
 	}
 
+	FileManager::instance.deleteAllFiles();
 
 	return 0;
 }

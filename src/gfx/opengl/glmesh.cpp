@@ -1,5 +1,6 @@
 #include "glmesh.h"
 
+#include "../../filesystem/filemanager.h"
 
 namespace archt {
 
@@ -23,7 +24,7 @@ namespace archt {
 	GLMesh::~GLMesh() {
 		if (vbo) delete vbo;
 		if (ibo) delete ibo;
-		if (tex) delete tex;
+		FileManager::instance.deleteFile(tex->getFilePath(), FileManager::FileType::GL_TEXTURE_T);
 	}
 
 	void GLMesh::setVbo(VBO* vbo) {
