@@ -7,8 +7,6 @@
 
 namespace archt {
 
-
-
 	const int GLRenderer2D::MAX_QUADS = 1000;
 	const int GLRenderer2D::MAX_VERTECES = 4 * MAX_QUADS;
 	const int GLRenderer2D::MAX_INDECES = 6 * MAX_QUADS;

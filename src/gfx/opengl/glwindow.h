@@ -18,10 +18,13 @@ namespace archt {
 		GLWindow(const char* title, int x, int y, int w, int h);
 		~GLWindow();
 
+		void makeContextCurrent() const;
+
 		void pollEvents();
 		bool shouldClose();
 		void swapBuffer();
 
+		void setTitle(const char* name);
 
 	};
 }

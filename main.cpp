@@ -20,8 +20,7 @@ int main() {
 
 	using namespace archt;
 	
-	GLWindow window("Architect", 0, 0, 1080, 720);
-	GLRenderAPI::init();
+	GLWindow* window = GLRenderAPI::init();
 	GLRenderer2D::init();
 	Input::init();
 
@@ -84,7 +83,7 @@ int main() {
 
 	while (true) {
 
-		window.pollEvents();
+		window->pollEvents();
 		
 		if (Input::isPress(GLFW_KEY_W)) {
 			model = glm::translate(model, { 0.0f, 0.01f, 0.0f });
@@ -124,9 +123,9 @@ int main() {
 		GLRenderer2D::endScene();
 
 
-		window.swapBuffer();
+		window->swapBuffer();
 		
-		if (window.shouldClose()) {
+		if (window->shouldClose()) {
 			break;
 		}
 	}

@@ -36,23 +36,11 @@ namespace archt {
 	GLWindow::GLWindow(const char* title, int x, int y, int w, int h)
 		: title(title), x(x), y(y), w(w), h(h) {
 
-		if (glfwInit() != GLFW_TRUE) {
-			printf("Failed to initialize GLFW!\n");
-			__debugbreak();
-		}
-
+		
 		window = glfwCreateWindow(w, h, title, nullptr, nullptr);
 		glfwMakeContextCurrent(window);
 
-		if (glewInit() != GLEW_OK) {
-			printf("Failed to initialize GLEW!\n");
-			__debugbreak();
-		}
-
 		glfwSetKeyCallback(window, keyCallback);
-
-
-
 
 	}
 
@@ -64,6 +52,11 @@ namespace archt {
 		
 		glfwTerminate();
 	}
+
+	void GLWindow::makeContextCurrent() const {
+		glfwMakeContextCurrent(window);
+	}
+
 
 	void GLWindow::pollEvents() {
 		glfwPollEvents();
@@ -78,6 +71,9 @@ namespace archt {
 	}
 
 
+	void GLWindow::setTitle(const char* name) {
+		glfwSetWindowTitle(window, name);
+	}
 
 
 }

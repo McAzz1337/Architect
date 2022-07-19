@@ -11,18 +11,42 @@ namespace archt {
 	int GLRenderAPI::availableMemory = 0;
 	int GLRenderAPI::maxTextures = 32;
 
+	GLWindow* GLRenderAPI::window = nullptr;
+
 
 	uint32_t GLRenderAPI::clearMask = 0;
 
 
-	void GLRenderAPI::init() {
-		vendor = std::string((char*) glGetString(GL_VENDOR));
-		version = std::string((char*) glGetString(GL_VERSION));
-		
+	GLWindow* GLRenderAPI::init() {
+
+		if (glfwInit() != GLFW_TRUE) {
+			printf("Failed to initialize GLFW!\n");
+			__debugbreak();
+		}
+
+
+		window = new GLWindow("Architect", 0, 0, 1080, 720);
+
+		if (glewInit() != GLEW_OK) {
+			printf("Failed to initialize GLEW!\n");
+			__debugbreak();
+		}
+
 		glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &availableMemory);
 		
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextures);
 		GLShaderConstants::setConstant(GLShaderConstants::MAX_TEXTURES, &maxTextures);
+
+
+
+		vendor = std::string((char*) glGetString(GL_VENDOR));
+		version = std::string((char*) glGetString(GL_VERSION));
+
+		std::string title = "Architect | " + vendor + " | " + version;
+
+		window->setTitle(title.c_str());
+
+		return window;
 	}
 
 	void GLRenderAPI::terminate() {

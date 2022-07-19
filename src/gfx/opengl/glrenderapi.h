@@ -2,6 +2,7 @@
 #include <typeindex>
 
 #include "glrenderer2d.h"
+#include "glwindow.h"
 
 namespace archt {
 
@@ -13,12 +14,14 @@ namespace archt {
 		static int availableMemory;
 		static uint32_t clearMask;
 
+		static GLWindow* window;
+
 		static int maxTextures;
 
 	public:
 		GLRenderAPI() = delete;
 
-		static void init();
+		static GLWindow* init();
 		static void terminate();
 
 
