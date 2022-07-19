@@ -18,6 +18,6 @@ void main() {
 	highp int index = int(_texId);
 	vec4 color = texture(tex[index], _uv);
 	
-	_out = color;// * tint;
+	_out = color * tint;
 	//_out = vec4(_texId, _texId, _texId, 1.0);
 }

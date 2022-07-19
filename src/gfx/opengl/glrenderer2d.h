@@ -19,7 +19,7 @@ namespace archt {
 
 		static uint32_t currentVertex;
 		static uint32_t currentIndex;
-		static uint32_t currentTexture;
+		static int currentTexture;
 		static uint32_t currentMesh;
 
 		static bool inScene;
@@ -27,7 +27,6 @@ namespace archt {
 		static IBO* ibo;
 		static GLVertexarray* vao;
 		static Camera* cam;
-		static GLTexture* texture;
 		static std::vector<GLMesh*> meshes;
 
 	public:

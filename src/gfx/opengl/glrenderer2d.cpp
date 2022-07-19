@@ -14,7 +14,7 @@ namespace archt {
 
 	uint32_t GLRenderer2D::currentVertex = 0;
 	uint32_t GLRenderer2D::currentIndex = 0;
-	uint32_t GLRenderer2D::currentTexture = 0;
+	int GLRenderer2D::currentTexture = 0;
 	uint32_t GLRenderer2D::currentMesh = 0;
 
 	bool GLRenderer2D::inScene = false;
@@ -22,7 +22,6 @@ namespace archt {
 	VBO* GLRenderer2D::vbo = nullptr;
 	IBO* GLRenderer2D::ibo = nullptr;
 	GLVertexarray* GLRenderer2D::vao = nullptr;
-	GLTexture* GLRenderer2D::texture = nullptr;
 
 	std::vector<GLMesh*> GLRenderer2D::meshes;
 
@@ -71,7 +70,6 @@ namespace archt {
 	}
 	void GLRenderer2D::endScene() {
 		inScene = false;
-
 	}
 
 	void GLRenderer2D::submit(GLMesh* mesh) {
@@ -91,7 +89,7 @@ namespace archt {
 		
 
 		meshes[0]->getShader()->bind();
-		uint32_t maxTextures = GLRenderAPI::getMaxTextureCount();
+		int maxTextures = GLRenderAPI::getMaxTextureCount();
 		for (int i = 0; i < currentMesh; i++) {
 
 			VBO* vb = meshes[i]->getVBO();
