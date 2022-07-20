@@ -5,6 +5,8 @@
 #include "glvertexarray.h"
 #include "camera.h"
 
+#include <glm/mat4x4.hpp>
+
 #include <vector>
 #include <typeindex>
 
@@ -12,7 +14,7 @@ namespace archt {
 
 	class GLRenderer2D {
 
-		const static int MAX_QUADS;
+		const static int MAX_OBJECTS;
 		const static int MAX_VERTECES;
 		const static int MAX_INDECES;
 
@@ -20,7 +22,10 @@ namespace archt {
 		static uint32_t currentVertex;
 		static uint32_t currentIndex;
 		static int currentTexture;
+		static uint32_t currentMatrix;
 		static uint32_t currentMesh;
+
+		static GLShader* activeShader;
 
 		static bool inScene;
 		static VBO* vbo;
@@ -28,6 +33,7 @@ namespace archt {
 		static GLVertexarray* vao;
 		static Camera* cam;
 		static std::vector<GLMesh*> meshes;
+		static glm::mat4* matrices;
 
 	public:
 		GLRenderer2D() = delete;
@@ -43,6 +49,7 @@ namespace archt {
 		static void startBatch();
 		static void endBatch();
 
+		static void sort();
 		static void render();
 		static void draw();
 		static void flush();

@@ -1,6 +1,7 @@
 #pragma once
 #include "../vertex.h"
 #include <typeindex>
+#include "glinclude.h"
 
 namespace archt {
 
@@ -15,18 +16,21 @@ namespace archt {
 		VBO(Vertex* verteces, uint32_t size);
 		~VBO();
 
-		void allocateOnGPU();
+		void allocateOnGPU(int bytes = -1, int mode = GL_DYNAMIC_DRAW);
+		void deallocateOnGPU();
 		void bind() const;
 		void write(uint32_t offset, Vertex* d, uint32_t size);
-		void upload(int mode) const;
+		void upload(int offset = 0, int length = 0, int mode = GL_DYNAMIC_DRAW) const;
 
 		void setTexId(float id);
+		void setMatrixId(float id);
 
 		void print(int end) const;
 
 		inline Vertex* getData() const { return data; }
 		inline int getSize() const { return size; }
 		inline int bytes() const { return size * sizeof(Vertex); }
+		inline int hasGPUAllocation() const { return id != 0; }
 	};
 
 
@@ -43,10 +47,11 @@ namespace archt {
 		~IBO();
 
 
-		void allocateOnGPU();
+		void allocateOnGPU(int bytes = -1, int mode = GL_DYNAMIC_DRAW);
+		void deallocateOnGPU();
 		void bind() const;
 		void write(uint32_t offset, uint32_t* d, uint32_t size, int vertexOffset);
-		void upload(int mode) const;
+		void upload(int offset = 0, int length = 0, int mode = GL_DYNAMIC_DRAW) const;
 
 		void print(int end) const;
 
@@ -54,6 +59,7 @@ namespace archt {
 		inline uint32_t* getData() const { return data; }
 		inline int getSize() const { return size; }
 		inline int bytes() const { return size * sizeof(uint32_t); }
+		inline int hasGPUAllocation() const { return id != 0; }
 	};
 
 

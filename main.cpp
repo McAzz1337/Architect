@@ -33,17 +33,17 @@ int main() {
 	{
 		uint32_t vSize = 4;
 		Vertex* verteces = new Vertex[vSize] {
-			Vertex({ -0.5f,  0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 1.0f }, 0),
-			Vertex({  0.5f,  0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 1.0f }, 0),
-			Vertex({  0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 0.0f }, 0),
-			Vertex({ -0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 0.0f }, 0)
+			Vertex({ -0.5f,  0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 1.0f }, 0, 0),
+			Vertex({  0.5f,  0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 1.0f }, 0, 0),
+			Vertex({  0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 0.0f }, 0, 0),
+			Vertex({ -0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 0.0f }, 0, 0)
 		};
 
 		Vertex* verteces2 = new Vertex[vSize] {
-			Vertex({ -0.3f,  0.3f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 1.0f }, 0),
-			Vertex({  0.3f,  0.3f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 1.0f }, 0),
-			Vertex({  0.3f, -0.3f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 0.0f }, 0),
-			Vertex({ -0.3f, -0.3f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 0.0f }, 0)
+			Vertex({ -0.3f,  0.3f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 1.0f }, 0, 0),
+			Vertex({  0.3f,  0.3f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 1.0f }, 0, 0),
+			Vertex({  0.3f, -0.3f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 0.0f }, 0, 0),
+			Vertex({ -0.3f, -0.3f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 0.0f }, 0, 0)
 		};
 		
 	
@@ -74,6 +74,7 @@ int main() {
 	
 
 	GLShader* shader = (GLShader*) FileManager::instance.loadFile("src/assets/shaders/shader", FileManager::FileType::GL_SHADER_T);
+	
 	mesh.setShader(shader);
 	mesh2.setShader(shader);
 
@@ -81,30 +82,32 @@ int main() {
 	glm::mat4 model2 = glm::mat4(1.0f);
 
 	model = glm::translate(model, { -0.5005f, 0.0f, 0.0f });
-
+	
+	mesh.setModelMatrix(model);
+	mesh2.setModelMatrix(model2);
 
 	while (true) {
 
 		window->pollEvents();
 		
 		if (Input::isPress(GLFW_KEY_W)) {
-			model = glm::translate(model, { 0.0f, 0.01f, 0.0f });
+			mesh.translate({ 0.0f, 0.01f, 0.0f });
 		}
 		else if (Input::isPress(GLFW_KEY_S)) {
-			model = glm::translate(model, { 0.0f, -0.01f, 0.0f });
+			mesh.translate({ 0.0f, -0.01f, 0.0f });
 		}
 		else if (Input::isHeld(GLFW_KEY_W)) {
-			model = glm::translate(model, { 0.0f, 0.01f, 0.0f });
+			mesh.translate({ 0.0f, 0.01f, 0.0f });
 		}
 		else if (Input::isHeld(GLFW_KEY_S)) {
-			model = glm::translate(model, { 0.0f, -0.01f, 0.0f });
+			mesh.translate({ 0.0f, -0.01f, 0.0f });
 		}
 
 		if (Input::isPress(GLFW_KEY_A) || Input::isHeld(GLFW_KEY_A)) {
-			model = glm::rotate(model, (float) -(M_PI / 180.0f), {0.0f, 1.0f, 0.0f});
+			mesh.rotate((float) -(M_PI / 180.0f), { 0.0f, 1.0f, 0.0f });
 		}
 		else if (Input::isPress(GLFW_KEY_D) || Input::isHeld(GLFW_KEY_D)) {
-			model = glm::rotate(model, (float) M_PI / 180.0f, { 0.0f, 1.0f, 0.0f });
+			mesh.rotate((float) M_PI / 180.0f, { 0.0f, 1.0f, 0.0f });
 		}
 
 	
@@ -114,12 +117,6 @@ int main() {
 		GLRenderer2D::submit(&mesh);
 		GLRenderer2D::submit(&mesh2);
 
-		glm::mat4 mvp = cam.getProjectionView() * model;
-		glm::mat4 mvp2 = cam.getProjectionView() * model2;
-
-		shader->bind();
-		shader->setMat4("mvp", mvp);
-		shader->setMat4("mvp2", mvp2);
 
 		GLRenderer2D::render();
 		GLRenderer2D::flush();
@@ -133,6 +130,7 @@ int main() {
 		}
 	}
 
+	GLRenderer2D::terminate();
 	FileManager::instance.deleteAllFiles();
 
 	return 0;

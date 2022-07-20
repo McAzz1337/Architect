@@ -2,6 +2,9 @@
 
 #include "../../filesystem/filemanager.h"
 
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 namespace archt {
 
 
@@ -26,6 +29,20 @@ namespace archt {
 		if (ibo) delete ibo;
 		FileManager::instance.deleteFile(tex->getFilePath(), FileManager::FileType::GL_TEXTURE_T);
 	}
+
+	void GLMesh::translate(const glm::vec3 t) {
+		modelMatrix = glm::translate(modelMatrix, t);
+	}
+
+	void GLMesh::rotate(float angle, const glm::vec3 axis) {
+		modelMatrix = glm::rotate(modelMatrix, angle, axis);
+
+	}
+
+	void GLMesh::scale(const glm::vec3 s) {
+		modelMatrix = glm::scale(modelMatrix, s);
+	}
+
 
 	void GLMesh::setVbo(VBO* vbo) {
 		if (this->vbo) 
@@ -64,6 +81,10 @@ namespace archt {
 
 	void GLMesh::setShader(GLShader* shader) {
 		this->shader = shader;
+	}
+
+	void GLMesh::setModelMatrix(const glm::mat4& m) {
+		modelMatrix = m;
 	}
 
 }

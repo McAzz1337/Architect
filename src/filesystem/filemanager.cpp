@@ -1,10 +1,10 @@
 #include "filemanager.h"
 
-#define MAKE_ENTRY_STATIC(path, type) std::make_pair(path, std::make_pair(type(path), 1))
-#define MAKE_ENTTRY_DYNAMIC(path, type) std::make_pair(path, std::make_pair(new type(path), 1))
+
 
 namespace archt {
-
+#define MAKE_ENTRY_STATIC(path, type) std::make_pair(path, std::make_pair(type(path), 1))
+#define MAKE_ENTTRY_DYNAMIC(path, type) std::make_pair(path, std::make_pair(new type(path), 1))
 
 	FileManager FileManager::instance;
 

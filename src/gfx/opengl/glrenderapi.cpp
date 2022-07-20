@@ -10,7 +10,7 @@ namespace archt {
 	std::string GLRenderAPI::version = "N/A";
 	int GLRenderAPI::availableMemory = 0;
 	int GLRenderAPI::maxTextures = 32;
-
+	int GLRenderAPI::maxMatrices = 100;
 	GLWindow* GLRenderAPI::window = nullptr;
 
 
@@ -36,7 +36,9 @@ namespace archt {
 		
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextures);
 		GLShaderConstants::setConstant(GLShaderConstants::MAX_TEXTURES, &maxTextures);
-
+		
+		
+		GLShaderConstants::setConstant(GLShaderConstants::MAX_MATRICES, &maxMatrices);
 
 
 		vendor = std::string((char*) glGetString(GL_VENDOR));
@@ -65,6 +67,12 @@ namespace archt {
 		glBlendFunc(sFactor, dFactor);
 	}
 
+	void GLRenderAPI::setCullFace(uint32_t frontFace, uint32_t cullFace) {
+		glEnable(GL_CULL_FACE);
+		glFrontFace(frontFace);
+		glCullFace(cullFace);
+	}
+
 	void GLRenderAPI::setClearMask(uint32_t mask) {
 		clearMask = mask;
 	}
@@ -79,6 +87,10 @@ namespace archt {
 
 	int GLRenderAPI::getMaxTextureCount() {
 		return maxTextures;
+	}
+
+	int GLRenderAPI::getMaxMatricesCount() {
+		return maxMatrices;
 	}
 
 }

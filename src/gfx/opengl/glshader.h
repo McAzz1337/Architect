@@ -39,9 +39,11 @@ namespace archt {
 		void setUniform1ui(const char* name, unsigned int uniform) const;
 
 		void setMat4(const char* name, const glm::mat4& matrix) const;
-
+		void setMatrixf4v(const char* name, glm::mat4* matrices, int count) const;
 
 		void logShaderSource() const;
+
+		inline uint32_t getProgramId() const { return id; }
 
 	private:
 		static void compileShader(const std::string& src, int type, int& id);

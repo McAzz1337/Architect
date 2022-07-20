@@ -3,6 +3,9 @@
 #include <memory>
 
 #include "glinclude.h"
+#include "gldebug.h"
+
+#define HAS_GPU_ALLOCATION id != 0
 
 namespace archt {
 
@@ -18,8 +21,8 @@ namespace archt {
 		if (data)
 			delete[] data;
 
-		if (id != 0)
-			glDeleteBuffers(1, &id);
+		if (HAS_GPU_ALLOCATION)
+			deallocateOnGPU();
 	}
 
 	void VBO::bind() const {
@@ -46,14 +49,29 @@ namespace archt {
 		}
 	}
 
-	void VBO::upload(int mode) const {
-		bind();
-		glBufferData(GL_ARRAY_BUFFER, bytes(), data, mode);
+	void VBO::upload(int offset, int length, int mode) const {
+		if (length == 0)
+			length = size;
+		if (offset * sizeof(Vertex) + length * sizeof(Vertex) > bytes()) {
+			__debugbreak();
+		}
+		CALL(glBufferSubData(GL_ARRAY_BUFFER, offset * sizeof(Vertex), length * sizeof(Vertex), data));
+		//glBufferData(GL_ARRAY_BUFFER, bytes(), data, mode);
 	}
 
-	void VBO::allocateOnGPU() {
+	void VBO::allocateOnGPU(int size, int mode) {
 		glGenBuffers(1, &id);
+		bind();
+		
+		size = size < 0 ? bytes() : size * sizeof(uint32_t);
+		glBufferData(GL_ARRAY_BUFFER, size, data, mode);
 	}
+
+	void VBO::deallocateOnGPU() {
+		glDeleteBuffers(1, &id);
+		id = 0;
+	}
+
 
 	void VBO::print(int end) const {
 		printf("VBO data:\n");
@@ -66,6 +84,12 @@ namespace archt {
 	void VBO::setTexId(float id) {
 		for (int i = 0; i < size; i++) {
 			data[i].texId = id;
+		}
+	}
+
+	void VBO::setMatrixId(float id) {
+		for (int i = 0; i < size; i++) {
+			data[i].matrixId = id;
 		}
 	}
 
@@ -85,8 +109,8 @@ namespace archt {
 			delete[] data;
 		}
 
-		if (id != 0)
-			glDeleteBuffers(1, &id);
+		if (HAS_GPU_ALLOCATION)
+			deallocateOnGPU();
 	}
 
 	void IBO::bind() const {
@@ -118,13 +142,24 @@ namespace archt {
 		}
 	}
 
-	void IBO::upload(int mode) const {
-		bind();
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, bytes(), data, mode);
+	void IBO::upload(int offset, int length, int mode) const {
+		if (length == 0)
+			length = size; 
+		CALL(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset * sizeof(uint32_t), length * sizeof(uint32_t), data));
+		//glBufferData(GL_ELEMENT_ARRAY_BUFFER, bytes(), data, mode);
 	}
 
-	void IBO::allocateOnGPU() {
+	void IBO::allocateOnGPU(int size, int mode) {
 		glGenBuffers(1, &id);
+		bind();
+		
+		size = size < 0 ? bytes() : size * sizeof(uint32_t);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, mode);
+	}
+	
+	void IBO::deallocateOnGPU() {
+		glDeleteBuffers(1, &id);
+		id = 0;
 	}
 
 

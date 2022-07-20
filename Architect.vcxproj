@@ -148,6 +148,7 @@
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\stb\stb\stbi_image_write.c" />
     <ClCompile Include="src\stb\stb\stb_image.c" />
+    <ClCompile Include="src\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\fileio.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\stb\stb\stbi_image_write.h" />
     <ClInclude Include="src\stb\stb\stb_image.h" />
+    <ClInclude Include="src\timer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\assets\shaders\shader.frag" />

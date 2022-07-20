@@ -11,9 +11,10 @@ namespace archt {
 		glm::vec3 normal;
 		glm::vec2 uv;
 		float texId = 0.0f;
+		float matrixId = 0.0f;
 
 		Vertex();
-		Vertex(const glm::vec3& pos, const glm::vec3& normal, const glm::vec2& uv, float texId);
+		Vertex(const glm::vec3& pos, const glm::vec3& normal, const glm::vec2& uv, float texId, float matrixId);
 		~Vertex();
 
 		void print() const;

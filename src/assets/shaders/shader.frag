@@ -5,6 +5,7 @@
 in vec3 _normal;
 in vec2 _uv;
 in float _texId;
+in float _matrixId;
 
 
 uniform vec4 tint = vec4(1, 1, 1, 1);
@@ -19,5 +20,5 @@ void main() {
 	vec4 color = texture(tex[index], _uv);
 	
 	_out = color * tint;
-	//_out = vec4(_texId, _texId, _texId, 1.0);
+	//_out = vec4(_matrixId, _matrixId, _matrixId, 1.0);
 }

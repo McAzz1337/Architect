@@ -9,6 +9,7 @@
 
 #include "glrenderapi.h"
 #include "glshaderconstants.h"
+#include "gldebug.h"
 
 namespace archt {
 
@@ -29,7 +30,7 @@ namespace archt {
 			GLShaderConstants::modifySahderSource(gsrc);
 		GLShaderConstants::modifySahderSource(fsrc);
 		
-		//logShaderSource();
+		logShaderSource();
 
 		int vid = 0;
 		int gid = 0;
@@ -130,6 +131,11 @@ namespace archt {
 			glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
 	}
 
+	void GLShader::setMatrixf4v(const char* name, glm::mat4* matrices, int count) const {
+		int location = getLocation(name);
+		if (location > -1)
+			CALL(glUniformMatrix4fv(location, count, GL_FALSE, (const float*) matrices));
+	}
 
 
 	void GLShader::logShaderSource() const {
