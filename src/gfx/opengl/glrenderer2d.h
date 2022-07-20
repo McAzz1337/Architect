@@ -33,7 +33,8 @@ namespace archt {
 		static GLVertexarray* vao;
 		static Camera* cam;
 		static std::vector<GLMesh*> meshes;
-		static glm::mat4* matrices;
+		static std::vector<glm::mat4> matrices;
+		static std::vector<GLTexture*> textures;
 
 	public:
 		GLRenderer2D() = delete;
@@ -53,6 +54,8 @@ namespace archt {
 		static void render();
 		static void draw();
 		static void flush();
+
+		static bool hasTexture(GLTexture* tex);
 
 
 	};

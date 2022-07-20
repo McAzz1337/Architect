@@ -26,7 +26,7 @@ int main() {
 	GLRenderer2D::init();
 	Input::init();
 
-	Camera cam(M_PI / 3.0f, 1080.0f / 720.0f, 0.01f, 1000.0f);
+	Camera cam(M_PI / 3.0f, 1080.0f / 720.0f, 0.001f, 1000.0f);
 
 	GLMesh mesh;
 	GLMesh mesh2;

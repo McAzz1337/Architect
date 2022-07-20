@@ -20,7 +20,6 @@ namespace archt {
 	GLMesh::GLMesh(Vertex* verteces, uint32_t vSize, uint32_t* indeces, uint32_t iSize) {
 		vbo = new VBO(verteces, vSize);
 		ibo = new IBO(indeces, iSize);
-
 	}
 	
 

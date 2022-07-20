@@ -22,7 +22,7 @@ namespace archt {
 
 		inline const glm::mat4& getProjection() const { return projection; }
 		inline const glm::mat4& getView() const { return view; }
-		inline const glm::mat4& getProjectionView() const { return projection * view; }
+		inline const glm::mat4 getProjectionView() const { return projection * view; }
 
 
 	};

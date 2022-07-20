@@ -27,7 +27,8 @@ namespace archt {
 	GLVertexarray* GLRenderer2D::vao = nullptr;
 
 	std::vector<GLMesh*> GLRenderer2D::meshes;
-	glm::mat4* GLRenderer2D::matrices = nullptr;
+	std::vector<glm::mat4> GLRenderer2D::matrices;
+	std::vector<GLTexture*> GLRenderer2D::textures;
 
 
 
@@ -39,13 +40,13 @@ namespace archt {
 		for (int i = 0; i < MAX_OBJECTS; i++) {
 			meshes.push_back(nullptr);
 		}
-	
+
 
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
 		GLRenderAPI::enable(GL_DEPTH_TEST);
 		GLRenderAPI::enable(GL_BLEND);
-		
+
 		GLRenderAPI::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		GLRenderAPI::setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -62,14 +63,18 @@ namespace archt {
 		vao = new GLVertexarray(vbo, ibo);
 
 		int maxMatrices = GLRenderAPI::getMaxMatricesCount();
-		matrices = new glm::mat4[maxMatrices];
+		matrices.reserve(maxMatrices);
+		matrices.resize(maxMatrices);
+
+		int maxTextures = GLRenderAPI::getMaxTextureCount();
+		textures.reserve(maxTextures);
+		textures.resize(maxTextures);
 	}
 
 	void GLRenderer2D::terminate() {
 		delete ibo;
 		delete vbo;
 		delete vao;
-		delete[] matrices;
 	}
 
 	void GLRenderer2D::beginScene(Camera* camera) {
@@ -94,16 +99,14 @@ namespace archt {
 	}
 
 	void GLRenderer2D::startBatch() {
-		
 
-		meshes[0]->getShader()->bind();
+
 		int maxTextures = GLRenderAPI::getMaxTextureCount();
 		int maxMatrices = GLRenderAPI::getMaxMatricesCount();
-		vbo->bind();
-		ibo->bind();
+
 		activeShader = meshes[0]->getShader();
 		activeShader->bind();
-		const glm::mat4& projectionView = cam->getProjectionView();
+		const glm::mat4 projectionView = cam->getProjectionView();
 
 		for (int i = 0; i < currentMesh; i++) {
 
@@ -115,26 +118,32 @@ namespace archt {
 			uint32_t vSize = vb->getSize();
 			uint32_t iSize = ib->getSize();
 
-			if (currentVertex + vSize >= MAX_VERTECES || 
+			GLTexture* tex = mesh->getTexture();
+
+			if (currentVertex + vSize >= MAX_VERTECES ||
 				currentIndex + iSize >= MAX_INDECES ||
-				currentTexture == maxTextures ||
+				(!hasTexture(tex) && currentTexture == maxTextures) ||
 				currentMatrix == maxMatrices ||
-				meshes[i]->getShader() != activeShader) {
+				mesh->getShader() != activeShader) {
+
 				draw();
 				flush();
 				endBatch();
-				activeShader = meshes[i]->getShader();
+
+				activeShader = mesh->getShader();
 				activeShader->bind();
 			}
-			
-			mesh->getTexture()->bind(currentTexture);
-			vb->setTexId((float)currentTexture);
-			vb->setMatrixId((float)currentMatrix);
-			matrices[currentMatrix] = projectionView * mesh->getModelMatrix();
+
+			tex->bind(currentTexture);
+			vb->setTexId((float) currentTexture);
+			textures[currentTexture] = tex;
+
+			vb->setMatrixId((float) currentMatrix);
+			matrices[currentMatrix] = (projectionView * mesh->getModelMatrix());
 
 			vbo->write(currentVertex, vb->getData(), vSize);
 			ibo->write(currentIndex, ib->getData(), iSize, currentVertex);
-			
+
 			currentVertex += vSize;
 			currentIndex += iSize;
 			currentTexture++;
@@ -148,7 +157,7 @@ namespace archt {
 	}
 
 	void GLRenderer2D::sort() {
-		
+
 		int index = 0;
 		for (int i = 0; i < currentMesh - 1; i++) {
 			GLShader* currentShader = meshes[i]->getShader();
@@ -168,7 +177,7 @@ namespace archt {
 			}
 		}
 	}
-	
+
 
 	void GLRenderer2D::render() {
 		if (!inScene || currentMesh == 0)
@@ -181,12 +190,15 @@ namespace archt {
 	}
 
 	void GLRenderer2D::draw() {
-		
+
+		vbo->bind();
+		ibo->bind();
+
 		vbo->upload();
 		ibo->upload();
 		vao->bind();
 
-		activeShader->setMatrixf4v("mvp", matrices, currentMatrix);
+		activeShader->setMatrixf4v("mvp", matrices.data(), currentMatrix);
 
 		glDrawElements(GL_TRIANGLES, currentIndex, GL_UNSIGNED_INT, nullptr);
 	}
@@ -198,6 +210,15 @@ namespace archt {
 		currentMatrix = 0;
 	}
 
+	bool GLRenderer2D::hasTexture(GLTexture* tex) {
+
+		for (int i = 0; i < currentTexture; i++) {
+			if (textures[i] == tex)
+				return true;
+		}
+
+		return false;
+	}
 
 
 

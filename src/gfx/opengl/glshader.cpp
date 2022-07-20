@@ -11,6 +11,8 @@
 #include "glshaderconstants.h"
 #include "gldebug.h"
 
+#include <glm/ext.hpp>
+
 namespace archt {
 
 	const std::string GLShader::VS_EXT = ".vert";
@@ -50,8 +52,8 @@ namespace archt {
 			texIndeces[i] = i;
 
 		setUniform1iv("tex", maxTextures, texIndeces);
-		delete[] texIndeces;
 
+		delete[] texIndeces;
 	}
 
 
@@ -134,7 +136,7 @@ namespace archt {
 	void GLShader::setMatrixf4v(const char* name, glm::mat4* matrices, int count) const {
 		int location = getLocation(name);
 		if (location > -1) 
-			CALL(glUniformMatrix4fv(location, count, GL_FALSE, &matrices[0][0][0]));
+			CALL(glUniformMatrix4fv(location, count, GL_FALSE, (const float*) &matrices[0]));
 	}
 
 
