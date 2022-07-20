@@ -17,7 +17,7 @@ out float _matrixId;
 
 void main() {
 
-	int matrixIndex = int(matrixId);
+	highp int matrixIndex = int(matrixId);
 	gl_Position = mvp[matrixIndex] * vec4(pos, 1.0);
 
 

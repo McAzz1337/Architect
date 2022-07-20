@@ -24,13 +24,13 @@ namespace archt {
 		readFile(path + GS_EXT, gsrc);
 		readFile(path + FS_EXT, fsrc);
 
-		
+
 		GLShaderConstants::modifySahderSource(vsrc);
 		if (gsrc.length() > 0)
 			GLShaderConstants::modifySahderSource(gsrc);
 		GLShaderConstants::modifySahderSource(fsrc);
-		
-		logShaderSource();
+
+		//logShaderSource();
 
 		int vid = 0;
 		int gid = 0;
@@ -42,8 +42,8 @@ namespace archt {
 
 		createProgram(id, vid, gid, fid);
 
-		
-		
+
+
 		int maxTextures = GLRenderAPI::getMaxTextureCount();
 		int* texIndeces = new int[maxTextures];
 		for (int i = 0; i < maxTextures; i++)
@@ -57,19 +57,19 @@ namespace archt {
 
 	GLShader::GLShader(const std::string& vsrc, const std::string& gsrc, const std::string& fsrc)
 		: vsrc(vsrc), gsrc(gsrc), fsrc(fsrc) {
-	
-	
+
+
 		int vid = 0;
 		int gid = 0;
 		int fid = 0;
 		compileShader(vsrc, GL_VERTEX_SHADER, vid);
-		if (gsrc.length() > 0)	
+		if (gsrc.length() > 0)
 			compileShader(gsrc, GL_GEOMETRY_SHADER, gid);
 		compileShader(fsrc, GL_FRAGMENT_SHADER, fid);
 
 		createProgram(id, vid, gid, fid);
 	}
-	
+
 	GLShader::~GLShader() {
 		glDeleteProgram(id);
 	}
@@ -124,7 +124,7 @@ namespace archt {
 		if (location > -1)
 			glUniform1ui(location, uniform);
 	}
-	
+
 	void GLShader::setMat4(const char* name, const glm::mat4& matrix) const {
 		int location = getLocation(name);
 		if (location > -1)
@@ -133,8 +133,8 @@ namespace archt {
 
 	void GLShader::setMatrixf4v(const char* name, glm::mat4* matrices, int count) const {
 		int location = getLocation(name);
-		if (location > -1)
-			CALL(glUniformMatrix4fv(location, count, GL_FALSE, (const float*) matrices));
+		if (location > -1) 
+			CALL(glUniformMatrix4fv(location, count, GL_FALSE, &matrices[0][0][0]));
 	}
 
 
@@ -153,7 +153,7 @@ namespace archt {
 		glCompileShader(id);
 		int isCompiled = 0;
 		glGetShaderiv(id, GL_COMPILE_STATUS, &isCompiled);
-		
+
 		if (isCompiled == GL_FALSE) {
 			int maxLength = 0;
 			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &maxLength);
@@ -175,7 +175,7 @@ namespace archt {
 			__debugbreak();
 		}
 	}
-	
+
 	void GLShader::createProgram(uint32_t& id, uint32_t vertex, uint32_t geometry, uint32_t fragment) {
 		id = glCreateProgram();
 		glAttachShader(id, vertex);

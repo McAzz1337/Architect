@@ -102,6 +102,7 @@ namespace archt {
 		vbo->bind();
 		ibo->bind();
 		activeShader = meshes[0]->getShader();
+		activeShader->bind();
 		const glm::mat4& projectionView = cam->getProjectionView();
 
 		for (int i = 0; i < currentMesh; i++) {
@@ -123,11 +124,12 @@ namespace archt {
 				flush();
 				endBatch();
 				activeShader = meshes[i]->getShader();
+				activeShader->bind();
 			}
 			
 			mesh->getTexture()->bind(currentTexture);
 			vb->setTexId((float)currentTexture);
-			vb->setMatrixId(currentMatrix);
+			vb->setMatrixId((float)currentMatrix);
 			matrices[currentMatrix] = projectionView * mesh->getModelMatrix();
 
 			vbo->write(currentVertex, vb->getData(), vSize);
@@ -167,8 +169,9 @@ namespace archt {
 		}
 	}
 	
+
 	void GLRenderer2D::render() {
-		if (!inScene)
+		if (!inScene || currentMesh == 0)
 			return;
 
 		sort();
@@ -178,7 +181,6 @@ namespace archt {
 	}
 
 	void GLRenderer2D::draw() {
-		
 		
 		vbo->upload();
 		ibo->upload();
