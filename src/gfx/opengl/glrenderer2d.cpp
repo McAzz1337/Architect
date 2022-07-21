@@ -46,7 +46,7 @@ namespace archt {
 
 		GLRenderAPI::enable(GL_DEPTH_TEST);
 		GLRenderAPI::enable(GL_BLEND);
-
+		
 		GLRenderAPI::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		GLRenderAPI::setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -62,13 +62,12 @@ namespace archt {
 
 		vao = new GLVertexarray(vbo, ibo);
 
-		int maxMatrices = GLRenderAPI::getMaxMatricesCount();
-		matrices.reserve(maxMatrices);
-		matrices.resize(maxMatrices);
+		matrices.reserve(GLRenderAPI::maxMatrices);
+		matrices.resize(GLRenderAPI::maxMatrices);
 
 		int maxTextures = GLRenderAPI::getMaxTextureCount();
-		textures.reserve(maxTextures);
-		textures.resize(maxTextures);
+		textures.reserve(GLRenderAPI::maxTextures);
+		textures.resize(GLRenderAPI::maxTextures);
 	}
 
 	void GLRenderer2D::terminate() {
@@ -100,12 +99,7 @@ namespace archt {
 
 	void GLRenderer2D::startBatch() {
 
-
-		int maxTextures = GLRenderAPI::getMaxTextureCount();
-		int maxMatrices = GLRenderAPI::getMaxMatricesCount();
-
 		activeShader = meshes[0]->getShader();
-		activeShader->bind();
 		const glm::mat4 projectionView = cam->getProjectionView();
 
 		for (int i = 0; i < currentMesh; i++) {
@@ -122,8 +116,8 @@ namespace archt {
 
 			if (currentVertex + vSize >= MAX_VERTECES ||
 				currentIndex + iSize >= MAX_INDECES ||
-				(!hasTexture(tex) && currentTexture == maxTextures) ||
-				currentMatrix == maxMatrices ||
+				(!hasTexture(tex) && currentTexture == GLRenderAPI::maxTextures) ||
+				currentMatrix == GLRenderAPI::maxMatrices ||
 				mesh->getShader() != activeShader) {
 
 				draw();
@@ -131,7 +125,6 @@ namespace archt {
 				endBatch();
 
 				activeShader = mesh->getShader();
-				activeShader->bind();
 			}
 
 			tex->bind(currentTexture);
@@ -198,6 +191,7 @@ namespace archt {
 		ibo->upload();
 		vao->bind();
 
+		activeShader->bind();
 		activeShader->setMatrixf4v("mvp", matrices.data(), currentMatrix);
 
 		glDrawElements(GL_TRIANGLES, currentIndex, GL_UNSIGNED_INT, nullptr);

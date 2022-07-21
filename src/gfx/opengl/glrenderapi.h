@@ -35,10 +35,14 @@ namespace archt {
 		static void addToClearMask(uint32_t mask);
 		static void removeFromClearMask(uint32_t mask);
 
-		friend void GLRenderer2D::clear();
 
 		static int getMaxTextureCount();
 		static int getMaxMatricesCount();
+
+		friend void GLRenderer2D::clear();
+		friend void GLRenderer2D::startBatch();
+		friend void GLRenderer2D::init();
+
 
 	};
 }

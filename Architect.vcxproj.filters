@@ -133,4 +133,7 @@
     <None Include="src\assets\shaders\shader.frag" />
     <None Include="src\assets\shaders\shader.vert" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\assets\shaders\uniforms.txt" />
+  </ItemGroup>
 </Project>

@@ -51,6 +51,15 @@ namespace archt {
 		for (int i = 0; i < maxTextures; i++)
 			texIndeces[i] = i;
 
+		bind();
+
+		std::vector<std::string> uniformNames;
+		readFileSplit("srd/assets/shaders/uniforms.txt", uniformNames);
+
+		for (int i = 0; i < uniformNames.size(); i++) {
+			getUniformLocation(uniformNames[i]);
+		}
+
 		setUniform1iv("tex", maxTextures, texIndeces);
 
 		delete[] texIndeces;
@@ -70,6 +79,8 @@ namespace archt {
 		compileShader(fsrc, GL_FRAGMENT_SHADER, fid);
 
 		createProgram(id, vid, gid, fid);
+
+
 	}
 
 	GLShader::~GLShader() {
@@ -80,61 +91,71 @@ namespace archt {
 		glUseProgram(id);
 	}
 
-	int GLShader::getLocation(const char* name) const {
-		bind();
-		int location = glGetUniformLocation(id, name);
+	int GLShader::getUniformLocation(const std::string& name) const {
+
+		if (uniforms.contains(name)) {
+			return uniforms[name];
+		}
+
+		int location = glGetUniformLocation(id, name.data());
+
+#if 1
 		if (location == -1) {
 			std::string fileName;
 			extractFileName(file, fileName);
-			printf("failed to retrieve uniform location of variable [%s] in shader [%s]\n", name, fileName.c_str());
+			printf("Uniform [ %s ] not found in shader [ %s ]\n", name.c_str(), fileName.c_str());
 		}
+#endif
+		
+		uniforms[name] = location;
+
 		return location;
 	}
 
-	void GLShader::setUniformfv(const char* name, float* uniform, int count) const {
-		int location = getLocation(name);
+	void GLShader::setUniformfv(const std::string& name, float* uniform, int count) const {
+		int location = getUniformLocation(name);
 		if (location > -1)
 			glUniform1fv(location, count, uniform);
 	}
 
-	void GLShader::setUniform4f(const char* name, float* uniform) const {
-		int location = getLocation(name);
+	void GLShader::setUniform4f(const std::string& name, float* uniform) const {
+		int location = getUniformLocation(name);
 		if (location > -1)
 			glUniform4f(location, uniform[0], uniform[1], uniform[2], uniform[3]);
 	}
 
-	void GLShader::setUniform1f(const char* name, float uniform) const {
-		int location = getLocation(name);
+	void GLShader::setUniform1f(const std::string& name, float uniform) const {
+		int location = getUniformLocation(name);
 		if (location > -1)
 			glUniform1f(location, uniform);
 	}
 
-	void GLShader::setUniform1i(const char* name, int uniform) const {
-		int location = getLocation(name);
+	void GLShader::setUniform1i(const std::string& name, int uniform) const {
+		int location = getUniformLocation(name);
 		if (location > -1)
 			glUniform1i(location, uniform);
 	}
 
-	void GLShader::setUniform1iv(const char* name, int count, int* uniforms) const {
-		int location = getLocation(name);
+	void GLShader::setUniform1iv(const std::string& name, int count, int* uniforms) const {
+		int location = getUniformLocation(name);
 		if (location > -1)
 			glUniform1iv(location, count, uniforms);
 	}
 
-	void GLShader::setUniform1ui(const char* name, unsigned int uniform) const {
-		int location = getLocation(name);
+	void GLShader::setUniform1ui(const std::string& name, unsigned int uniform) const {
+		int location = getUniformLocation(name);
 		if (location > -1)
 			glUniform1ui(location, uniform);
 	}
 
-	void GLShader::setMat4(const char* name, const glm::mat4& matrix) const {
-		int location = getLocation(name);
+	void GLShader::setMat4(const std::string& name, const glm::mat4& matrix) const {
+		int location = getUniformLocation(name);
 		if (location > -1)
 			glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
 	}
 
-	void GLShader::setMatrixf4v(const char* name, glm::mat4* matrices, int count) const {
-		int location = getLocation(name);
+	void GLShader::setMatrixf4v(const std::string& name, glm::mat4* matrices, int count) const {
+		int location = getUniformLocation(name);
 		if (location > -1) 
 			CALL(glUniformMatrix4fv(location, count, GL_FALSE, (const float*) &matrices[0]));
 	}

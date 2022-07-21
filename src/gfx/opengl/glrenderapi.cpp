@@ -64,6 +64,7 @@ namespace archt {
 	}
 
 	void GLRenderAPI::blendFunc(uint32_t sFactor, uint32_t dFactor) {
+		glBlendEquation(GL_ADD);
 		glBlendFunc(sFactor, dFactor);
 	}
 

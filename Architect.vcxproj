@@ -175,6 +175,9 @@
     <None Include="src\assets\shaders\shader.frag" />
     <None Include="src\assets\shaders\shader.vert" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\assets\shaders\uniforms.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

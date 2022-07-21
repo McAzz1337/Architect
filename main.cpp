@@ -86,6 +86,8 @@ int main() {
 	mesh.setModelMatrix(model);
 	mesh2.setModelMatrix(model2);
 
+	FileManager::instance.logAllocateMemory(FileManager::DataType::KILO_BYTES);
+
 	while (true) {
 
 		window->pollEvents();

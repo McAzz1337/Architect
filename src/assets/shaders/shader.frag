@@ -17,8 +17,11 @@ out vec4 _out;
 
 void main() {
 	highp int index = int(_texId);
-	vec4 color = texture(tex[index], _uv);
+	vec4 color = texture2D(tex[index], _uv);
+	
+	if (color.w == 0.0) {
+		discard;
+	}
 	
 	_out = color * tint;
-	//_out = vec4(_matrixId, _matrixId, _matrixId, 1.0);
 }

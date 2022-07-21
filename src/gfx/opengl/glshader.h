@@ -5,6 +5,9 @@
 
 #include <glm/mat4x4.hpp>
 
+#include <unordered_map>
+
+
 namespace archt {
 
 	class GLShader {
@@ -20,6 +23,8 @@ namespace archt {
 		std::string gsrc;
 		std::string fsrc;
 
+		mutable std::unordered_map<std::string, int> uniforms;
+
 	public:
 		GLShader();
 		GLShader(const std::string& path);
@@ -28,18 +33,18 @@ namespace archt {
 		
 		void bind() const;
 	
-		int getLocation(const char* name) const;
+		int getUniformLocation(const std::string& name) const;
 
 
-		void setUniformfv(const char* name, float* uniform, int count) const;
-		void setUniform4f(const char* name, float* uniform) const;
-		void setUniform1f(const char* name, float uniform) const;
-		void setUniform1i(const char* name, int uniform) const;
-		void setUniform1iv(const char* name, int count, int* uniforms) const;
-		void setUniform1ui(const char* name, unsigned int uniform) const;
+		void setUniformfv(const std::string& name, float* uniform, int count) const;
+		void setUniform4f(const std::string& name, float* uniform) const;
+		void setUniform1f(const std::string& name, float uniform) const;
+		void setUniform1i(const std::string& name, int uniform) const;
+		void setUniform1iv(const std::string& name, int count, int* uniforms) const;
+		void setUniform1ui(const std::string& name, unsigned int uniform) const;
 
-		void setMat4(const char* name, const glm::mat4& matrix) const;
-		void setMatrixf4v(const char* name, glm::mat4* matrices, int count) const;
+		void setMat4(const std::string& name, const glm::mat4& matrix) const;
+		void setMatrixf4v(const std::string& name, glm::mat4* matrices, int count) const;
 
 		void logShaderSource() const;
 
