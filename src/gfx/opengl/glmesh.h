@@ -25,9 +25,9 @@ namespace archt {
 		GLMesh(Vertex* verteces, uint32_t vSize, uint32_t* indeces, uint32_t iSize);
 		~GLMesh();
 
-		void translate(const glm::vec3 t);
-		void rotate(float angle, const glm::vec3 axis);
-		void scale(const glm::vec3 s);
+		void translate(const glm::vec3& t);
+		void rotate(float angle, const glm::vec3& axis);
+		void scale(const glm::vec3& s);
 
 
 		void setVbo(VBO* vbo);

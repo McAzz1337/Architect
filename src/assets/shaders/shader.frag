@@ -16,12 +16,16 @@ out vec4 _out;
 
 
 void main() {
-	highp int index = int(_texId);
-	vec4 color = texture2D(tex[index], _uv);
+	
+	//_out = vec4(_texId / 1.0, _texId /  1.0, _texId /  1.0, 1.0);
+	
+	highp int texIndex = int(_texId);
+	vec4 color = texture2D(tex[texIndex], _uv);
 	
 	if (color.w == 0.0) {
 		discard;
 	}
 	
 	_out = color * tint;
+
 }

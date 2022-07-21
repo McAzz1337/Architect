@@ -28,8 +28,13 @@ int main() {
 
 	Camera cam(M_PI / 3.0f, 1080.0f / 720.0f, 0.001f, 1000.0f);
 
+
+	GLShader* shader = (GLShader*) FileManager::instance.loadFile("src/assets/shaders/shader", FileManager::FileType::GL_SHADER_T);
+
 	GLMesh mesh;
 	GLMesh mesh2;
+	int meshSize = 200; // GLRenderAPI::getMaxMatricesCount();
+	GLMesh* meshes = new GLMesh[meshSize];
 	{
 		uint32_t vSize = 4;
 		Vertex* verteces = new Vertex[vSize] {
@@ -70,10 +75,27 @@ int main() {
 
 		mesh.setTexture(tex);
 		mesh2.setTexture(tex2);
+
+		for (int i = 0; i < meshSize; i++) {
+			
+			meshes[i].setVbo(verteces, vSize);
+			meshes[i].setIbo(indeces, iSize);
+
+			if (i & 0b1)	meshes[i].setTexture(tex2); 
+			else			meshes[i].setTexture(tex);
+			
+			meshes[i].setShader(shader);
+		}
 	}
 	
+	
+	for (int y = 0; y < 20; y++) {
+		for (int x = 0; x < 10; x++) {
+			int index = y * 10 + x;
+			meshes[index].translate({ (float) x, (float) y, 0.0f });
+		}
+	}
 
-	GLShader* shader = (GLShader*) FileManager::instance.loadFile("src/assets/shaders/shader", FileManager::FileType::GL_SHADER_T);
 	
 	mesh.setShader(shader);
 	mesh2.setShader(shader);
@@ -92,33 +114,40 @@ int main() {
 
 		window->pollEvents();
 		
-		if (Input::isPress(GLFW_KEY_W)) {
-			mesh.translate({ 0.0f, 0.01f, 0.0f });
+		if (Input::isPress(GLFW_KEY_W) || Input::isHeld(GLFW_KEY_W)) {
+			cam.translate({ 0.0f, 0.0f, 0.3f });
 		}
-		else if (Input::isPress(GLFW_KEY_S)) {
-			mesh.translate({ 0.0f, -0.01f, 0.0f });
+		else if (Input::isPress(GLFW_KEY_S) || Input::isHeld(GLFW_KEY_S)) {
+			cam.translate({ 0.0f, 0.0f, -0.3f });
+
 		}
-		else if (Input::isHeld(GLFW_KEY_W)) {
-			mesh.translate({ 0.0f, 0.01f, 0.0f });
-		}
-		else if (Input::isHeld(GLFW_KEY_S)) {
-			mesh.translate({ 0.0f, -0.01f, 0.0f });
-		}
+	
 
 		if (Input::isPress(GLFW_KEY_A) || Input::isHeld(GLFW_KEY_A)) {
-			mesh.rotate((float) -(M_PI / 180.0f), { 0.0f, 1.0f, 0.0f });
+			cam.translate({ -0.3f, 0.0f, 0.0f });
 		}
 		else if (Input::isPress(GLFW_KEY_D) || Input::isHeld(GLFW_KEY_D)) {
-			mesh.rotate((float) M_PI / 180.0f, { 0.0f, 1.0f, 0.0f });
+			cam.translate({ 0.3f, 0.0f, 0.0f });
 		}
+
+		if (Input::isPress(GLFW_KEY_E) || Input::isHeld(GLFW_KEY_E)) {
+			cam.translate({ 0.0f, 0.3f, 0.0f });
+		}
+		else if (Input::isPress(GLFW_KEY_F) || Input::isHeld(GLFW_KEY_F)) {
+			cam.translate({ 0.0f, -0.3f, 0.0f });
+		}
+
 
 	
 		GLRenderer2D::clear();
 		GLRenderer2D::beginScene(&cam);
 
-		GLRenderer2D::submit(&mesh);
-		GLRenderer2D::submit(&mesh2);
+		//GLRenderer2D::submit(&mesh);
+		//GLRenderer2D::submit(&mesh2);
 
+		for (int i = 0; i < meshSize; i++) {
+			GLRenderer2D::submit(&meshes[i]);
+		}
 
 		GLRenderer2D::render();
 		GLRenderer2D::flush();

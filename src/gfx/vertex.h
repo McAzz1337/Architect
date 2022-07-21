@@ -10,7 +10,7 @@ namespace archt {
 		glm::vec3 pos;
 		glm::vec3 normal;
 		glm::vec2 uv;
-		float texId = 0.0f;
+		float texId = 0;
 		float matrixId = 0.0f;
 
 		Vertex();

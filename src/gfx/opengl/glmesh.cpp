@@ -29,16 +29,16 @@ namespace archt {
 		FileManager::instance.deleteFile(tex->getFilePath(), FileManager::FileType::GL_TEXTURE_T);
 	}
 
-	void GLMesh::translate(const glm::vec3 t) {
+	void GLMesh::translate(const glm::vec3& t) {
 		modelMatrix = glm::translate(modelMatrix, t);
 	}
 
-	void GLMesh::rotate(float angle, const glm::vec3 axis) {
+	void GLMesh::rotate(float angle, const glm::vec3& axis) {
 		modelMatrix = glm::rotate(modelMatrix, angle, axis);
 
 	}
 
-	void GLMesh::scale(const glm::vec3 s) {
+	void GLMesh::scale(const glm::vec3& s) {
 		modelMatrix = glm::scale(modelMatrix, s);
 	}
 

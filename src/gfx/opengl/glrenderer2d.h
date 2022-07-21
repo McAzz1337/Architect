@@ -55,7 +55,7 @@ namespace archt {
 		static void draw();
 		static void flush();
 
-		static bool hasTexture(GLTexture* tex);
+		static int fetchTextureIndex(GLTexture* tex);
 
 
 	};
