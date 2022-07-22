@@ -4,7 +4,7 @@
 
 in vec3 _normal;
 in vec2 _uv;
-in float _texId;
+in flat int _texId;
 in float _matrixId;
 
 
@@ -16,16 +16,15 @@ out vec4 _out;
 
 
 void main() {
+	//float ti = float(_texId);
 	
-	//_out = vec4(_texId / 1.0, _texId /  1.0, _texId /  1.0, 1.0);
+	//_out = vec4(ti / 32.0, ti / 32.0, ti / 32.0, 1.0);
 	
-	highp int texIndex = int(_texId);
-	vec4 color = texture2D(tex[texIndex], _uv);
+	vec4 color = texture(tex[_texId], _uv);
 	
 	if (color.w == 0.0) {
 		discard;
 	}
 	
 	_out = color * tint;
-
 }

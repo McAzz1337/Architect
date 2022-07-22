@@ -10,7 +10,7 @@ namespace archt {
 	std::string GLRenderAPI::version = "N/A";
 	int GLRenderAPI::availableMemory = 0;
 	int GLRenderAPI::maxTextures = 32;
-	int GLRenderAPI::maxMatrices = 100;
+	int GLRenderAPI::maxMatrices = 256;
 	GLWindow* GLRenderAPI::window = nullptr;
 
 
@@ -36,7 +36,9 @@ namespace archt {
 		
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextures);
 		GLShaderConstants::setConstant(GLShaderConstants::MAX_TEXTURES, &maxTextures);
-		
+		int maxFloats = 0;
+		glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &maxFloats);
+		maxMatrices = maxFloats / 4;
 		
 		GLShaderConstants::setConstant(GLShaderConstants::MAX_MATRICES, &maxMatrices);
 

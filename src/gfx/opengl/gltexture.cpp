@@ -51,6 +51,7 @@ namespace archt {
 	void GLTexture::bind(int index) const {
 		CALL(glActiveTexture(GL_TEXTURE0 + index));
 		CALL(glBindTextureUnit(index, id));
+		printf("texture bound at index : %i\n", index);
 	}
 
 	void GLTexture::createEmptyTexture(GLTexture* tex, int width, int height) {

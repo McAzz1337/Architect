@@ -21,6 +21,7 @@ namespace archt {
 
 
 		inline const std::string& getFilePath() const { return file; }
+		inline uint32_t getId() const { return id; }
 
 		static void createEmptyTexture(GLTexture* tex, int width, int height);
 		static void createTextureFromData(GLTexture* tex, const unsigned char* data, int width, int height);

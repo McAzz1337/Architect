@@ -34,7 +34,7 @@ namespace archt {
 		static Camera* cam;
 		static std::vector<GLMesh*> meshes;
 		static std::vector<glm::mat4> matrices;
-		static std::vector<GLTexture*> textures;
+		static int* textures;
 
 	public:
 		GLRenderer2D() = delete;
@@ -55,8 +55,8 @@ namespace archt {
 		static void draw();
 		static void flush();
 
-		static int fetchTextureIndex(GLTexture* tex);
-
+		static void flushTextures();
+		static int fetchTextureIndex(int tex);
 
 	};
 

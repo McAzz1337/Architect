@@ -128,6 +128,9 @@
     <ClInclude Include="src\timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\thread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\assets\shaders\shader.frag" />

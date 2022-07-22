@@ -26,7 +26,6 @@ namespace archt {
 	GLMesh::~GLMesh() {
 		if (vbo) delete vbo;
 		if (ibo) delete ibo;
-		FileManager::instance.deleteFile(tex->getFilePath(), FileManager::FileType::GL_TEXTURE_T);
 	}
 
 	void GLMesh::translate(const glm::vec3& t) {

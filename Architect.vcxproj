@@ -169,6 +169,7 @@
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\stb\stb\stbi_image_write.h" />
     <ClInclude Include="src\stb\stb\stb_image.h" />
+    <ClInclude Include="src\thread.h" />
     <ClInclude Include="src\timer.h" />
   </ItemGroup>
   <ItemGroup>

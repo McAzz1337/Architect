@@ -12,7 +12,7 @@ uniform mat4 mvp[MAX_MATRICES];
 
 out vec3 _normal;
 out vec2 _uv;
-out float _texId;
+out flat int _texId;
 out float _matrixId;
 
 void main() {
@@ -23,7 +23,7 @@ void main() {
 
 	_normal  = normal;
 	_uv = uv;
-	_texId = texId;
+	_texId = int(texId);
 	_matrixId = matrixId;
 }
 

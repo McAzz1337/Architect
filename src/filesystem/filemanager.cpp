@@ -6,7 +6,7 @@ namespace archt {
 #define MAKE_ENTRY_STATIC(path, type) std::make_pair(path, std::make_pair(type(path), 1))
 #define MAKE_ENTTRY_DYNAMIC(path, type) std::make_pair(path, std::make_pair(new type(path), 1))
 
-#define TRACK_ALLOCATED_MEMORY
+//#define TRACK_ALLOCATED_MEMORY
 #ifdef TRACK_ALLOCATED_MEMORY
 
 #define INCREASE_ALLOCATED_MEMORY(ref, path) if (ref)\
@@ -113,6 +113,7 @@ namespace archt {
 
 	void FileManager::logAllocateMemory(DataType type) const {
 		
+#ifdef TRACK_ALLOCATED_MEMORY
 		printf("Total allocated memory from files : ");
 
 		switch (type) {
@@ -137,6 +138,8 @@ namespace archt {
 				break;
 			}
 		}
+#endif
+
 	}
 
 
