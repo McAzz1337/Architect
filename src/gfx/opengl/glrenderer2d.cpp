@@ -9,7 +9,7 @@ namespace archt {
 
 	int drawcalls = 0;
 
-	const int GLRenderer2D::MAX_OBJECTS = 1000;
+	const int GLRenderer2D::MAX_OBJECTS = 10000;
 	const int GLRenderer2D::MAX_VERTECES = 4 * MAX_OBJECTS;
 	const int GLRenderer2D::MAX_INDECES = 6 * MAX_OBJECTS;
 

@@ -36,9 +36,9 @@ namespace archt {
 		
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextures);
 		GLShaderConstants::setConstant(GLShaderConstants::MAX_TEXTURES, &maxTextures);
-		int maxFloats = 0;
-		glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &maxFloats);
-		maxMatrices = maxFloats / 4;
+		int maxVec4 = 0;
+		glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &maxVec4);
+		maxMatrices = maxVec4 / 4;
 		
 		GLShaderConstants::setConstant(GLShaderConstants::MAX_MATRICES, &maxMatrices);
 

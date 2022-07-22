@@ -13,7 +13,7 @@ namespace archt {
 		projection = glm::perspective(fov, aspect, near, far);
 		view = glm::mat4(1.0f);
 
-		translate({ 0.0f, 0.0f, -1.0f });
+		translate({ 0.0f, 0.0f, 1.0f });
 	}
 
 	Camera::~Camera() {
