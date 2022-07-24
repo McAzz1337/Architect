@@ -1,0 +1,17 @@
+padding = 1
+info bar w, h = 113, 16
+sprite offset x, y = 0, 19
+shiny sprite offset x, y = 57, 17
+sprite size = 56
+
+backgroundcolor x, y = 0, 8
+primary color x, y = 8, 8
+secondary color x, y = 16, 8
+tertiary color x, y = 24, 8
+
+backgroundcolor x, y = 57, 8
+shiny primary color x, y = 65, 8
+shiny secondary color x, y = 73, 8
+shiny tertiary color x, y = 81, 8
+
+w, h = 1711, 5609

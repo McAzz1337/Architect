@@ -11,6 +11,9 @@ namespace archt {
 
 		static std::string vendor;
 		static std::string version;
+		static std::string model;
+		static std::string shaderLanguageVersion;
+
 		static int availableMemory;
 		static uint32_t clearMask;
 

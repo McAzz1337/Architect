@@ -21,10 +21,10 @@ namespace archt {
 		unsigned char* data = nullptr;
 		
 		{
-			unsigned char* src = stbi_load(path.c_str(), &w, &h, &comp, STBI_rgb_alpha);
-			data = new unsigned char[w * comp * h];
-			flipImage(src, w, h, comp, data);
-			stbi_image_free(src);
+			data = stbi_load(path.c_str(), &w, &h, &comp, STBI_rgb_alpha);
+			//data = new unsigned char[w * comp * h];
+			//flipImage(src, w, h, comp, data);
+			//stbi_image_free(src);
 		}
 
 		glGenTextures(1, &id);
@@ -40,7 +40,8 @@ namespace archt {
 		
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	
-		delete[] data;
+		stbi_image_free(data);
+		//delete[] data;
 	}
 
 	GLTexture::~GLTexture() {

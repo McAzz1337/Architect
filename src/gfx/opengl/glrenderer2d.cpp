@@ -29,7 +29,7 @@ namespace archt {
 	GLVertexarray* GLRenderer2D::vao = nullptr;
 
 	std::vector<GLMesh*> GLRenderer2D::meshes;
-	std::vector<glm::mat4> GLRenderer2D::matrices;
+	glm::mat4* GLRenderer2D::matrices = nullptr;
 	int* GLRenderer2D::textures = nullptr;
 
 
@@ -49,7 +49,7 @@ namespace archt {
 		GLRenderAPI::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		GLRenderAPI::setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		GLRenderAPI::setCullFace(GL_CW, GL_BACK);
+		//GLRenderAPI::setCullFace(GL_CW, GL_BACK);
 
 		Vertex* verteces = new Vertex[MAX_VERTECES];
 		vbo = new VBO(verteces, MAX_VERTECES);
@@ -61,8 +61,7 @@ namespace archt {
 
 		vao = new GLVertexarray(vbo, ibo);
 
-		matrices.reserve(GLRenderAPI::maxMatrices);
-		matrices.resize(GLRenderAPI::maxMatrices);
+		matrices = new glm::mat4[GLRenderAPI::maxMatrices];
 
 		textures = new int[GLRenderAPI::maxTextures];
 		for (int i = 0; i < GLRenderAPI::maxTextures; i++) {
@@ -93,7 +92,6 @@ namespace archt {
 
 		if (currentMesh == MAX_OBJECTS) {
 			render();
-			flush();
 			endScene();
 			beginScene(cam);
 		}
@@ -211,8 +209,14 @@ namespace archt {
 		vao->bind();
 
 		activeShader->bind();
-		activeShader->setMatrixf4v("mvp", matrices.data(), currentMatrix);
-
+		if (Uniformbuffer* buffer = activeShader->getUniformBuffer()) {
+			buffer->bind();
+			buffer->write(0, (void*) matrices, currentMatrix * sizeof(glm::mat4));
+			buffer->upload();
+		}
+		else {
+			activeShader->setMatrixf4v("mvp", matrices, currentMatrix);
+		}
 		glDrawElements(GL_TRIANGLES, currentIndex, GL_UNSIGNED_INT, nullptr);
 		printf("%i meshesdrawn in drawcall %i\n", currentMatrix, drawcalls);
 		drawcalls++;

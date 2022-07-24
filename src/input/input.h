@@ -2,7 +2,7 @@
 
 #include <typeindex>
 
-#define MAX_KEYS 256
+#define MAX_KEYS 400
 #define KEY_RELEASED 0
 #define KEY_PRESS 1
 #define KEY_HOLD 2

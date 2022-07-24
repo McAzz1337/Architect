@@ -32,7 +32,7 @@ namespace archt {
 			GLShaderConstants::modifySahderSource(gsrc);
 		GLShaderConstants::modifySahderSource(fsrc);
 
-		//logShaderSource();
+		logShaderSource();
 
 		int vid = 0;
 		int gid = 0;
@@ -53,16 +53,25 @@ namespace archt {
 
 		bind();
 
-		std::vector<std::string> uniformNames;
-		readFileSplit("srd/assets/shaders/uniforms.txt", uniformNames);
-
-		for (int i = 0; i < uniformNames.size(); i++) {
-			getUniformLocation(uniformNames[i]);
-		}
-
 		setUniform1iv("tex", maxTextures, texIndeces);
 
 		delete[] texIndeces;
+		std::string srcPath;
+		std::string srcName;
+		splitPath(path, srcPath, srcName);
+		printf("srcPath = %s\n", srcPath.c_str());
+		{
+			std::vector<std::string> uniformNames;
+			readFileSplit(srcPath + "/uniforms.txt", uniformNames, true);
+
+
+			for (int i = 0; i < uniformNames.size(); i++) {
+				getUniformLocation(uniformNames[i]);
+			}
+		}
+			
+		readFileSplit(srcPath + "/uniformbuffers.txt", uniformBuffers, true);
+
 	}
 
 
@@ -158,6 +167,14 @@ namespace archt {
 		int location = getUniformLocation(name);
 		if (location > -1) 
 			CALL(glUniformMatrix4fv(location, count, GL_FALSE, (const float*) &matrices[0]));
+	}
+
+	void GLShader::registerUniformBuffer(Uniformbuffer* buffer) {
+		uniformBuffer = buffer;
+		buffer->bind();
+		for (int i = 0; i < uniformBuffers.size(); i++) {
+			buffer->bindUniformBlock(id, uniformBuffers[i]);
+		}
 	}
 
 

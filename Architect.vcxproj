@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="pokemon.cpp" />
     <ClCompile Include="src\fileio.cpp" />
     <ClCompile Include="src\filesystem\filemanager.cpp" />
     <ClCompile Include="src\gfx\opengl\buffers.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="src\gfx\opengl\gltexture.cpp" />
     <ClCompile Include="src\gfx\opengl\glvertexarray.cpp" />
     <ClCompile Include="src\gfx\opengl\glwindow.cpp" />
+    <ClCompile Include="src\gfx\opengl\uniformbuffer.cpp" />
     <ClCompile Include="src\gfx\vertex.cpp" />
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\stb\stb\stbi_image_write.c" />
@@ -151,6 +153,7 @@
     <ClCompile Include="src\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="pokemon.h" />
     <ClInclude Include="src\fileio.h" />
     <ClInclude Include="src\filesystem\filemanager.h" />
     <ClInclude Include="src\gfx\opengl\buffers.h" />
@@ -165,6 +168,7 @@
     <ClInclude Include="src\gfx\opengl\gltexture.h" />
     <ClInclude Include="src\gfx\opengl\glvertexarray.h" />
     <ClInclude Include="src\gfx\opengl\glwindow.h" />
+    <ClInclude Include="src\gfx\opengl\uniformbuffer.h" />
     <ClInclude Include="src\gfx\vertex.h" />
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\stb\stb\stbi_image_write.h" />
@@ -173,11 +177,15 @@
     <ClInclude Include="src\timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\assets\shaders\shader.frag" />
-    <None Include="src\assets\shaders\shader.vert" />
+    <None Include="src\assets\shaders\fastshader\fastshader.frag" />
+    <None Include="src\assets\shaders\fastshader\fastshader.vert" />
+    <None Include="src\assets\shaders\shader\shader.frag" />
+    <None Include="src\assets\shaders\shader\shader.vert" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="src\assets\shaders\uniforms.txt" />
+    <Text Include="src\assets\shaders\fastshader\uniformbuffers.txt" />
+    <Text Include="src\assets\shaders\fastshader\uniforms.txt" />
+    <Text Include="src\assets\shaders\shader\uniforms.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

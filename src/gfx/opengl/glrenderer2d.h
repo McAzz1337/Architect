@@ -33,7 +33,7 @@ namespace archt {
 		static GLVertexarray* vao;
 		static Camera* cam;
 		static std::vector<GLMesh*> meshes;
-		static std::vector<glm::mat4> matrices;
+		static glm::mat4* matrices;
 		static int* textures;
 
 	public:

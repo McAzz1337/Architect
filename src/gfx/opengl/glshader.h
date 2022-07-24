@@ -1,12 +1,13 @@
 #pragma once
 
+#include "uniformbuffer.h"
+
 #include <typeindex>
 #include <string>
 
 #include <glm/mat4x4.hpp>
 
 #include <unordered_map>
-
 
 namespace archt {
 
@@ -24,6 +25,9 @@ namespace archt {
 		std::string fsrc;
 
 		mutable std::unordered_map<std::string, int> uniforms;
+		std::vector<std::string> uniformBuffers;
+
+		Uniformbuffer* uniformBuffer = nullptr;
 
 	public:
 		GLShader();
@@ -46,9 +50,12 @@ namespace archt {
 		void setMat4(const std::string& name, const glm::mat4& matrix) const;
 		void setMatrixf4v(const std::string& name, glm::mat4* matrices, int count) const;
 
+		void registerUniformBuffer(Uniformbuffer* buffer);
+
 		void logShaderSource() const;
 
 		inline uint32_t getProgramId() const { return id; }
+		inline Uniformbuffer* getUniformBuffer() const { return uniformBuffer; }
 
 	private:
 		static void compileShader(const std::string& src, int type, int& id);

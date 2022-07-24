@@ -32,7 +32,7 @@ namespace archt {
 
 		std::ifstream in(path);
 		
-		if (in.is_open()) {
+		if (!in.is_open()) {
 			
 			if (log)
 				printf("failed to open file: %s\n", path.c_str());
@@ -57,6 +57,18 @@ namespace archt {
 			dst = path.substr(start + 1);
 	}
 
+	void splitPath(const std::string& path, std::string& pathDst, std::string& fileDst) {
+		int delimeter = path.find_last_of('/');
+
+		if (delimeter == std::string::npos) {
+			pathDst = "";
+			fileDst = "";
+		}
+
+		pathDst = path.substr(0, delimeter);
+		fileDst = path.substr(delimeter + 1);
+	}
+
 
 	uint64_t requestFileSize(const std::string& path) {
 		
@@ -64,6 +76,10 @@ namespace archt {
 		uint64_t end;
 
 		std::ifstream in(path);
+		
+		if (!in.is_open())
+			return 0;
+
 		begin = in.tellg();
 		
 		in.seekg(0, std::ios::end);

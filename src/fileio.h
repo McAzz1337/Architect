@@ -9,6 +9,7 @@ namespace archt {
 	void readFileSplit(const std::string& path, std::vector<std::string>& dst, bool log = false);
 
 	void extractFileName(const std::string& path, std::string& dst);
+	void splitPath(const std::string& path, std::string& pathDst, std::string& fileDst);
 
 	uint64_t requestFileSize(const std::string& path);
 

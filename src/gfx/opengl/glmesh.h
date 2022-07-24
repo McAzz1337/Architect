@@ -12,6 +12,7 @@ namespace archt {
 
 	class GLMesh {
 
+	protected:
 		VBO* vbo = nullptr;
 		IBO* ibo = nullptr;
 		GLTexture* tex = nullptr;
@@ -23,7 +24,7 @@ namespace archt {
 		GLMesh(VBO* vbo, IBO* ibo);
 		GLMesh(VBO* vbo, IBO* ibo, const std::string& texture);
 		GLMesh(Vertex* verteces, uint32_t vSize, uint32_t* indeces, uint32_t iSize);
-		~GLMesh();
+		virtual ~GLMesh();
 
 		void translate(const glm::vec3& t);
 		void rotate(float angle, const glm::vec3& axis);

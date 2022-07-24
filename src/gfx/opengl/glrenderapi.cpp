@@ -8,6 +8,10 @@ namespace archt {
 
 	std::string GLRenderAPI::vendor = "N/A";
 	std::string GLRenderAPI::version = "N/A";
+	std::string GLRenderAPI::model = "N/A";
+	std::string GLRenderAPI::shaderLanguageVersion = "N/A";
+
+	
 	int GLRenderAPI::availableMemory = 0;
 	int GLRenderAPI::maxTextures = 32;
 	int GLRenderAPI::maxMatrices = 256;
@@ -38,15 +42,18 @@ namespace archt {
 		GLShaderConstants::setConstant(GLShaderConstants::MAX_TEXTURES, &maxTextures);
 		int maxVec4 = 0;
 		glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &maxVec4);
-		maxMatrices = maxVec4 / 4;
+		maxMatrices = 1000;
 		
-		GLShaderConstants::setConstant(GLShaderConstants::MAX_MATRICES, &maxMatrices);
+		int temp = 256;
+		GLShaderConstants::setConstant(GLShaderConstants::MAX_MATRICES, &temp);
 
 
 		vendor = std::string((char*) glGetString(GL_VENDOR));
 		version = std::string((char*) glGetString(GL_VERSION));
+		model = std::string((char*) glGetString(GL_RENDERER));
+		shaderLanguageVersion = std::string((char*) glGetString(GL_SHADING_LANGUAGE_VERSION));
 
-		std::string title = "Architect | " + vendor + " | " + version;
+		std::string title = "Architect | " + vendor + " | " + version + " | " + model + " | " + shaderLanguageVersion;
 
 		window->setTitle(title.c_str());
 
