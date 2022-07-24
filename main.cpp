@@ -42,7 +42,7 @@ int main() {
 	Uniformbuffer* uniformBuffer = new Uniformbuffer(nullptr, 4 * 16 * 1000);
 	fastShader->registerUniformBuffer(uniformBuffer);
 
-	int meshSize = 250;// GLRenderAPI::getMaxMatricesCount();
+	int meshSize = 251;// GLRenderAPI::getMaxMatricesCount();
 	GLMesh* meshes = new GLMesh[meshSize];
 	GLMesh mesh;
 	GLTexture* tex;
@@ -77,7 +77,7 @@ int main() {
 
 		tex = (GLTexture*) FileManager::instance.loadFile("src/assets/img/item.png", FileManager::FileType::GL_TEXTURE_T);
 		tex2 = (GLTexture*) FileManager::instance.loadFile("src/assets/img/item2.png", FileManager::FileType::GL_TEXTURE_T);
-		sprites = (GLTexture*) FileManager::instance.loadFile("src/assets/img/pokemon.png", FileManager::FileType::GL_TEXTURE_T);
+		sprites = (GLTexture*) FileManager::instance.loadFile("src/assets/img/pokememes.png", FileManager::FileType::GL_TEXTURE_T);
 		mesh.setTexture(sprites);
 		pokemon.setTexture(sprites);
 
@@ -97,32 +97,40 @@ int main() {
 
 
 	Pokemon::setSpriteSheetSize(glm::vec2(1711.0f, 5609.0f));
+	const glm::vec2& spriteSheetSize = Pokemon::getSpriteSheetSize();
 	int spriteSize = 56;
 	int infoHeight = 18;
 	int strideY = 188;
 	int strideX = 171;
 
 
-	glm::vec2 uvs[250];
-	for (int i = 0; i < 25; i++) {
+	glm::vec2 uvs[251];
+	for (int i = 0; i < 26; i++) {
 		for (int j = 0; j < 10; j++) {
 			int index = i * 10 + j;
+			if (index == meshSize) {
+				goto BREAK;
+			}
 			int yPos = i * strideY + infoHeight;
 			int xPos = j * strideX + 1;
 
-			float x = (float) xPos / 1711.0f;
-			float y = (float) yPos / 5609.0f;
+			float x = (float) xPos / spriteSheetSize.x;
+			float y = (float) yPos / spriteSheetSize.y;
 
 			uvs[index] = glm::vec2(x, y);
 			printf("uvs[%i] = %f %f\n", index, x, y);
 		}
 	}
+BREAK:
 
-	float sx = (float) spriteSize / 1711.0f;
-	float sy = (float) spriteSize / 5609.0f;
-	for (int y = 0; y < 25; y++) {
+	float sx = (float) spriteSize / spriteSheetSize.x;
+	float sy = (float) spriteSize / spriteSheetSize.y;
+	for (int y = 0; y < 26; y++) {
 		for (int x = 0; x < 10; x++) {
 			int index = y * 10 + x;
+			if (index == meshSize) {
+				goto BREAK2;
+			}
 			VBO* vbo = meshes[index].getVBO();
 			Vertex* data = vbo->getData();
 			data[0].uv = uvs[index];
@@ -146,23 +154,23 @@ int main() {
 
 		}
 	}
-
+BREAK2:
 
 	{
 		Pokemon::setSpriteSize({ sx, sy });
 		glm::vec2 offsets[Pokemon::Sprite::NONE];
-		offsets[Pokemon::Sprite::FRONT]				= glm::vec2(0.0f, 0.0f);
-		offsets[Pokemon::Sprite::FRONT_SHINY]		= glm::vec2(sx + 1.0f / 1711.0f, 0.0f);
+		offsets[Pokemon::Sprite::FRONT] = glm::vec2(0.0f, 0.0f);
+		offsets[Pokemon::Sprite::FRONT_SHINY] = glm::vec2(sx + 1.0f / spriteSheetSize.x, 0.0f);
 
-		offsets[Pokemon::Sprite::FRONT_ALT]			= glm::vec2(0.0f, sy + 1.0f / 5609.0f);
-		offsets[Pokemon::Sprite::FRONT_ALT_SHINY]	= glm::vec2(sx + 1.0f / 1711.0f, sy + 1.0f / 5609.0f);
+		offsets[Pokemon::Sprite::FRONT_ALT] = glm::vec2(0.0f, sy + 1.0f / spriteSheetSize.y);
+		offsets[Pokemon::Sprite::FRONT_ALT_SHINY] = glm::vec2(sx + 1.0f / spriteSheetSize.x, sy + 1.0f / spriteSheetSize.y);
 
 
-		offsets[Pokemon::Sprite::BACK]				= glm::vec2(0.0f, sy * 2.0f + 2.0f / 5609.0f);
-		offsets[Pokemon::Sprite::BACK_SHINY]		= glm::vec2(sx + 1.0f / 1711.0f, sy * 2.0f + 2.0f / 5609.0f);
+		offsets[Pokemon::Sprite::BACK] = glm::vec2(0.0f, sy * 2.0f + 2.0f / spriteSheetSize.y);
+		offsets[Pokemon::Sprite::BACK_SHINY] = glm::vec2(sx + 1.0f / spriteSheetSize.x, sy * 2.0f + 2.0f / spriteSheetSize.y);
 		Pokemon::setUVOffsets(offsets);
 	}
-	pokemon.setUvs({ 1.0f / 1711.0f, (float) infoHeight / 5609.0f });
+	pokemon.setUvs({ 1.0f / spriteSheetSize.x, (float) infoHeight / spriteSheetSize.y });
 	pokemon.setSprite(Pokemon::Sprite::BACK);
 
 
@@ -211,12 +219,12 @@ int main() {
 		}
 
 
-		
+
 		float dx = sx / 20.0f;
 		float dy = sy / 20.0f;
 		if (control) {
-			dx = 0.1f / 1711.0f	;
-			dy = 0.1f / 5609.0f	;
+			dx = 0.1f / spriteSheetSize.x;
+			dy = 0.1f / spriteSheetSize.y;
 		}
 		else if (shift) {
 			dx = sx / 60.0f;
@@ -245,7 +253,7 @@ int main() {
 			pokemon.translateUv(glm::vec2(-dx, 0.0f));
 			//cam.rotate({ 0.0f, 1.0f, 0.0f }, M_PI / 36.0f);
 		}
-		
+
 		if (Input::isPress(GLFW_KEY_UP) || Input::isHeld(GLFW_KEY_UP)) {
 			pokemon.translateUv(glm::vec2(0.0f, -dy));
 			//cam.rotate({ 0.0f, -1.0f, 0.0f }, M_PI / 36.0f);
@@ -276,11 +284,11 @@ int main() {
 
 
 
-		//for (int i = 0; i < meshSize; i++) {
-		//	GLRenderer2D::submit(&meshes[i]);
-		//}
+		for (int i = 0; i < meshSize; i++) {
+			GLRenderer2D::submit(&meshes[i]);
+		}
 		//GLRenderer2D::submit(&mesh);
-		GLRenderer2D::submit(&pokemon);
+		//GLRenderer2D::submit(&pokemon);
 
 
 		GLRenderer2D::render();

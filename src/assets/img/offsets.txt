@@ -15,3 +15,7 @@ shiny secondary color x, y = 73, 8
 shiny tertiary color x, y = 81, 8
 
 w, h = 1711, 5609
+
+D:\GithubRepos\Architect\src\assets\img\pokemon_magenta_alpha.png
+make transparent = ff00e3
+D:\GithubRepos\Architect\src\assets\img\pokememes.png
