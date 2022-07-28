@@ -301,6 +301,7 @@ int main() {
 
 			for (int i = 0; i < meshSize; i++) {
 				GLRenderer2D::submit(&pokemons[i]);
+				pokemons[i].translate({ 0.0f, 0.0f, -0.001f });
 			}
 			GLRenderer2D::render();
 			GLRenderer2D::flush();
@@ -313,10 +314,13 @@ int main() {
 			transferShader->setUniform1f("alpha", (float) transferProgress);
 			for (int i = 0; i < meshSize; i++) {
 				GLRenderer2D::submit(&pokemons[i]);
+				pokemons[i].translate({ 0.0f, 0.0f, 0.001f });
 			}
 			GLRenderer2D::render();
 			GLRenderer2D::flush();
 			GLRenderer2D::endScene();
+
+
 		}
 
 			

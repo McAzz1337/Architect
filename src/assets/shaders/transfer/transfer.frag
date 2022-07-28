@@ -20,7 +20,7 @@ void main() {
 	
 	vec4 color = texture(tex[_texId], _uv + uvOffset);
 
-	if (color.w == 0.0 || alpha == 0.0) {
+	if (color.w == 0.0) {
 		discard;
 	}
 

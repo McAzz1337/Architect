@@ -77,8 +77,8 @@ namespace archt {
 	}
 
 	void GLRenderAPI::blendFunc(uint32_t sFactor, uint32_t dFactor) {
-		glBlendFunc(sFactor, dFactor);
 		CALL(glBlendEquation(GL_FUNC_ADD));
+		glBlendFunc(sFactor, dFactor);
 	}
 
 	void GLRenderAPI::setCullFace(uint32_t frontFace, uint32_t cullFace) {
