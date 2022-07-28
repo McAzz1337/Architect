@@ -15,6 +15,12 @@
 #include "src/gfx/opengl/gltexture.h"
 #include "src/gfx/opengl/glwindow.h"
 
+// audio
+#include "src/audio/openal/sounddevice.h"
+#include "src/audio/openal/audiobuffer.h"
+#include "src/audio/openal/soundsource.h"
+
+
 //glm
 #include <glm/gtx/transform.hpp>
 
@@ -26,7 +32,9 @@
 #include "spritesheet.h"
 
 
-
+double scrollTime = 10.0;
+float scrollY = 0.0f;
+float step = 0.0f;
 
 int main() {
 
@@ -35,6 +43,8 @@ int main() {
 
 	GLWindow* window = GLRenderAPI::init();
 	GLRenderer2D::init();
+
+
 	Input::init();
 
 	Camera cam(M_PI / 3.0f, 1080.0f / 720.0f, 0.001f, 1000.0f);
@@ -48,14 +58,30 @@ int main() {
 	fastShader->registerUniformBuffer(uniformBuffer);
 	transferShader->registerUniformBuffer(uniformBuffer);
 
-	int meshSize = 251;// GLRenderAPI::getMaxMatricesCount();
+	int pokemonCount = 251;// GLRenderAPI::getMaxMatricesCount();
 
 	Pokemon pokemon;
-	Pokemon* pokemons = new Pokemon[meshSize];
+	Pokemon* pokemons = new Pokemon[pokemonCount];
+	Pokemon trainer;
 
-	SpriteSheet spriteSheet("src/assets/img/pokememes.png");
-	pokemon.setSpriteSheet(&spriteSheet);
+	SpriteSheet* trainerSheet = new SpriteSheet("src/assets/img/trainers.png");
+	SpriteSheet* spriteSheet = new SpriteSheet("src/assets/img/pokememes.png");
+	
+	
+	pokemon.setSpriteSheet(spriteSheet);
 	pokemon.setShader(fastShader);
+
+	trainer.setSpriteSheet(trainerSheet);
+	trainer.setShader(fastShader);
+
+#pragma region SOUND_SETUP
+	SoundDevice::init();
+	AudioBuffer* music = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/pokemon-rgby-wild-pokemon-battle-music.wav");
+	AudioBuffer* stealYaBitch = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/stealyabitch.wav");
+	SoundSource* source = new SoundSource(music);
+	SoundSource* source1 = new SoundSource(stealYaBitch);
+
+#pragma endregion SOUND_SETUP
 
 
 #pragma region BUFFER_SETUP
@@ -79,65 +105,83 @@ int main() {
 
 		pokemon.setVbo(verteces, vSize);
 		pokemon.setIbo(indeces, iSize);
-
-		for (int i = 0; i < meshSize; i++) {
-			pokemons[i].setSpriteSheet(&spriteSheet);
+		
+		trainer.setVbo(verteces, vSize);
+		trainer.setIbo(indeces, iSize);
+		
+		for (int i = 0; i < pokemonCount; i++) {
+			pokemons[i].setSpriteSheet(spriteSheet);
 			pokemons[i].setShader(fastShader);
 			pokemons[i].setVbo(verteces, vSize);
 			pokemons[i].setIbo(indeces, iSize);
 		}
-
+		
 
 	}
 #pragma endregion BUFFER_SETUP
 
 	int size = 56;
 	int footprintSize = 16;
-	glm::vec2 spriteSheetSize = spriteSheet.getSize();
-	glm::vec2 spriteSize = spriteSheet.normalizeUv(size, size);
+	glm::vec2 spriteSheetSize = spriteSheet->getSize();
+	glm::vec2 spriteSize = spriteSheet->normalizeUv(size, size);
 	glm::ivec2 strides = { 171, 188 };
-	glm::vec2 pixelSizes = spriteSheet.getPixelSizes();
+	glm::vec2 pixelSizes = spriteSheet->getPixelSizes();
 
 
 
 #pragma region UV_SETUP
 	{
 		pokemon.setSpriteSize(spriteSize);
-		pokemon.setFootprintSize(spriteSheet.normalizeUv(footprintSize, footprintSize));
+		pokemon.setFootprintSize(spriteSheet->normalizeUv(footprintSize, footprintSize));
+		
+		trainer.setSpriteSize(trainerSheet->normalizeUv(size, size));
+		trainer.setFootprintSize({ 0.0f, 0.0f });
 
-		for (int i = 0; i < meshSize; i++) {
+		for (int i = 0; i < pokemonCount; i++) {
 			pokemons[i].setSpriteSize(spriteSize);
-			pokemons[i].setFootprintSize(spriteSheet.normalizeUv(footprintSize, footprintSize));
+			pokemons[i].setFootprintSize(spriteSheet->normalizeUv(footprintSize, footprintSize));
 		}
+		
 
 		glm::vec2 offsets[Pokemon::Sprite::NONE];
-		offsets[Pokemon::Sprite::FRONT] = spriteSheet.normalizeUv(1, 18);
-		offsets[Pokemon::Sprite::FRONT_SHINY] = spriteSheet.normalizeUv(2 + size, 18);
-
-		offsets[Pokemon::Sprite::FRONT_ALT] = spriteSheet.normalizeUv(1, 19 + size);
-		offsets[Pokemon::Sprite::FRONT_ALT_SHINY] = spriteSheet.normalizeUv(2 + size, 19 + size);
-
-
-		offsets[Pokemon::Sprite::BACK] = spriteSheet.normalizeUv(1, 2 * size + 20);
-		offsets[Pokemon::Sprite::BACK_SHINY] = spriteSheet.normalizeUv(2 + size, 2 * size + 20);
-
-		offsets[Pokemon::Sprite::FOOTPRINT] = spriteSheet.normalizeUv(115, 1);
-
+		offsets[Pokemon::Sprite::FRONT] = glm::vec2(0.0f, 0.0f);
+		offsets[Pokemon::Sprite::FRONT_SHINY] = glm::vec2(0.0f, 0.0f);
+		
+		offsets[Pokemon::Sprite::FRONT_ALT] = glm::vec2(0.0f, 0.0f);
+		offsets[Pokemon::Sprite::FRONT_ALT_SHINY] = glm::vec2(0.0f, 0.0f);
+		
+		
+		offsets[Pokemon::Sprite::BACK] = glm::vec2(0.0f, 0.0f);
+		offsets[Pokemon::Sprite::BACK_SHINY] = glm::vec2(0.0f, 0.0f);
+		
+		offsets[Pokemon::Sprite::FOOTPRINT] = glm::vec2(0.0f, 0.0f);
+		
 		pokemon.loadOffset("src/assets/img/pokememes_offset.txt");
-		for (int i = 0; i < meshSize; i++) {
+		trainer.setUVOffsets(offsets);
+
+		int y = 0;
+		for (int i = 0; i < pokemonCount; i++) {
 			pokemons[i].loadOffset("src/assets/img/pokememes_offset.txt");
 
 			int x = i % 10;
-			int y = (i - x) / 10;
+			y = (i - x) / 10;
 
-			pokemons[i].setUvs(spriteSheet.normalizeUv(x * strides.x, y * strides.y));
+
+			pokemons[i].setUvs(spriteSheet->normalizeUv(x * strides.x, y * strides.y));
 
 			pokemons[i].setSprite(Pokemon::Sprite::FRONT);
-			pokemons[i].translate({ (float) x, (float) y, 0.0f });
+			pokemons[i].translate({ (float) x - 4.5f, (float) y, -5.0f });
 		}
+		scrollY = (float) y / -100.0f;
+		step = scrollY / (float) scrollTime;
 	}
 	pokemon.setUvs({ 0.0f, 0.0f });
 	pokemon.setSprite(Pokemon::Sprite::FRONT);
+	
+	trainer.setUvs(trainerSheet->normalizeUv(0, 10 * size));
+	trainer.setSprite(Pokemon::Sprite::FRONT);
+	trainer.translate({ -1.5f, 0.0f, 0.0f });
+
 #pragma endregion UV_SETUP
 
 	FileManager::instance.logAllocateMemory(FileManager::DataType::KILO_BYTES);
@@ -147,10 +191,7 @@ int main() {
 	DeltaTime delta;
 	double elapsed = 0;
 
-	double transferDuration = 2.0;
-	double transferProgress = 0.0;
-	bool inTransfer = false;
-
+	source->play();
 	while (true) {
 		delta.update();
 
@@ -214,7 +255,7 @@ int main() {
 			if (sprite == Pokemon::Sprite::NONE) {
 				sprite = Pokemon::Sprite::FRONT;
 			}
-			for (int i = 0; i < meshSize; i++) {
+			for (int i = 0; i < pokemonCount; i++) {
 				pokemons[i].setSprite((Pokemon::Sprite) sprite);
 			}
 			pokemon.setSprite((Pokemon::Sprite) sprite);
@@ -245,93 +286,32 @@ int main() {
 		GLRenderer2D::beginScene(&cam);
 
 
-		//GLRenderer2D::submit(&pokemon);
+		bool scroll = elapsed > 1.0;
+		static bool first = true;
 		
-
-		static glm::vec2 uvOffset(0.0f, 0.0f);
-		if (!inTransfer && elapsed >= 3.0) {
-			int sprite = pokemons[0].getSprite();
-			int nextSprite = sprite + 1;
-			if (nextSprite == Pokemon::Sprite::NONE) {
-				nextSprite = Pokemon::Sprite::FRONT;
+		if (elapsed > scrollTime) {
+			if (first) {
+				source->stop();
+				source1->play();
+				first = false;
+				goto RENDER;
 			}
-			
-			const glm::vec2& uv = pokemons[0].getUvOffset((Pokemon::Sprite) sprite);
-			const glm::vec2& nextUv = pokemons[0].getUvOffset((Pokemon::Sprite) nextSprite);
-			uvOffset = nextUv - uv;
-		
-			for (int i = 0; i < meshSize; i++) {
-				pokemons[i].setShader(transferShader);
-			}
-			transferProgress = 0.0;
-			inTransfer = true;
-			elapsed -= 3.0;
-		}
-		else if (inTransfer) {
-			transferProgress = elapsed / transferDuration;
-
-			if (elapsed >= transferDuration) {
-
-				int nextSprite = pokemons[0].getSprite() + 1;
-				if (nextSprite == Pokemon::Sprite::NONE) {
-					nextSprite = Pokemon::Sprite::FRONT;
-				}
-				for (int i = 0; i < meshSize; i++) {
-					pokemons[i].setShader(fastShader);
-					pokemons[i].setSprite((Pokemon::Sprite) nextSprite);
-				}
-				
-				elapsed -= transferDuration;
-				inTransfer = false;
+			else {
+				trainer.translate({ 1.0f / 250.0f, 0.0f, 0.0f });
+				GLRenderer2D::submit(&trainer);
 			}
 		}
-
-		
-
-		
-
-		if (inTransfer) {
-			transferShader->bind();
-			
-			
-			
-			glm::vec2 off(0.0f, 0.0f);
-			transferShader->setUniform2f("uvOffset", (float*) &off);
-			transferShader->setUniform1f("alpha", (float) (1.0 - transferProgress));
-
-			for (int i = 0; i < meshSize; i++) {
-				GLRenderer2D::submit(&pokemons[i]);
-				pokemons[i].translate({ 0.0f, 0.0f, -0.001f });
-			}
-			GLRenderer2D::render();
-			GLRenderer2D::flush();
-			GLRenderer2D::endScene();
-			GLRenderer2D::beginScene(&cam);
-
-			
-			
-			transferShader->setUniform2f("uvOffset", (float*) &uvOffset);
-			transferShader->setUniform1f("alpha", (float) transferProgress);
-			for (int i = 0; i < meshSize; i++) {
-				GLRenderer2D::submit(&pokemons[i]);
-				pokemons[i].translate({ 0.0f, 0.0f, 0.001f });
-			}
-			GLRenderer2D::render();
-			GLRenderer2D::flush();
-			GLRenderer2D::endScene();
-
-
-		}
-
-			
 		else {
-			for (int i = 0; i < meshSize; i++) {
+			for (int i = 0; i < pokemonCount; i++) {
 				GLRenderer2D::submit(&pokemons[i]);
+				if (scroll) pokemons[i].translate({ 0.0f, step, 0.0f });
 			}
-			GLRenderer2D::render();
-			GLRenderer2D::flush();
-			GLRenderer2D::endScene();
 		}
+
+		RENDER:
+		GLRenderer2D::render();
+		GLRenderer2D::flush();
+		GLRenderer2D::endScene();
 
 	
 
@@ -340,12 +320,13 @@ int main() {
 		//printf("Allocated Memory: %i\n", GLRenderAPI::queryTotalMemory() - GLRenderAPI::queryAvailableMemory());
 		window->swapBuffer();
 
-		if (window->shouldClose()) {
+		if (window->shouldClose() || elapsed > 15.0) {
 			break;
 		}
 	}
 
 
+	SoundDevice::terminate();
 	GLRenderer2D::terminate();
 	FileManager::instance.deleteAllFiles();
 

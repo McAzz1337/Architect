@@ -41,6 +41,10 @@ namespace archt {
 		modelMatrix = glm::scale(modelMatrix, s);
 	}
 
+	void GLMesh::resetMatrix() {
+		modelMatrix = glm::mat4(1.0f);
+	}
+
 
 	void GLMesh::setVbo(VBO* vbo) {
 		if (this->vbo) 

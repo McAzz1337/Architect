@@ -32,7 +32,7 @@ namespace archt {
 		static IBO* ibo;
 		static GLVertexarray* vao;
 		static Camera* cam;
-		static std::vector<GLMesh*> meshes;
+		static GLMesh** meshes;
 		static glm::mat4* matrices;
 		static int* textures;
 

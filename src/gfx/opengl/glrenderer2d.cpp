@@ -30,7 +30,7 @@ namespace archt {
 	IBO* GLRenderer2D::ibo = nullptr;
 	GLVertexarray* GLRenderer2D::vao = nullptr;
 
-	std::vector<GLMesh*> GLRenderer2D::meshes;
+	GLMesh** GLRenderer2D::meshes = nullptr;
 	glm::mat4* GLRenderer2D::matrices = nullptr;
 	int* GLRenderer2D::textures = nullptr;
 
@@ -40,7 +40,7 @@ namespace archt {
 
 	void GLRenderer2D::init() {
 
-		meshes.reserve(MAX_OBJECTS);
+		meshes = new GLMesh*[MAX_OBJECTS];
 
 
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
@@ -98,7 +98,7 @@ namespace archt {
 			beginScene(cam);
 		}
 
-		meshes.push_back(mesh);
+		meshes[currentMesh] = mesh;
 		currentMesh++;
 	}
 
@@ -140,13 +140,11 @@ namespace archt {
 
 			if (texIndex != -1) {
 				vb->setTexId((float) texIndex);
-				//printf("texture reused at index %i\n", texIndex);
 			}
 			else {
 				tex->bind(currentTexture);
 				vb->setTexId((float) currentTexture);
 				textures[currentTexture] = tex->getId();
-				//printf("inserted new texture at index %i\n", currentTexture);
 				currentTexture++;
 			}
 
@@ -175,7 +173,7 @@ namespace archt {
 			GLShader* nextShader = meshes[i + 1]->getShader();
 			if (nextShader != currentShader) {
 				index = i + 1;
-				for (int j = i + 2; j < meshes.size(); j++) {
+				for (int j = i + 2; j < currentMesh; j++) {
 					nextShader = meshes[j]->getShader();
 					if (nextShader == currentShader) {
 						GLMesh* mesh = meshes[j];
@@ -213,7 +211,6 @@ namespace archt {
 		activeShader->bind();
 		std::string shaderName = "";
 		extractFileName(activeShader->getFileName(), shaderName);
-		printf("rendering with shader [ %s ]\n", shaderName.c_str());
 		if (Uniformbuffer* buffer = activeShader->getUniformBuffer()) {
 			buffer->bind();
 			buffer->write(0, (void*) matrices, currentMatrix * sizeof(glm::mat4));

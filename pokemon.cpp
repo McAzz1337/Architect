@@ -78,7 +78,7 @@ void Pokemon::snapUvs() {
 
 void Pokemon::setSpriteSheet(SpriteSheet* sheet) {
 	spriteSheet = sheet;
-	setTexture(spriteSheet->getTexture());
+	setTexture(spriteSheet);
 }
 
 void Pokemon::setFootprintSize(const glm::vec2& size) {

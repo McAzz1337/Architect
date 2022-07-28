@@ -30,6 +30,7 @@ namespace archt {
 		void rotate(float angle, const glm::vec3& axis);
 		void scale(const glm::vec3& s);
 
+		void resetMatrix();
 
 		void setVbo(VBO* vbo);
 		void setVbo(Vertex* verteces, uint32_t size);

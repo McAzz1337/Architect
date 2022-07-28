@@ -4,11 +4,11 @@
 #include "src/gfx/opengl/gltexture.h"
 
 
-class SpriteSheet {
+class SpriteSheet : public archt::GLTexture {
 
-	archt::GLTexture* texture = nullptr;
 	float pixelX = 0.0f;
 	float pixelY = 0.0f;
+	glm::vec2 spriteSize;
 
 
 public:
@@ -18,8 +18,11 @@ public:
 
 	glm::vec2 normalizeUv(int x = 0, int y = 0);
 
-	glm::vec2 getSize() const;
 
-	inline archt::GLTexture* getTexture() const { return texture; }
+	void setSpriteSize(const glm::vec2& size);
+
+	const glm::vec2 getSpriteSizeNormalized() const;
+
 	inline glm::vec2 getPixelSizes() const { return glm::vec2(pixelX, pixelY); }
+	inline const glm::vec2& getSpriteSize() const { return spriteSize; }
 };

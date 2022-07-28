@@ -32,7 +32,7 @@ namespace archt {
 			GLShaderConstants::modifySahderSource(gsrc);
 		GLShaderConstants::modifySahderSource(fsrc);
 
-		logShaderSource();
+		//logShaderSource();
 
 		int vid = 0;
 		int gid = 0;
@@ -89,8 +89,6 @@ namespace archt {
 		compileShader(fsrc, GL_FRAGMENT_SHADER, fid);
 
 		createProgram(id, vid, gid, fid);
-
-
 	}
 
 	GLShader::~GLShader() {
@@ -203,6 +201,7 @@ namespace archt {
 		const char* temp = src.c_str();
 		glShaderSource(id, 1, &temp, NULL);
 		glCompileShader(id);
+		
 		int isCompiled = 0;
 		glGetShaderiv(id, GL_COMPILE_STATUS, &isCompiled);
 

@@ -20,6 +20,8 @@ namespace archt {
 		void translate(const glm::vec3& t);
 		void rotate(const glm::vec3& axis, float angle);
 
+		void resetMatrix();
+
 		inline const glm::mat4& getProjection() const { return projection; }
 		inline const glm::mat4& getView() const { return glm::inverse(view); }
 		inline const glm::mat4 getProjectionView() const { return projection * glm::inverse(view); }

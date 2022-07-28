@@ -7,6 +7,7 @@ namespace archt {
 
 	class GLTexture {
 
+	protected:
 		std::string file;
 		uint32_t id = 0;
 		int w = 0;
@@ -16,14 +17,14 @@ namespace archt {
 		GLTexture();
 		GLTexture(const GLTexture& other);
 		GLTexture(const std::string& path);
-		~GLTexture();
+		virtual ~GLTexture();
 
 		void bind(int index) const;
 
 
 		inline const std::string& getFilePath() const { return file; }
 		inline uint32_t getId() const { return id; }
-		inline glm::ivec2 getSize() const { return glm::ivec2(w, h); }
+		inline glm::vec2 getSize() const { return glm::vec2((float) w, (float) h); }
 
 		static void createEmptyTexture(GLTexture* tex, int width, int height);
 		static void createTextureFromData(GLTexture* tex, const unsigned char* data, int width, int height);

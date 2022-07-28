@@ -28,4 +28,9 @@ namespace archt {
 		view = glm::rotate(view, angle, axis);
 	}
 
+	void Camera::resetMatrix() {
+		view = glm::mat4(1.0f);
+		translate({ 0.0f, 0.0f, 1.0f });
+	}
+
 }
