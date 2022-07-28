@@ -15,6 +15,7 @@ namespace archt {
 		static std::string shaderLanguageVersion;
 
 		static int availableMemory;
+		static int totalMemory;
 		static uint32_t clearMask;
 
 		static GLWindow* window;
@@ -39,6 +40,8 @@ namespace archt {
 		static void removeFromClearMask(uint32_t mask);
 
 
+		static int queryAvailableMemory();
+		static int queryTotalMemory();
 		static int getMaxTextureCount();
 		static int getMaxMatricesCount();
 

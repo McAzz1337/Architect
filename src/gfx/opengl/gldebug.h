@@ -6,10 +6,9 @@
 #define GL_ASSERT(x) if (!x) { __debugbreak(); }
 
 #define CALL(x) archt::clearError(); x; GL_ASSERT(archt::checkError(#x, __FILE__, __LINE__))
+#define CHECK_ERROR(x) checkError(#x, __FILE__, __LINE__)
 
 namespace archt {
-
-
 
 	static void clearError() {
 		while (glGetError() != GL_NO_ERROR) {}

@@ -56,6 +56,7 @@ namespace archt {
 		setUniform1iv("tex", maxTextures, texIndeces);
 
 		delete[] texIndeces;
+		
 		std::string srcPath;
 		std::string srcName;
 		splitPath(path, srcPath, srcName);
@@ -127,16 +128,28 @@ namespace archt {
 			glUniform1fv(location, count, uniform);
 	}
 
+	void GLShader::setUniform1f(const std::string& name, float uniform) const {
+		int location = getUniformLocation(name);
+		if (location > -1)
+			CALL(glUniform1f(location, uniform));
+	}
+
+	void GLShader::setUniform2f(const std::string& name, float* uniform) const {
+		int location = getUniformLocation(name);
+		if (location > -1)
+			CALL(glUniform2f(location, uniform[0], uniform[1]));
+	}
+
+	void GLShader::setUniform3f(const std::string& name, float* uniform) const {
+		int location = getUniformLocation(name);
+		if (location > -1)
+			glUniform3f(location, uniform[0], uniform[1], uniform[3]);
+	}
+
 	void GLShader::setUniform4f(const std::string& name, float* uniform) const {
 		int location = getUniformLocation(name);
 		if (location > -1)
 			glUniform4f(location, uniform[0], uniform[1], uniform[2], uniform[3]);
-	}
-
-	void GLShader::setUniform1f(const std::string& name, float uniform) const {
-		int location = getUniformLocation(name);
-		if (location > -1)
-			glUniform1f(location, uniform);
 	}
 
 	void GLShader::setUniform1i(const std::string& name, int uniform) const {
@@ -170,11 +183,10 @@ namespace archt {
 	}
 
 	void GLShader::registerUniformBuffer(Uniformbuffer* buffer) {
+		if (uniformBuffer)
+			return;
+
 		uniformBuffer = buffer;
-		buffer->bind();
-		for (int i = 0; i < uniformBuffers.size(); i++) {
-			buffer->bindUniformBlock(id, uniformBuffers[i]);
-		}
 	}
 
 

@@ -75,6 +75,12 @@
     <ClCompile Include="pokemon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="spritesheet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\chronos\deltatime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\fileio.h">
@@ -143,16 +149,27 @@
     <ClInclude Include="pokemon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="spritesheet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\chronos\deltatime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\assets\shaders\shader\shader.frag" />
     <None Include="src\assets\shaders\shader\shader.vert" />
     <None Include="src\assets\shaders\fastshader\fastshader.vert" />
     <None Include="src\assets\shaders\fastshader\fastshader.frag" />
+    <None Include="src\assets\shaders\transfer\transfer.vert" />
+    <None Include="src\assets\shaders\transfer\transfer.frag" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\assets\shaders\shader\uniforms.txt" />
     <Text Include="src\assets\shaders\fastshader\uniforms.txt" />
     <Text Include="src\assets\shaders\fastshader\uniformbuffers.txt" />
+    <Text Include="src\assets\img\pokememes_offset.txt" />
+    <Text Include="src\assets\shaders\transfer\uniformbuffers.txt" />
+    <Text Include="src\assets\shaders\transfer\uniforms.txt" />
   </ItemGroup>
 </Project>

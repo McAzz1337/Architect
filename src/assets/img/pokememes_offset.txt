@@ -1,0 +1,7 @@
+front  =1,18
+front shiny=58,18
+front_alt=1,75
+front_alt_shiny=58,75
+back=1,132
+back_shiny=58,132
+footprint=115,1

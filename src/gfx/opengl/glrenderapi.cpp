@@ -1,6 +1,7 @@
 #include "glrenderapi.h"
 
 #include "glinclude.h"
+#include "gldebug.h"
 
 #include "glshaderconstants.h"
 
@@ -13,6 +14,7 @@ namespace archt {
 
 	
 	int GLRenderAPI::availableMemory = 0;
+	int GLRenderAPI::totalMemory = 0;
 	int GLRenderAPI::maxTextures = 32;
 	int GLRenderAPI::maxMatrices = 256;
 	GLWindow* GLRenderAPI::window = nullptr;
@@ -37,7 +39,9 @@ namespace archt {
 		}
 
 		glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &availableMemory);
+		glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &totalMemory);
 		
+
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextures);
 		GLShaderConstants::setConstant(GLShaderConstants::MAX_TEXTURES, &maxTextures);
 		int maxVec4 = 0;
@@ -53,7 +57,7 @@ namespace archt {
 		model = std::string((char*) glGetString(GL_RENDERER));
 		shaderLanguageVersion = std::string((char*) glGetString(GL_SHADING_LANGUAGE_VERSION));
 
-		std::string title = "Architect | " + vendor + " | " + version + " | " + model + " | " + shaderLanguageVersion;
+		std::string title = "Architect | " + vendor + " | " + version + " | " + model + " | " + shaderLanguageVersion + " | Memory: " + std::to_string(totalMemory);
 
 		window->setTitle(title.c_str());
 
@@ -73,8 +77,8 @@ namespace archt {
 	}
 
 	void GLRenderAPI::blendFunc(uint32_t sFactor, uint32_t dFactor) {
-		glBlendEquation(GL_ADD);
 		glBlendFunc(sFactor, dFactor);
+		CALL(glBlendEquation(GL_FUNC_ADD));
 	}
 
 	void GLRenderAPI::setCullFace(uint32_t frontFace, uint32_t cullFace) {
@@ -93,6 +97,15 @@ namespace archt {
 
 	void GLRenderAPI::removeFromClearMask(uint32_t mask) {
 		clearMask &= ~mask;
+	}
+
+	int GLRenderAPI::queryAvailableMemory() {
+		glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &availableMemory);
+		return availableMemory;
+	}
+
+	int GLRenderAPI::queryTotalMemory() {
+		return totalMemory;
 	}
 
 	int GLRenderAPI::getMaxTextureCount() {

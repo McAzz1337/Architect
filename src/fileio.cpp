@@ -69,6 +69,22 @@ namespace archt {
 		fileDst = path.substr(delimeter + 1);
 	}
 
+	void split(const std::string& src, const char delimeter, std::string* tokens, int size) {
+		
+		int start = 0;
+		for (int i = 0; i < size; i++) {
+
+			int end = src.find(delimeter, start);
+			if (end == std::string::npos) {
+				tokens[i] = src.substr(start);
+				break;
+			}
+
+			tokens[i] = src.substr(start, end);
+			start = end + 1;
+		}
+	}
+
 
 	uint64_t requestFileSize(const std::string& path) {
 		

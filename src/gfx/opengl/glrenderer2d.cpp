@@ -5,6 +5,8 @@
 
 #include "glshaderconstants.h"
 
+#include "../../fileio.h"
+
 namespace archt {
 
 	int drawcalls = 0;
@@ -49,7 +51,7 @@ namespace archt {
 		GLRenderAPI::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		GLRenderAPI::setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//GLRenderAPI::setCullFace(GL_CW, GL_BACK);
+		GLRenderAPI::setCullFace(GL_CW, GL_BACK);
 
 		Vertex* verteces = new Vertex[MAX_VERTECES];
 		vbo = new VBO(verteces, MAX_VERTECES);
@@ -81,7 +83,7 @@ namespace archt {
 	}
 	void GLRenderer2D::endScene() {
 		inScene = false;
-		printf("%i drawcalls per scene\n", drawcalls);
+		//printf("%i drawcalls per scene\n", drawcalls);
 		currentMesh = 0;
 		drawcalls = 0;
 	}
@@ -209,6 +211,9 @@ namespace archt {
 		vao->bind();
 
 		activeShader->bind();
+		std::string shaderName = "";
+		extractFileName(activeShader->getFileName(), shaderName);
+		printf("rendering with shader [ %s ]\n", shaderName.c_str());
 		if (Uniformbuffer* buffer = activeShader->getUniformBuffer()) {
 			buffer->bind();
 			buffer->write(0, (void*) matrices, currentMatrix * sizeof(glm::mat4));
@@ -218,7 +223,7 @@ namespace archt {
 			activeShader->setMatrixf4v("mvp", matrices, currentMatrix);
 		}
 		glDrawElements(GL_TRIANGLES, currentIndex, GL_UNSIGNED_INT, nullptr);
-		printf("%i meshesdrawn in drawcall %i\n", currentMatrix, drawcalls);
+		//printf("%i meshesdrawn in drawcall %i\n", currentMatrix, drawcalls);
 		drawcalls++;
 	}
 

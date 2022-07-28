@@ -11,6 +11,8 @@ namespace archt {
 	void extractFileName(const std::string& path, std::string& dst);
 	void splitPath(const std::string& path, std::string& pathDst, std::string& fileDst);
 
+	void split(const std::string& src, const char delimeter, std::string* tokens, int size);
+
 	uint64_t requestFileSize(const std::string& path);
 
 }

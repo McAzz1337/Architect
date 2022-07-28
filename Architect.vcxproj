@@ -133,6 +133,8 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pokemon.cpp" />
+    <ClCompile Include="spritesheet.cpp" />
+    <ClCompile Include="src\chronos\deltatime.cpp" />
     <ClCompile Include="src\fileio.cpp" />
     <ClCompile Include="src\filesystem\filemanager.cpp" />
     <ClCompile Include="src\gfx\opengl\buffers.cpp" />
@@ -154,6 +156,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pokemon.h" />
+    <ClInclude Include="spritesheet.h" />
+    <ClInclude Include="src\chronos\deltatime.h" />
     <ClInclude Include="src\fileio.h" />
     <ClInclude Include="src\filesystem\filemanager.h" />
     <ClInclude Include="src\gfx\opengl\buffers.h" />
@@ -181,11 +185,16 @@
     <None Include="src\assets\shaders\fastshader\fastshader.vert" />
     <None Include="src\assets\shaders\shader\shader.frag" />
     <None Include="src\assets\shaders\shader\shader.vert" />
+    <None Include="src\assets\shaders\transfer\transfer.frag" />
+    <None Include="src\assets\shaders\transfer\transfer.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="src\assets\img\pokememes_offset.txt" />
     <Text Include="src\assets\shaders\fastshader\uniformbuffers.txt" />
     <Text Include="src\assets\shaders\fastshader\uniforms.txt" />
     <Text Include="src\assets\shaders\shader\uniforms.txt" />
+    <Text Include="src\assets\shaders\transfer\uniformbuffers.txt" />
+    <Text Include="src\assets\shaders\transfer\uniforms.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

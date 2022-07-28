@@ -1,6 +1,7 @@
 #include "uniformbuffer.h"
 
 #include "glinclude.h"
+#include "gldebug.h"
 
 namespace archt {
 	
@@ -42,12 +43,18 @@ namespace archt {
 	}
 
 	void Uniformbuffer::upload() const {
-		glBufferSubData(GL_UNIFORM_BUFFER, 0, size, data);
+		CALL(glBufferSubData(GL_UNIFORM_BUFFER, 0, size, data));
 	}
 
 
 	int Uniformbuffer::getUniformBlockLocation(uint32_t shaderId, const std::string& blockName) const {
-		return glGetUniformBlockIndex(shaderId, blockName.c_str());
+		int location =  glGetUniformBlockIndex(shaderId, blockName.c_str());
+		CHECK_ERROR(glGetUniformBlockIndex(shaderId, blockName.c_str()));
+
+		if (location == GL_INVALID_INDEX) {
+			__debugbreak();
+		}
+		return location;
 	}
 
 

@@ -1,20 +1,25 @@
 #include "pokemon.h"
 
+#include "src/fileio.h"
 
 
-glm::vec2 Pokemon::uvOffsets[Sprite::NONE];
-glm::vec2 Pokemon::spriteSize;
-glm::vec2 Pokemon::spriteSheetSize;
 
 Pokemon::Pokemon() {
 
 }
 
-Pokemon::Pokemon(glm::vec2 uv) {
+Pokemon::Pokemon(glm::vec2 uv) : uv(uv) {
+
 	uvs[Sprite::FRONT] = uv + uvOffsets[Sprite::FRONT];
 	uvs[Sprite::FRONT_SHINY] = uv + uvOffsets[Sprite::FRONT_SHINY];
+
+	uvs[Sprite::FRONT_ALT] = uv + uvOffsets[Sprite::FRONT_ALT];
+	uvs[Sprite::FRONT_ALT_SHINY] = uv + uvOffsets[Sprite::FRONT_ALT_SHINY];
+
 	uvs[Sprite::BACK] = uv + uvOffsets[Sprite::BACK];
 	uvs[Sprite::BACK_SHINY] = uv + uvOffsets[Sprite::BACK_SHINY];
+
+	uvs[Sprite::FOOTPRINT] = uv + uvOffsets[Sprite::FOOTPRINT];
 }
 
 Pokemon::~Pokemon() {
@@ -27,6 +32,7 @@ void Pokemon::setSprite(Sprite sprite) {
 	this->sprite = sprite;
 
 	glm::vec2 coord = uvs[sprite];
+	glm::vec2 spriteSize = sprite == Sprite::FOOTPRINT ? footprintSize :  this->spriteSize;
 
 	Vertex* verteces = vbo->getData();
 	int size = vbo->getSize();
@@ -41,14 +47,17 @@ void Pokemon::setSprite(Sprite sprite) {
 }
 
 void Pokemon::setUvs(const glm::vec2& uv) {
+	this->uv = uv;
 	uvs[Sprite::FRONT] = uv + uvOffsets[Sprite::FRONT];
 	uvs[Sprite::FRONT_SHINY] = uv + uvOffsets[Sprite::FRONT_SHINY];
-	
+
 	uvs[Sprite::FRONT_ALT] = uv + uvOffsets[Sprite::FRONT_ALT];
 	uvs[Sprite::FRONT_ALT_SHINY] = uv + uvOffsets[Sprite::FRONT_ALT_SHINY];
 
 	uvs[Sprite::BACK] = uv + uvOffsets[Sprite::BACK];
 	uvs[Sprite::BACK_SHINY] = uv + uvOffsets[Sprite::BACK_SHINY];
+
+	uvs[Sprite::FOOTPRINT] = uv + uvOffsets[Sprite::FOOTPRINT];
 	setSprite(sprite);
 }
 
@@ -64,24 +73,22 @@ void Pokemon::translateUv(const glm::vec2& v) {
 }
 
 void Pokemon::snapUvs() {
-	
-	archt::Vertex* verteces = vbo->getData();
-	int size = vbo->getSize();
-	const glm::vec2 uv = verteces[0].uv;
-	
-	float restX = fmod(uv.x, spriteSize.x);
 
-	glm::vec2 translation;
-	
-	if (restX < spriteSize.x)
-		translation.x = uv.x - 1.0f / spriteSheetSize.x;
-	else
-		translation.x = -restX;
+}
 
-	translateUv(translation);
+void Pokemon::setSpriteSheet(SpriteSheet* sheet) {
+	spriteSheet = sheet;
+	setTexture(spriteSheet->getTexture());
+}
+
+void Pokemon::setFootprintSize(const glm::vec2& size) {
+	footprintSize = size;
 }
 
 
+void Pokemon::setSpriteSize(const glm::vec2& size) {
+	spriteSize = size;
+}
 
 void Pokemon::setUVOffsets(glm::vec2* offsets) {
 	for (int i = 0; i < Sprite::NONE; i++) {
@@ -89,15 +96,20 @@ void Pokemon::setUVOffsets(glm::vec2* offsets) {
 	}
 }
 
-void Pokemon::setSpriteSize(const glm::vec2& size) {
-	spriteSize = size;
+void Pokemon::loadOffset(const std::string& path) {
+	std::vector<std::string> lines;
+	archt::readFileSplit(path, lines, true);
+
+	for (int i = 0; i < Sprite::NONE; i++) {
+		std::string tokens[2];
+		archt::split(lines[i], '=', tokens, 2);
+		std::string values[2];
+		archt::split(tokens[1], ',', values, 2);
+		uvOffsets[i] = spriteSheet->normalizeUv(std::stoi(values[0]), std::stoi(values[1]));
+	}
 }
 
-void Pokemon::setSpriteSheetSize(const glm::vec2& size) {
-	spriteSheetSize = size;
-}
 
 
-const glm::vec2& Pokemon::getSpriteSheetSize() {
-	return spriteSheetSize;
-}
+
+

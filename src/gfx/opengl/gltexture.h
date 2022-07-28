@@ -1,5 +1,6 @@
 #pragma once
 
+#include "glm/vec2.hpp"
 #include <string>
 
 namespace archt {
@@ -22,6 +23,7 @@ namespace archt {
 
 		inline const std::string& getFilePath() const { return file; }
 		inline uint32_t getId() const { return id; }
+		inline glm::ivec2 getSize() const { return glm::ivec2(w, h); }
 
 		static void createEmptyTexture(GLTexture* tex, int width, int height);
 		static void createTextureFromData(GLTexture* tex, const unsigned char* data, int width, int height);

@@ -2,6 +2,7 @@
 
 #include "src/gfx/opengl/glmesh.h";
 #include <glm/vec2.hpp>
+#include "spritesheet.h"
 
 class Pokemon : public archt::GLMesh {
 
@@ -14,18 +15,21 @@ public:
 		FRONT_ALT_SHINY,
 		BACK,
 		BACK_SHINY,
+		FOOTPRINT,
 		NONE
 	};
 
 private:
-	static glm::vec2 uvOffsets[Sprite::NONE];
-	static glm::vec2 spriteSize;
-	static glm::vec2 spriteSheetSize;
 
 
 	int index = 0;
+	glm::vec2 uv;
 	glm::vec2 uvs[Sprite::NONE];
 	Sprite sprite = Sprite::FRONT;
+	SpriteSheet* spriteSheet = nullptr;
+	glm::vec2 spriteSize;
+	glm::vec2 footprintSize;
+	glm::vec2 uvOffsets[Sprite::NONE];
 
 public:
 	Pokemon();
@@ -39,11 +43,15 @@ public:
 	void snapUvs();
 
 	inline Sprite getSprite() const { return sprite; }
+	inline SpriteSheet* getSpriteSheet() const { return spriteSheet; }
+	inline const glm::vec2& getUvOffset(Sprite sprite) const { return uvOffsets[sprite]; }
+	inline const glm::vec2& getUv() const { return uv; }
 
-	static void setUVOffsets(glm::vec2* offsets);
-	static void setSpriteSize(const glm::vec2& size);
-	static void setSpriteSheetSize(const glm::vec2& size);
+	void setSpriteSheet(SpriteSheet* sheet);
+	void setSpriteSize(const glm::vec2& size);
+	void setFootprintSize(const glm::vec2& size);
 
-	static const glm::vec2& getSpriteSheetSize();
+	void setUVOffsets(glm::vec2* offsets);
+	void loadOffset(const std::string& path);
 
 };
