@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 # Folders to Ignore
 vendor/
+src/assets/audio
