@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pokemon.cpp" />
+    <ClCompile Include="src\audio\openal\audiorenderer.cpp" />
     <ClCompile Include="src\audio\openal\sounddevice.cpp" />
     <ClCompile Include="spritesheet.cpp" />
     <ClCompile Include="src\audio\openal\audiobuffer.cpp" />
@@ -159,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pokemon.h" />
+    <ClInclude Include="src\audio\openal\audiorenderer.h" />
     <ClInclude Include="src\audio\openal\sounddevice.h" />
     <ClInclude Include="spritesheet.h" />
     <ClInclude Include="src\audio\openal\audiobuffer.h" />

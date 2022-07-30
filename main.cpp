@@ -19,6 +19,7 @@
 #include "src/audio/openal/sounddevice.h"
 #include "src/audio/openal/audiobuffer.h"
 #include "src/audio/openal/soundsource.h"
+#include "src/audio/openal/audiorenderer.h"
 
 
 //glm
@@ -43,7 +44,6 @@ int main() {
 
 	GLWindow* window = GLRenderAPI::init();
 	GLRenderer2D::init();
-
 
 	Input::init();
 
@@ -76,11 +76,11 @@ int main() {
 
 #pragma region SOUND_SETUP
 	SoundDevice::init();
+	AudioRenderer::init();
 	AudioBuffer* music = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/pokemon-rgby-wild-pokemon-battle-music.wav");
 	AudioBuffer* stealYaBitch = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/stealyabitch.wav");
 	SoundSource* source = new SoundSource(music);
-	SoundSource* source1 = new SoundSource(stealYaBitch);
-
+	
 #pragma endregion SOUND_SETUP
 
 
@@ -160,6 +160,9 @@ int main() {
 		trainer.setUVOffsets(offsets);
 
 		int y = 0;
+		std::vector<std::string> cryFiles;
+		std::string dir = "src/assets/audio/cries";
+		getEntries(dir, cryFiles);
 		for (int i = 0; i < pokemonCount; i++) {
 			pokemons[i].loadOffset("src/assets/img/pokememes_offset.txt");
 
@@ -171,6 +174,9 @@ int main() {
 
 			pokemons[i].setSprite(Pokemon::Sprite::FRONT);
 			pokemons[i].translate({ (float) x - 4.5f, (float) y, -5.0f });
+		
+			AudioBuffer* cry = new AudioBuffer(dir + "/" + cryFiles[i]);
+			pokemons[i].setCry(cry);
 		}
 		scrollY = (float) y / -100.0f;
 		step = scrollY / (float) scrollTime;
@@ -191,7 +197,8 @@ int main() {
 	DeltaTime delta;
 	double elapsed = 0;
 
-	source->play();
+
+
 	while (true) {
 		delta.update();
 
@@ -287,44 +294,36 @@ int main() {
 
 
 		bool scroll = elapsed > 1.0;
-		static bool first = true;
 		
-		if (elapsed > scrollTime) {
-			if (first) {
-				source->stop();
-				source1->play();
-				first = false;
-				goto RENDER;
-			}
-			else {
-				trainer.translate({ 1.0f / 250.0f, 0.0f, 0.0f });
-				GLRenderer2D::submit(&trainer);
-			}
-		}
-		else {
-			for (int i = 0; i < pokemonCount; i++) {
-				GLRenderer2D::submit(&pokemons[i]);
-				if (scroll) pokemons[i].translate({ 0.0f, step, 0.0f });
-			}
+		for (int i = 0; i < pokemonCount; i++) {
+			GLRenderer2D::submit(&pokemons[i]);
+			pokemons[i].translate({ 0.0f, -0.001f, 0.0f });
 		}
 
-		RENDER:
 		GLRenderer2D::render();
 		GLRenderer2D::flush();
 		GLRenderer2D::endScene();
 
-	
+		static int index = 0;
+		if (elapsed > 1.0f) {
+			while (AudioRenderer::hasFreeSlots() && index < pokemonCount) {
+				AudioRenderer::submit(pokemons[index].getCry());
+				index++;
+			}
+		}
+
+		AudioRenderer::render();
+
 
 
 		//printf("Available Memory: %i\n", GLRenderAPI::queryAvailableMemory());
 		//printf("Allocated Memory: %i\n", GLRenderAPI::queryTotalMemory() - GLRenderAPI::queryAvailableMemory());
 		window->swapBuffer();
 
-		if (window->shouldClose() || elapsed > 15.0) {
+		if (window->shouldClose()) {
 			break;
 		}
 	}
-
 
 	SoundDevice::terminate();
 	GLRenderer2D::terminate();

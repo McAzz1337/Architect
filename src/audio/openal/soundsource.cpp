@@ -6,7 +6,15 @@ namespace archt {
 
 
 	SoundSource::SoundSource() {
-	
+		
+		alGenSources(1, &id);
+
+		alSourcef(id, AL_PITCH, pitch);
+		alSourcef(id, AL_GAIN, gain);
+		alSource3f(id, AL_POSITION, pos[0], pos[1], pos[2]);
+		alSource3f(id, AL_VELOCITY, velocity[0], velocity[1], velocity[2]);
+		alSourcei(id, AL_LOOPING, loop);
+		alSourcei(id, AL_BUFFER, 0);
 	}
 	
 	SoundSource::SoundSource(AudioBuffer* buffer) : buffer(buffer) {
@@ -14,7 +22,7 @@ namespace archt {
 		alGenSources(1, &id);
 		
 		alSourcef(id, AL_PITCH, pitch);
-		alSourcef(id, AL_GAIN, pitch);
+		alSourcef(id, AL_GAIN, gain);
 		alSource3f(id, AL_POSITION, pos[0], pos[1], pos[2]);
 		alSource3f(id, AL_VELOCITY, velocity[0], velocity[1], velocity[2]);
 		alSourcei(id, AL_LOOPING, loop);
@@ -58,6 +66,7 @@ namespace archt {
 	}
 
 	bool SoundSource::isPlaying() const {
+		if (!buffer) return false;
 		int state;
 		alGetSourcei(id, AL_SOURCE_STATE, &state);
 		return state == AL_PLAYING;

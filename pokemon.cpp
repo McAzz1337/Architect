@@ -90,6 +90,10 @@ void Pokemon::setSpriteSize(const glm::vec2& size) {
 	spriteSize = size;
 }
 
+void Pokemon::setCry(archt::AudioBuffer* buffer) {
+	cry = buffer;
+}
+
 void Pokemon::setUVOffsets(glm::vec2* offsets) {
 	for (int i = 0; i < Sprite::NONE; i++) {
 		uvOffsets[i] = offsets[i];
