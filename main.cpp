@@ -18,12 +18,14 @@
 // audio
 #include "src/audio/openal/sounddevice.h"
 #include "src/audio/openal/audiobuffer.h"
-#include "src/audio/openal/soundsource.h"
+#include "src/audio/openal/audiosource.h"
 #include "src/audio/openal/audiorenderer.h"
 
 
 //glm
 #include <glm/gtx/transform.hpp>
+
+#include "src/thread/thread.h"
 
 // std
 #include <math.h>
@@ -77,9 +79,10 @@ int main() {
 #pragma region SOUND_SETUP
 	SoundDevice::init();
 	AudioRenderer::init();
-	AudioBuffer* music = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/pokemon-rgby-wild-pokemon-battle-music.wav");
+	AudioBuffer* music = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/backgroundmusic/pokemon-rgby-wild-pokemon-battle-music.wav");
+	AudioBuffer* music1 = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/backgroundmusic/intro.wav");
 	AudioBuffer* stealYaBitch = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/stealyabitch.wav");
-	SoundSource* source = new SoundSource(music);
+	AudioSource* source = new AudioSource(music1);
 	
 #pragma endregion SOUND_SETUP
 
@@ -194,19 +197,53 @@ int main() {
 
 
 
-	DeltaTime delta;
 	double elapsed = 0;
 
 
+	AudioRenderer::setBackgroundMusic(music1);
+	AudioRenderer::playBackgroundMusic();
+
+	//auto lambda = [music]() {
+	//	std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
+	//	return music;
+	//};
+	//
+	//std::function<AudioBuffer*(void)> func = lambda;
+	//
+	//Thread<AudioBuffer*> thread(func, true);
 
 	while (true) {
-		delta.update();
+		DeltaTime::instance.update();
 
-		elapsed += delta.getSeconds();
+		elapsed += DeltaTime::instance.getSeconds();
 		//printf("elapsed : %f\n", elapsed);
 
 
 		window->pollEvents();
+
+		//if (thread.isDone()) {
+		//	AudioBuffer* buffer = thread.result();
+		//	if (buffer == music) {
+		//		auto lambda1 = [music1]() {
+		//			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
+		//			return music1;
+		//		};
+		//		func = lambda1;
+		//	}
+		//	else {
+		//		auto lambda2 = [music]() {
+		//			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
+		//			return music;
+		//		};
+		//		func = lambda2;
+		//	}
+		//	
+		//	AudioRenderer::swapBackgroundMusic(buffer);
+		//	printf("thread finished\n");
+		//	thread.setFunction(func);
+		//	thread.start();
+		//}
+	
 
 #pragma region CONTROLS
 		bool shift = Input::isPress(GLFW_KEY_LEFT_SHIFT) || Input::isHeld(GLFW_KEY_LEFT_SHIFT);
@@ -304,20 +341,17 @@ int main() {
 		GLRenderer2D::flush();
 		GLRenderer2D::endScene();
 
-		static int index = 0;
-		if (elapsed > 1.0f) {
-			while (AudioRenderer::hasFreeSlots() && index < pokemonCount) {
-				AudioRenderer::submit(pokemons[index].getCry());
-				index++;
-			}
-		}
+	
 
 		AudioRenderer::render();
 
+		static bool transition = false;
+		if (elapsed > 10.0 && !transition) {
+			AudioRenderer::swapBackgroundMusic(music, false, 2.0);
+			transition = true;
+		}
 
 
-		//printf("Available Memory: %i\n", GLRenderAPI::queryAvailableMemory());
-		//printf("Allocated Memory: %i\n", GLRenderAPI::queryTotalMemory() - GLRenderAPI::queryAvailableMemory());
 		window->swapBuffer();
 
 		if (window->shouldClose()) {
@@ -325,8 +359,10 @@ int main() {
 		}
 	}
 
+	AudioRenderer::terminate();
 	SoundDevice::terminate();
 	GLRenderer2D::terminate();
+	GLRenderAPI::terminate();
 	FileManager::instance.deleteAllFiles();
 
 	return 0;

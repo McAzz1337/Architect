@@ -102,7 +102,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;_USE_MATH_DEFINES;GLM_FORCE_RADIANS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;_USE_MATH_DEFINES;GLM_FORCE_RADIANS;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>D:\GithubRepos\Architect\vendor\sndlib\include;D:\GithubRepos\Architect\vendor\glm;D:\GithubRepos\Architect\vendor\glfw-3.3.7.bin.WIN64\include;D:\GithubRepos\Architect\vendor\glew\include;D:\GithubRepos\Architect\vendor\assimp\include;D:\GithubRepos\Architect\vendor\openal\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -137,7 +137,7 @@
     <ClCompile Include="src\audio\openal\sounddevice.cpp" />
     <ClCompile Include="spritesheet.cpp" />
     <ClCompile Include="src\audio\openal\audiobuffer.cpp" />
-    <ClCompile Include="src\audio\openal\soundsource.cpp" />
+    <ClCompile Include="src\audio\openal\audiosource.cpp" />
     <ClCompile Include="src\chronos\deltatime.cpp" />
     <ClCompile Include="src\fileio.cpp" />
     <ClCompile Include="src\filesystem\filemanager.cpp" />
@@ -160,11 +160,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pokemon.h" />
+    <ClInclude Include="src\app.h" />
     <ClInclude Include="src\audio\openal\audiorenderer.h" />
     <ClInclude Include="src\audio\openal\sounddevice.h" />
     <ClInclude Include="spritesheet.h" />
     <ClInclude Include="src\audio\openal\audiobuffer.h" />
-    <ClInclude Include="src\audio\openal\soundsource.h" />
+    <ClInclude Include="src\audio\openal\audiosource.h" />
     <ClInclude Include="src\chronos\deltatime.h" />
     <ClInclude Include="src\fileio.h" />
     <ClInclude Include="src\filesystem\filemanager.h" />
@@ -185,7 +186,7 @@
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\stb\stb\stbi_image_write.h" />
     <ClInclude Include="src\stb\stb\stb_image.h" />
-    <ClInclude Include="src\thread.h" />
+    <ClInclude Include="src\thread\thread.h" />
     <ClInclude Include="src\timer.h" />
   </ItemGroup>
   <ItemGroup>

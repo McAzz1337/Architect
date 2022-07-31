@@ -9,9 +9,11 @@ namespace archt {
 		std::chrono::system_clock::time_point now;
 		int64_t delta;
 
-
-
 	public:
+		static DeltaTime instance;
+
+		
+			
 		DeltaTime();
 		~DeltaTime();
 

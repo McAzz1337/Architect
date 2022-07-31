@@ -5,6 +5,10 @@
 
 #include "glshaderconstants.h"
 
+#ifdef PLATFORM_WINDOWS
+#include <Windows.h>
+#endif
+
 namespace archt {
 
 	std::string GLRenderAPI::vendor = "N/A";
@@ -30,8 +34,18 @@ namespace archt {
 			__debugbreak();
 		}
 
+		int x = 0;
+		int y = 0;
+#ifdef PLATFORM_WINDOWS
+		RECT screen;
+		HWND screenWindow = GetDesktopWindow();
+		GetWindowRect(screenWindow, &screen);
+		x = screen.right / 2 - 1080 / 2;
+		y = screen.bottom/ 2 - 720 / 2;
+#endif
 
-		window = new GLWindow("Architect", 0, 0, 1080, 720);
+
+		window = new GLWindow("Architect", x, y, 1080, 720);
 
 		if (glewInit() != GLEW_OK) {
 			printf("Failed to initialize GLEW!\n");

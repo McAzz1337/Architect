@@ -3,6 +3,9 @@
 
 namespace archt {
 
+	DeltaTime DeltaTime ::instance;
+
+
 	DeltaTime::DeltaTime() {
 		last = std::chrono::system_clock().now();
 	}

@@ -25,7 +25,7 @@ namespace archt {
 		soundFile = sf_open(path.c_str(), SFM_READ, &info);
 		
 		if (!soundFile) {
-			printf("Failed to open sound file: %s\n", path);
+			printf("Failed to open sound file: %s\n", path.c_str());
 			__debugbreak();
 		}
 		else if (info.frames < 1 || info.frames >(sf_count_t) (INT_MAX / sizeof(short) / info.channels)) {
@@ -88,9 +88,5 @@ namespace archt {
 
 	}
 
-	AudioBuffer::~AudioBuffer() {
 
-	}
-
-	
 }

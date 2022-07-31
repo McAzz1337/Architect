@@ -40,6 +40,7 @@ namespace archt {
 		window = glfwCreateWindow(w, h, title, nullptr, nullptr);
 		glfwMakeContextCurrent(window);
 
+		glfwSetWindowPos(window, x, y);
 
 		glfwSetKeyCallback(window, keyCallback);
 	}

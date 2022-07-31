@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 
-
 namespace archt {
 
 
@@ -15,7 +14,9 @@ namespace archt {
 		AudioBuffer(const std::string& path);
 		~AudioBuffer();
 
+
 		inline uint32_t getId() const { return id; }
+
 
 	};
 
