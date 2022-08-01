@@ -105,13 +105,13 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;_USE_MATH_DEFINES;GLM_FORCE_RADIANS;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\GithubRepos\Architect\vendor\sndlib\include;D:\GithubRepos\Architect\vendor\glm;D:\GithubRepos\Architect\vendor\glfw-3.3.7.bin.WIN64\include;D:\GithubRepos\Architect\vendor\glew\include;D:\GithubRepos\Architect\vendor\assimp\include;D:\GithubRepos\Architect\vendor\openal\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\GithubRepos\Architect\vendor\glm;D:\GithubRepos\Architect\vendor\glfw-3.3.7.bin.WIN64\include;D:\GithubRepos\Architect\vendor\glew\include;D:\GithubRepos\Architect\vendor\assimp\include;D:\GithubRepos\Architect\vendor\openal\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\GithubRepos\Architect\vendor\sndlib\lib;D:\GithubRepos\Architect\vendor\openal\libs\Win64\EFX-Util_MT;D:\GithubRepos\Architect\vendor\openal\libs\Win64;D:\GithubRepos\Architect\vendor\glfw-3.3.7.bin.WIN64\lib-vc2022;D:\GithubRepos\Architect\vendor\glew\lib\Release\x64;D:\GithubRepos\Architect\vendor\assimp\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;assimp.lib;glew32s.lib;glfw3.lib;OpenAL32.lib;EFX-Util.lib;sndfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\GithubRepos\Architect\vendor\openal\libs\Win64\EFX-Util_MT;D:\GithubRepos\Architect\vendor\openal\libs\Win64;D:\GithubRepos\Architect\vendor\glfw-3.3.7.bin.WIN64\lib-vc2022;D:\GithubRepos\Architect\vendor\glew\lib\Release\x64;D:\GithubRepos\Architect\vendor\assimp\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;assimp.lib;glew32s.lib;glfw3.lib;OpenAL32.lib;EFX-Util.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -133,11 +133,16 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pokemon.cpp" />
+    <ClCompile Include="readwave.cpp" />
+    <ClCompile Include="src\audio\openal\albuffer.cpp" />
+    <ClCompile Include="src\audio\openal\allistener.cpp" />
     <ClCompile Include="src\audio\openal\audiorenderer.cpp" />
+    <ClCompile Include="src\audio\openal\musicbuffer.cpp" />
     <ClCompile Include="src\audio\openal\sounddevice.cpp" />
     <ClCompile Include="spritesheet.cpp" />
     <ClCompile Include="src\audio\openal\audiobuffer.cpp" />
     <ClCompile Include="src\audio\openal\audiosource.cpp" />
+    <ClCompile Include="src\audio\waveloader.cpp" />
     <ClCompile Include="src\chronos\deltatime.cpp" />
     <ClCompile Include="src\fileio.cpp" />
     <ClCompile Include="src\filesystem\filemanager.cpp" />
@@ -161,11 +166,16 @@
   <ItemGroup>
     <ClInclude Include="pokemon.h" />
     <ClInclude Include="src\app.h" />
+    <ClInclude Include="src\audio\openal\albuffer.h" />
+    <ClInclude Include="src\audio\openal\aldebug.h" />
+    <ClInclude Include="src\audio\openal\allistener.h" />
     <ClInclude Include="src\audio\openal\audiorenderer.h" />
+    <ClInclude Include="src\audio\openal\musicbuffer.h" />
     <ClInclude Include="src\audio\openal\sounddevice.h" />
     <ClInclude Include="spritesheet.h" />
     <ClInclude Include="src\audio\openal\audiobuffer.h" />
     <ClInclude Include="src\audio\openal\audiosource.h" />
+    <ClInclude Include="src\audio\waveloader.h" />
     <ClInclude Include="src\chronos\deltatime.h" />
     <ClInclude Include="src\fileio.h" />
     <ClInclude Include="src\filesystem\filemanager.h" />

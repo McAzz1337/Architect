@@ -2,7 +2,7 @@
 
 #include "audiobuffer.h"
 #include "audiosource.h"
-
+#include "allistener.h"
 
 #include <vector>
 #include <future>
@@ -21,6 +21,8 @@ namespace archt {
 
 		static double fadeDuration;
 		static bool transition;
+
+		static ALListener* listener;
 
 		static AudioSource* backgroundMusic;
 		static AudioSource* nextBackgroundMusic;

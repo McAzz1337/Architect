@@ -1,6 +1,6 @@
 #pragma once
-#include "audiobuffer.h"
 
+#include "audiobuffer.h"
 
 #include <glm/vec3.hpp>
 
@@ -15,7 +15,7 @@ namespace archt {
 		float pos[3] = { 0.0f, 0.0f, 0.0f};
 		float velocity[3] = { 0.0f, 0.0f, 0.0f };
 		int loops = 0;
-		mutable AudioBuffer* buffer = nullptr;
+		mutable ALBuffer* buffer = nullptr;
 
 	public:
 		AudioSource();
@@ -26,12 +26,15 @@ namespace archt {
 		void attachBuffer(AudioBuffer* buffer) const;
 		void detachBuffer() const;
 
+		
+
 		void play() const;
 		void pause() const;
 		void rewind() const;
 		void stop() const;
 
 		bool isPlaying() const;
+		bool isPaused() const;
 
 		void setPitch(float p);
 		void setGain(float g);

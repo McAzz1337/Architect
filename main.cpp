@@ -35,15 +35,19 @@
 #include "spritesheet.h"
 
 
+extern void readWave(const char* filePath);
+
 double scrollTime = 10.0;
 float scrollY = 0.0f;
 float step = 0.0f;
+
 
 int main() {
 
 	using namespace archt;
 
-
+	//readWave("D:/GithubRepos/Architect/src/assets/audio/backgroundmusic/pokemon-rgby-wild-pokemon-battle-music.wav");
+	
 	GLWindow* window = GLRenderAPI::init();
 	GLRenderer2D::init();
 
@@ -79,11 +83,9 @@ int main() {
 #pragma region SOUND_SETUP
 	SoundDevice::init();
 	AudioRenderer::init();
-	AudioBuffer* music = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/backgroundmusic/pokemon-rgby-wild-pokemon-battle-music.wav");
+	AudioBuffer* music = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/backgroundmusic/complete_osd_genII_custom.wav");
 	AudioBuffer* music1 = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/backgroundmusic/intro.wav");
-	AudioBuffer* stealYaBitch = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/stealyabitch.wav");
-	AudioSource* source = new AudioSource(music1);
-	
+	AudioBuffer* music2 = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/ak47-1.wav");
 #pragma endregion SOUND_SETUP
 
 
@@ -178,8 +180,8 @@ int main() {
 			pokemons[i].setSprite(Pokemon::Sprite::FRONT);
 			pokemons[i].translate({ (float) x - 4.5f, (float) y, -5.0f });
 		
-			AudioBuffer* cry = new AudioBuffer(dir + "/" + cryFiles[i]);
-			pokemons[i].setCry(cry);
+			//AudioBuffer* cry = new AudioBuffer(dir + "/" + cryFiles[i]);
+			//pokemons[i].setCry(cry);
 		}
 		scrollY = (float) y / -100.0f;
 		step = scrollY / (float) scrollTime;
@@ -200,17 +202,26 @@ int main() {
 	double elapsed = 0;
 
 
-	AudioRenderer::setBackgroundMusic(music1);
+	AudioRenderer::setBackgroundMusic(music);
 	AudioRenderer::playBackgroundMusic();
 
-	//auto lambda = [music]() {
-	//	std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
-	//	return music;
-	//};
+	//Thread<void> thread;
+	//{
+	//	auto lambda = [&pokemons, &pokemonCount]() {
+	//		std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(2000));
+	//		int sprite = pokemons[0].getSprite() + 1;
+	//		if (sprite == Pokemon::Sprite::FOOTPRINT)
+	//			sprite = Pokemon::Sprite::FRONT;
 	//
-	//std::function<AudioBuffer*(void)> func = lambda;
-	//
-	//Thread<AudioBuffer*> thread(func, true);
+	//		for (int i = 0; i < pokemonCount; i++) {
+	//			pokemons[i].setSprite((Pokemon::Sprite) sprite);
+	//		}
+	//	};
+	//	std::function<void(void)> func = lambda;
+	//	thread.setFunction(func);
+	//	thread.start();
+	//}
+
 
 	while (true) {
 		DeltaTime::instance.update();
@@ -222,28 +233,10 @@ int main() {
 		window->pollEvents();
 
 		//if (thread.isDone()) {
-		//	AudioBuffer* buffer = thread.result();
-		//	if (buffer == music) {
-		//		auto lambda1 = [music1]() {
-		//			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
-		//			return music1;
-		//		};
-		//		func = lambda1;
-		//	}
-		//	else {
-		//		auto lambda2 = [music]() {
-		//			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
-		//			return music;
-		//		};
-		//		func = lambda2;
-		//	}
-		//	
-		//	AudioRenderer::swapBackgroundMusic(buffer);
-		//	printf("thread finished\n");
-		//	thread.setFunction(func);
+		//	thread.result();
 		//	thread.start();
 		//}
-	
+		
 
 #pragma region CONTROLS
 		bool shift = Input::isPress(GLFW_KEY_LEFT_SHIFT) || Input::isHeld(GLFW_KEY_LEFT_SHIFT);
@@ -345,11 +338,11 @@ int main() {
 
 		AudioRenderer::render();
 
-		static bool transition = false;
-		if (elapsed > 10.0 && !transition) {
-			AudioRenderer::swapBackgroundMusic(music, false, 2.0);
-			transition = true;
-		}
+		//static bool transition = false;
+		//if (elapsed > 10.0 && !transition) {
+		//	AudioRenderer::swapBackgroundMusic(music, false, 2.0);
+		//	transition = true;
+		//}
 
 
 		window->swapBuffer();

@@ -6,6 +6,9 @@
 #include <thread>
 #include <typeindex>
 
+
+#define PLAY
+
 namespace archt {
 
 
@@ -18,6 +21,8 @@ namespace archt {
 	double AudioRenderer::fadeDuration = 0.0;
 	bool AudioRenderer::transition = false;
 
+	ALListener* AudioRenderer::listener = nullptr;
+
 	AudioSource* AudioRenderer::backgroundMusic = nullptr;
 	AudioSource* AudioRenderer::nextBackgroundMusic = nullptr;
 	AudioSource** AudioRenderer::soundSources = nullptr;
@@ -26,13 +31,18 @@ namespace archt {
 	Thread<void> AudioRenderer::thread;
 
 	void AudioRenderer::init() {
+
 		soundSources = new AudioSource*[MAX_SOUND_SOURCES];
 		for (int i = 0; i < MAX_SOUND_SOURCES; i++) {
 			soundSources[i] = new AudioSource();
 		}
 		backgroundMusic = new AudioSource();
+		backgroundMusic->setLoops(1);
 		nextBackgroundMusic = new AudioSource();
 		nextBackgroundMusic->setGain(0.0f);
+		nextBackgroundMusic->setLoops(1);
+
+		listener = new ALListener();
 	}
 
 	void AudioRenderer::terminate() {
@@ -55,6 +65,7 @@ namespace archt {
 
 	void AudioRenderer::render() {
 
+#ifdef PLAY
 		while (bufferQueue.size() > 0) {
 		
 			int source = fetchEmptySource();
@@ -69,6 +80,7 @@ namespace archt {
 			soundSources[source]->play();
 		}
 
+	
 		if (fadeDuration > 0.0) {
 			
 			double elapsed = DeltaTime::instance.getSeconds();
@@ -100,6 +112,8 @@ namespace archt {
 		if (thread.isDone()) {
 			thread.result();
 		}
+#endif
+
 	}
 
 	void AudioRenderer::flush() {
@@ -142,9 +156,11 @@ namespace archt {
 	}
 	
 	void AudioRenderer::playBackgroundMusic() {
+#ifdef PLAY
 		if (backgroundMusic->isPlaying())
 			return;
 		backgroundMusic->play();
+#endif
 	}
 	
 	void AudioRenderer::pauseBackgroundMusic() {

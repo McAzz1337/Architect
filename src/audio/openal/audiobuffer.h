@@ -1,10 +1,11 @@
 #pragma once
+#include "albuffer.h"
 #include <string>
 
 namespace archt {
 
 
-	class AudioBuffer {
+	class AudioBuffer : public ALBuffer {
 
 		std::string file;
 		uint32_t id;
