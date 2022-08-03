@@ -45,6 +45,8 @@ namespace archt {
 		static int getMaxTextureCount();
 		static int getMaxMatricesCount();
 
+		static void createGuiInfoWindow();
+
 		friend void GLRenderer2D::clear();
 		friend void GLRenderer2D::startBatch();
 		friend void GLRenderer2D::init();

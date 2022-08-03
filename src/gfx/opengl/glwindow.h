@@ -1,6 +1,7 @@
 #pragma once
 #include "glinclude.h"
-
+#include <glm/vec2.hpp>
+#include <vector>
 
 namespace archt {
 
@@ -11,6 +12,7 @@ namespace archt {
 		GLFWwindow* window = nullptr;
 		const char* title;
 		int x, y, w, h;
+
 
 	public:
 
@@ -25,6 +27,12 @@ namespace archt {
 		void swapBuffer();
 
 		void setTitle(const char* name);
+		void setSize(int width, int height);
+
+
+
+		inline GLFWwindow* getHandle() const { return window; }
+		inline glm::ivec2 getSize() const { return glm::ivec2(w, h); }
 
 	};
 }

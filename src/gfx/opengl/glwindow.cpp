@@ -3,6 +3,8 @@
 #include "../../input/input.h"
 
 #include <iostream>
+#include <functional>
+#include <memory>
 
 namespace archt {
 
@@ -29,6 +31,13 @@ namespace archt {
 		}
 	}
 
+	void resizeCallback(GLFWwindow* window, int width, int height) {
+		
+	}
+
+	
+
+
 	GLWindow::GLWindow() {
 
 	}
@@ -43,15 +52,17 @@ namespace archt {
 		glfwSetWindowPos(window, x, y);
 
 		glfwSetKeyCallback(window, keyCallback);
+	
+		glfwSetWindowSizeCallback(window, resizeCallback);
+		
 	}
 
 
 
 	GLWindow::~GLWindow() {
-		if (window)
+		if (window) {
 			glfwDestroyWindow(window);
-		
-		glfwTerminate();
+		}
 	}
 
 	void GLWindow::makeContextCurrent() const {
@@ -75,6 +86,13 @@ namespace archt {
 	void GLWindow::setTitle(const char* name) {
 		glfwSetWindowTitle(window, name);
 	}
+
+	void GLWindow::setSize(int width, int height) {
+		w = width;
+		h = height;
+	}
+
+	
 
 
 }

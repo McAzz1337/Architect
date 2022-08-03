@@ -1,6 +1,11 @@
 #include "waveloader.h"
 
 
+#define WAVELOADER_RIFF "RIFF"
+#define WAVELOADER_WAVE "WAVE"
+#define WAVELOADER_FMT "fmt "
+#define WAVELOADER_DATA "data"
+
 namespace archt {
 
 
@@ -19,7 +24,7 @@ namespace archt {
 
 
 		fread(header.riff, sizeof(int8_t), 4, file);
-		if (!strcmp((const char*) header.riff, RIFF)) {
+		if (!strcmp((const char*) header.riff, WAVELOADER_RIFF)) {
 			printf("Error at riff in file: %s\nriff = %s\n", path.c_str(), header.riff);
 			__debugbreak();
 		}
@@ -27,13 +32,13 @@ namespace archt {
 		fread(&header.size, sizeof(DWORD), 1, file);
 
 		fread(header.wave, sizeof(int8_t), 4, file);
-		if (!strcmp((const char*) header.wave, WAVE)) {
+		if (!strcmp((const char*) header.wave, WAVELOADER_WAVE)) {
 			printf("Error at wave in file: %s\nwave = %s\n", path.c_str(), header.wave);
 			__debugbreak();
 		}
 
 		fread(header.fmt, sizeof(int8_t), 4, file);
-		if (!strcmp((const char*) header.fmt, FMT)) {
+		if (!strcmp((const char*) header.fmt, WAVELOADER_FMT)) {
 			printf("Error at fmt in file: %s\nfmt = %s\n", path.c_str(), header.fmt);
 			__debugbreak();
 		}
@@ -50,7 +55,7 @@ namespace archt {
 		fread(&header.bitsPerSample, sizeof(int16_t), 1, file);
 
 		fread(header.data, sizeof(int8_t), 4, file);
-		if (!strcmp((const char*) header.fmt, DATA)) {
+		if (!strcmp((const char*) header.fmt, WAVELOADER_DATA)) {
 			printf("Error at data in file: %s\data = %s\n", path.c_str(), header.data);
 			__debugbreak();
 		}

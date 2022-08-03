@@ -5,6 +5,7 @@
 #include "src/fileio.h"
 #include "src/filesystem/filemanager.h"
 #include "src/input/input.h"
+#include "src/thread/thread.h"
 
 // archt graphics
 #include "src/gfx/opengl/camera.h"
@@ -21,11 +22,18 @@
 #include "src/audio/openal/audiosource.h"
 #include "src/audio/openal/audiorenderer.h"
 
+// gui
+#include "src/gfx/gui/gui.h"
+
+//imgui
+#include "vendor/imgui/imgui.h"
+#include "vendor/imgui/imgui_impl_glfw.h"
+#include "vendor/imgui/imgui_impl_opengl3.h"
 
 //glm
 #include <glm/gtx/transform.hpp>
 
-#include "src/thread/thread.h"
+
 
 // std
 #include <math.h>
@@ -34,6 +42,10 @@
 #include "pokemon.h"
 #include "spritesheet.h"
 
+
+// deletable
+#include <ios>
+#include <fstream>
 
 extern void readWave(const char* filePath);
 
@@ -87,6 +99,13 @@ int main() {
 	AudioBuffer* music1 = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/backgroundmusic/intro.wav");
 	AudioBuffer* music2 = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/ak47-1.wav");
 #pragma endregion SOUND_SETUP
+
+#pragma region IMGUI_SETUP
+	
+	Gui::init(window);
+	GLRenderAPI::createGuiInfoWindow();
+
+#pragma endregion IMGUI_SETUP
 
 
 #pragma region BUFFER_SETUP
@@ -167,7 +186,7 @@ int main() {
 		int y = 0;
 		std::vector<std::string> cryFiles;
 		std::string dir = "src/assets/audio/cries";
-		getEntries(dir, cryFiles);
+		archt::getEntries(dir, cryFiles);
 		for (int i = 0; i < pokemonCount; i++) {
 			pokemons[i].loadOffset("src/assets/img/pokememes_offset.txt");
 
@@ -178,7 +197,7 @@ int main() {
 			pokemons[i].setUvs(spriteSheet->normalizeUv(x * strides.x, y * strides.y));
 
 			pokemons[i].setSprite(Pokemon::Sprite::FRONT);
-			pokemons[i].translate({ (float) x - 4.5f, (float) y, -5.0f });
+			//pokemons[i].translate({ (float) x - 4.5f, (float) y, -5.0f });
 		
 			//AudioBuffer* cry = new AudioBuffer(dir + "/" + cryFiles[i]);
 			//pokemons[i].setCry(cry);
@@ -222,8 +241,38 @@ int main() {
 	//	thread.start();
 	//}
 
+	std::vector<std::string> pokemonNames;
+	archt::readFileSplit("src/assets/img/pokemon_list.txt", pokemonNames, true);
+
+
+	
+	std::vector<std::pair<int, int>> markedPokemon;
+
+	auto markedWindow = [&markedPokemon, &pokemonNames]() {
+		if (ImGui::Begin("Marked Pokemon")) {
+			int size = markedPokemon.size();
+			std::string spriteName = "";
+			for (int i = 0; i < size; i++) {
+
+				switch (markedPokemon[i].second) {
+					case Pokemon::Sprite::FRONT:			spriteName = "FRONT";			break;
+					case Pokemon::Sprite::FRONT_SHINY:		spriteName = "FRONT_SHINY";		break;
+					case Pokemon::Sprite::FRONT_ALT:		spriteName = "FRONT_ALT";		break;
+					case Pokemon::Sprite::FRONT_ALT_SHINY:	spriteName = "FRONT_ALT_SHINY"; break;
+					case Pokemon::Sprite::BACK:				spriteName = "BACK";			break;
+					case Pokemon::Sprite::BACK_SHINY:		spriteName = "BACK_SHINY";		break;
+				}
+
+				ImGui::Text("%s\t%s", pokemonNames[markedPokemon[i].first].c_str(), spriteName.c_str());
+			}
+		}
+		ImGui::End();
+	};
+	Gui::instance->addGuiWindow(markedWindow);
 
 	while (true) {
+
+
 		DeltaTime::instance.update();
 
 		elapsed += DeltaTime::instance.getSeconds();
@@ -319,16 +368,64 @@ int main() {
 #pragma endregion CONTROLS
 
 
+		static bool swapSprites = true;
+		static int index = 0;
+		static int sprite = Pokemon::Sprite::FRONT;
+		static bool spaceLock = false;
+		static bool zeroLock = false;
+
+		if (Input::isPress(GLFW_KEY_KP_0) || Input::isHeld(GLFW_KEY_KP_0)) {
+			if (!zeroLock) {
+				markedPokemon.push_back(std::make_pair(index, sprite));
+				zeroLock = true;
+			}
+		}
+		else if (Input::isRelease(GLFW_KEY_KP_0) && zeroLock) {
+			zeroLock = false;
+		}
+
+		if (Input::isPress(GLFW_KEY_SPACE) || Input::isHeld(GLFW_KEY_SPACE)) {
+			if (!spaceLock) {
+				swapSprites = !swapSprites;
+				spaceLock = true;
+			}
+		}
+		else if (Input::isRelease(GLFW_KEY_SPACE) && spaceLock) {
+			spaceLock = false;
+		}
+
+
 		GLRenderer2D::clear();
 		GLRenderer2D::beginScene(&cam);
 
 
 		bool scroll = elapsed > 1.0;
 		
-		for (int i = 0; i < pokemonCount; i++) {
-			GLRenderer2D::submit(&pokemons[i]);
-			pokemons[i].translate({ 0.0f, -0.001f, 0.0f });
+
+		if (elapsed > 3.0 && swapSprites) {
+			sprite++;
+			if (sprite == Pokemon::Sprite::FOOTPRINT) {
+				sprite = Pokemon::Sprite::FRONT;
+				index++;
+				if (index == pokemonCount) {
+					index = 0;
+				}
+			}
+			pokemons[index].setSprite((Pokemon::Sprite) sprite);
+			elapsed = 0.0;
 		}
+		else if (!swapSprites) {
+			elapsed = 0.0;
+		}
+
+		GLRenderer2D::submit(&pokemons[index]);
+	
+
+
+		//for (int i = 0; i < pokemonCount; i++) {
+		//	GLRenderer2D::submit(&pokemons[i]);
+		//	pokemons[i].translate({ 0.0f, -0.001f, 0.0f });
+		//}
 
 		GLRenderer2D::render();
 		GLRenderer2D::flush();
@@ -344,6 +441,21 @@ int main() {
 		//	transition = true;
 		//}
 
+#pragma region IMGUI
+		//ImGui_ImplOpenGL3_NewFrame();
+		//ImGui_ImplGlfw_NewFrame();
+		//ImGui::NewFrame();
+		//
+		//ImGui::Begin("Hello, world!");
+		//ImGui::End();
+		//
+		//
+		//ImGui::Render();
+		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		Gui::instance->render();
+
+#pragma endregion IMGUI
+
 
 		window->swapBuffer();
 
@@ -352,6 +464,35 @@ int main() {
 		}
 	}
 
+	if (markedPokemon.size() > 0) {
+		
+		int size = markedPokemon.size();
+		const std::string outputFile = "C:/Users/marcf/OneDrive/Desktop/MARKED_POKEMEMES.txt";
+		std::ofstream out;
+		out.open(outputFile);
+
+		std::string spriteName = "";
+		for (int i = 0; i < size; i++) {
+
+			switch (markedPokemon[i].second) {
+				case Pokemon::Sprite::FRONT:			spriteName = "FRONT";			break;
+				case Pokemon::Sprite::FRONT_SHINY:		spriteName = "FRONT_SHINY";		break;
+				case Pokemon::Sprite::FRONT_ALT:		spriteName = "FRONT_ALT";		break;
+				case Pokemon::Sprite::FRONT_ALT_SHINY:	spriteName = "FRONT_ALT_SHINY"; break;
+				case Pokemon::Sprite::BACK:				spriteName = "BACK";			break;
+				case Pokemon::Sprite::BACK_SHINY:		spriteName = "BACK_SHINY";		break;
+			}
+
+			out << pokemonNames[markedPokemon[i].first] << "\t\t" << spriteName << std::endl;
+		}
+		out.close();
+	}
+
+
+	//ImGui_ImplGlfw_Shutdown();
+	//ImGui_ImplOpenGL3_Shutdown();
+	
+	Gui::terminate();
 	AudioRenderer::terminate();
 	SoundDevice::terminate();
 	GLRenderer2D::terminate();

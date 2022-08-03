@@ -5,6 +5,12 @@
 
 #include "glshaderconstants.h"
 
+#include "../../vendor/imgui/imgui.h"
+
+#include "../gui/gui.h"
+
+#include "../../stb/stb/stb_image.h"
+
 #ifdef PLATFORM_WINDOWS
 #include <Windows.h>
 #endif
@@ -71,15 +77,25 @@ namespace archt {
 		model = std::string((char*) glGetString(GL_RENDERER));
 		shaderLanguageVersion = std::string((char*) glGetString(GL_SHADING_LANGUAGE_VERSION));
 
-		std::string title = "Architect | " + vendor + " | " + version + " | " + model + " | " + shaderLanguageVersion + " | Memory: " + std::to_string(totalMemory);
+		int w;
+		int h;
+		int comp;
+		unsigned char* data = stbi_load("src/assets/img/A.png", &w, &h, &comp, STBI_rgb_alpha);
 
-		window->setTitle(title.c_str());
+		GLFWimage image[1];
+		image[0].width = w;
+		image[0].height = h;
+		image[0].pixels = data;
+
+		glfwSetWindowIcon(window->getHandle(), 1, image);
+
+		stbi_image_free(data);
 
 		return window;
 	}
 
 	void GLRenderAPI::terminate() {
-
+		glfwTerminate();
 	}
 
 	void GLRenderAPI::enable(uint32_t feature) {
@@ -116,6 +132,52 @@ namespace archt {
 	int GLRenderAPI::queryAvailableMemory() {
 		glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &availableMemory);
 		return availableMemory;
+	}
+
+	void GLRenderAPI::createGuiInfoWindow() {
+	
+		auto window = []() {
+			static bool show = true;
+			ImGui::Begin("Video card info", &show);
+
+			ImVec4 green = { 0.0f, 1.0f, 0.0f, 1.0f };
+			ImVec4 white = { 1.0f, 1.0f, 1.0f, 1.0f };
+			ImVec4 turqoise = { 0.0f, 0.8f, 1.0f, 1.0f };
+
+			ImGui::TextColored(white, "Vendor:\t\t");
+			ImGui::SameLine();
+			ImGui::TextColored(green, vendor.c_str());
+
+			ImGui::TextColored(white, "Version:\t\t");
+			ImGui::SameLine();
+			ImGui::TextColored(green, version.c_str());
+
+			ImGui::TextColored(white, "Model:\t\t");
+			ImGui::SameLine();
+			ImGui::TextColored(green, model.c_str());
+
+			ImGui::TextColored(white, "GLSL version:\t\t");
+			ImGui::SameLine();
+			ImGui::TextColored(green, shaderLanguageVersion.c_str());
+			
+			ImGui::TextColored(white, "Total memory:\t");
+			ImGui::SameLine();
+			ImGui::TextColored(turqoise, std::to_string(totalMemory).c_str());
+			
+
+			ImGui::TextColored(white, "Available memory: ");
+			ImGui::SameLine();
+			ImGui::TextColored(turqoise, std::to_string(availableMemory).c_str());
+
+
+			ImGui::TextColored(white, "Texture slots:\t");
+			ImGui::SameLine();
+			ImGui::TextColored(turqoise, std::to_string(maxTextures).c_str());
+
+			ImGui::End();
+		};
+
+		Gui::instance->addGuiWindow(window);
 	}
 
 	int GLRenderAPI::queryTotalMemory() {

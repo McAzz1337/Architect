@@ -5,10 +5,7 @@
 #include <string>
 
 
-#define RIFF "RIFF"
-#define WAVE "WAVE"
-#define FMT "fmt "
-#define DATA "data"
+
 
 namespace archt {
 

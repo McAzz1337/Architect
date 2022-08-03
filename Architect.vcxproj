@@ -146,6 +146,8 @@
     <ClCompile Include="src\chronos\deltatime.cpp" />
     <ClCompile Include="src\fileio.cpp" />
     <ClCompile Include="src\filesystem\filemanager.cpp" />
+    <ClCompile Include="src\gfx\gui\gui.cpp" />
+    <ClCompile Include="src\gfx\gui\guiwindow.cpp" />
     <ClCompile Include="src\gfx\opengl\buffers.cpp" />
     <ClCompile Include="src\gfx\opengl\camera.cpp" />
     <ClCompile Include="src\gfx\opengl\glmesh.cpp" />
@@ -162,6 +164,13 @@
     <ClCompile Include="src\stb\stb\stbi_image_write.c" />
     <ClCompile Include="src\stb\stb\stb_image.c" />
     <ClCompile Include="src\timer.cpp" />
+    <ClCompile Include="vendor\imgui\imgui.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_demo.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_tables.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pokemon.h" />
@@ -179,6 +188,8 @@
     <ClInclude Include="src\chronos\deltatime.h" />
     <ClInclude Include="src\fileio.h" />
     <ClInclude Include="src\filesystem\filemanager.h" />
+    <ClInclude Include="src\gfx\gui\gui.h" />
+    <ClInclude Include="src\gfx\gui\guiwindow.h" />
     <ClInclude Include="src\gfx\opengl\buffers.h" />
     <ClInclude Include="src\gfx\opengl\camera.h" />
     <ClInclude Include="src\gfx\opengl\gldebug.h" />
@@ -198,6 +209,15 @@
     <ClInclude Include="src\stb\stb\stb_image.h" />
     <ClInclude Include="src\thread\thread.h" />
     <ClInclude Include="src\timer.h" />
+    <ClInclude Include="vendor\imgui\imconfig.h" />
+    <ClInclude Include="vendor\imgui\imgui.h" />
+    <ClInclude Include="vendor\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="vendor\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="vendor\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="vendor\imgui\imgui_internal.h" />
+    <ClInclude Include="vendor\imgui\imstb_rectpack.h" />
+    <ClInclude Include="vendor\imgui\imstb_textedit.h" />
+    <ClInclude Include="vendor\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\assets\shaders\fastshader\fastshader.frag" />
@@ -209,6 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\assets\img\pokememes_offset.txt" />
+    <Text Include="src\assets\img\pokemon_list.txt" />
     <Text Include="src\assets\shaders\fastshader\uniformbuffers.txt" />
     <Text Include="src\assets\shaders\fastshader\uniforms.txt" />
     <Text Include="src\assets\shaders\shader\uniforms.txt" />
