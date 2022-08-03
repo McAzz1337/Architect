@@ -19,6 +19,8 @@ namespace archt {
 	int AudioRenderer::currentBuffer = 0;
 
 	double AudioRenderer::fadeDuration = 0.0;
+	double AudioRenderer::elapsed = 0.0;
+
 	bool AudioRenderer::transition = false;
 
 	ALListener* AudioRenderer::listener = nullptr;
@@ -37,7 +39,9 @@ namespace archt {
 			soundSources[i] = new AudioSource();
 		}
 		backgroundMusic = new AudioSource();
+		backgroundMusic->setGain(1.0f);
 		backgroundMusic->setLoops(1);
+
 		nextBackgroundMusic = new AudioSource();
 		nextBackgroundMusic->setGain(0.0f);
 		nextBackgroundMusic->setLoops(1);
@@ -83,33 +87,40 @@ namespace archt {
 	
 		if (fadeDuration > 0.0) {
 			
-			double elapsed = DeltaTime::instance.getSeconds();
-			float fadeStep = ((float) (elapsed / fadeDuration));
+			elapsed += DeltaTime::instance.getSeconds();
+			float gain = ((float) (elapsed / fadeDuration));
 			
-			backgroundMusic->addGain(-fadeStep);
-			
+			if (gain > 1.0f)
+				gain = 1.0f;
+
+			backgroundMusic->setGain(1.0f - gain);
+
 			if (transition) {
 				if (!nextBackgroundMusic->isPlaying())
 					nextBackgroundMusic->play();
 
-				nextBackgroundMusic->addGain(fadeStep);
+				nextBackgroundMusic->setGain(gain);
 
-				if (nextBackgroundMusic->getGain() == 1.0f) {
-					backgroundMusic->stop();
+				if (gain == 1.0f) {
+					stopBackgroundMusic();
+
 					AudioSource* temp = backgroundMusic;
 					backgroundMusic = nextBackgroundMusic;
 					nextBackgroundMusic = temp;
 
 					transition = false;
 					fadeDuration = 0.0;
+					elapsed = 0.0;
 				}
 			}
-			else if (backgroundMusic->getGain() >= 0.0f) {
+			else if (gain >= 1.0f) {
 				fadeDuration = 0.0;
+				elapsed = 0.0;
+				stopBackgroundMusic();
 			}
 		}
 
-		if (thread.isDone()) {
+		if (thread.isValid()) {
 			thread.result();
 		}
 #endif
@@ -178,10 +189,11 @@ namespace archt {
 		backgroundMusic->stop();
 	}
 	
-	void AudioRenderer::fadeBackgroundMusic(bool transition, double fadeDuration, AudioBuffer* next) {
+	void AudioRenderer::fadeBackgroundMusic(AudioBuffer* next, bool transition, double fadeDuration) {
 		
 		AudioRenderer::transition = transition;
 		AudioRenderer::fadeDuration = fadeDuration;
+		elapsed = 0.0;
 		nextBackgroundMusic->attachBuffer(next);
 	}
 
@@ -192,7 +204,7 @@ namespace archt {
 
 		
 		auto func = [buffer, &stopImmediately, &delay]() {
-			
+			printf("swapping bg music started\n");
 			std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(delay * 1000));
 			if (!stopImmediately)
 				stopBackgroundMusic();
@@ -200,7 +212,7 @@ namespace archt {
 			setBackgroundMusic(buffer);
 			playBackgroundMusic();
 		};
-		std::function<void(void)> f = func;
+
 		thread.setFunction(func);
 		thread.start();
 	}

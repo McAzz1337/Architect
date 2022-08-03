@@ -20,8 +20,6 @@ namespace archt {
 	}
 
 	AudioBuffer::AudioBuffer(const std::string& path) :file(path) {
-	
-
 
 		WaveHeader header;
 		uint16_t* buffer = loadWaveFile(path, header);
@@ -31,12 +29,11 @@ namespace archt {
 
 
 		delete[] buffer;
-
-
 	}
 
 	AudioBuffer::~AudioBuffer() {
-
+		if (id)
+			alDeleteBuffers(1 , &id);
 	}
 
 }

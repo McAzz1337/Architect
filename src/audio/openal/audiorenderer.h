@@ -20,6 +20,7 @@ namespace archt {
 		static int currentBuffer;
 
 		static double fadeDuration;
+		static double elapsed;
 		static bool transition;
 
 		static ALListener* listener;
@@ -49,7 +50,7 @@ namespace archt {
 		static void playBackgroundMusic();
 		static void pauseBackgroundMusic();
 		static void stopBackgroundMusic();
-		static void fadeBackgroundMusic(bool transition, double fadeDuration = 0.0, AudioBuffer* next = nullptr);
+		static void fadeBackgroundMusic(AudioBuffer* next, bool transition, double fadeDuration = 0.0);
 		static void swapBackgroundMusic(AudioBuffer* buffer, bool stopImmediately, double delay = 0.0);
 
 	};

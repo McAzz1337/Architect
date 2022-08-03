@@ -8,7 +8,7 @@ namespace archt {
 	class AudioBuffer : public ALBuffer {
 
 		std::string file;
-		uint32_t id;
+		uint32_t id = 0;
 
 	public:
 		AudioBuffer();

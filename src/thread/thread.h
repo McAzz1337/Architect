@@ -15,7 +15,7 @@ namespace archt {
 
 		}
 
-		Thread(std::function<T(void)> func, bool launch) : func(func) {
+		Thread(std::function<T(void)> func, bool launch = false) : func(func) {
 			if (launch)
 				start();
 		}
@@ -33,18 +33,24 @@ namespace archt {
 			this->func = func;
 		}
 
-		bool isDone() {
-			if (thread.valid())
-				return thread.wait_for(std::chrono::duration<int, std::milli>(0)) == std::future_status::ready;
+		bool isDone() const {
+			return getStatus() == std::future_status::ready;
 			
-			return false;
 		}
 
+		bool isValid() const {
+			return thread.valid();
+		}
+
+		std::future_status getStatus() const {
+			return thread.wait_for(std::chrono::duration<int, std::milli>(0));
+		}
 	
 		T result() {
 			return thread.get();
 		}
 
+		
 		
 	};
 

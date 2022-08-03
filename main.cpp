@@ -96,8 +96,12 @@ int main() {
 	SoundDevice::init();
 	AudioRenderer::init();
 	AudioBuffer* music = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/backgroundmusic/complete_osd_genII_custom.wav");
-	AudioBuffer* music1 = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/backgroundmusic/intro.wav");
+	AudioBuffer* music1 = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/backgroundmusic/title_screen.wav");
 	AudioBuffer* music2 = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/ak47-1.wav");
+
+	AudioRenderer::setBackgroundMusic(music);
+	AudioRenderer::playBackgroundMusic();
+
 #pragma endregion SOUND_SETUP
 
 #pragma region IMGUI_SETUP
@@ -218,28 +222,7 @@ int main() {
 
 
 
-	double elapsed = 0;
-
-
-	AudioRenderer::setBackgroundMusic(music);
-	AudioRenderer::playBackgroundMusic();
-
-	//Thread<void> thread;
-	//{
-	//	auto lambda = [&pokemons, &pokemonCount]() {
-	//		std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(2000));
-	//		int sprite = pokemons[0].getSprite() + 1;
-	//		if (sprite == Pokemon::Sprite::FOOTPRINT)
-	//			sprite = Pokemon::Sprite::FRONT;
-	//
-	//		for (int i = 0; i < pokemonCount; i++) {
-	//			pokemons[i].setSprite((Pokemon::Sprite) sprite);
-	//		}
-	//	};
-	//	std::function<void(void)> func = lambda;
-	//	thread.setFunction(func);
-	//	thread.start();
-	//}
+	
 
 	std::vector<std::string> pokemonNames;
 	archt::readFileSplit("src/assets/img/pokemon_list.txt", pokemonNames, true);
@@ -270,21 +253,21 @@ int main() {
 	};
 	Gui::instance->addGuiWindow(markedWindow);
 
+	double elapsed = 0.0;
+	double elapsed2 = 0.0;
 	while (true) {
 
 
 		DeltaTime::instance.update();
 
-		elapsed += DeltaTime::instance.getSeconds();
+		double delta = DeltaTime::instance.getSeconds();
+		elapsed += delta;
+		elapsed2 += delta;
 		//printf("elapsed : %f\n", elapsed);
 
 
 		window->pollEvents();
 
-		//if (thread.isDone()) {
-		//	thread.result();
-		//	thread.start();
-		//}
 		
 
 #pragma region CONTROLS
@@ -395,9 +378,7 @@ int main() {
 		}
 
 
-		GLRenderer2D::clear();
-		GLRenderer2D::beginScene(&cam);
-
+		
 
 		bool scroll = elapsed > 1.0;
 		
@@ -418,40 +399,39 @@ int main() {
 			elapsed = 0.0;
 		}
 
+		
+		
+		GLRenderer2D::clear();
+		GLRenderer2D::beginScene(&cam);
+		
 		GLRenderer2D::submit(&pokemons[index]);
-	
-
-
+		
+		// scrolling pokemon
+		//GLRenderer2D::submit(&pokemons[index]);
 		//for (int i = 0; i < pokemonCount; i++) {
 		//	GLRenderer2D::submit(&pokemons[i]);
 		//	pokemons[i].translate({ 0.0f, -0.001f, 0.0f });
 		//}
 
+		
 		GLRenderer2D::render();
 		GLRenderer2D::flush();
 		GLRenderer2D::endScene();
 
+		
+	
 	
 
 		AudioRenderer::render();
 
 		//static bool transition = false;
-		//if (elapsed > 10.0 && !transition) {
-		//	AudioRenderer::swapBackgroundMusic(music, false, 2.0);
+		//if (elapsed2 > 10.0 && !transition) {
+		//	AudioRenderer::fadeBackgroundMusic(music1, true, 5.0);
 		//	transition = true;
 		//}
 
 #pragma region IMGUI
-		//ImGui_ImplOpenGL3_NewFrame();
-		//ImGui_ImplGlfw_NewFrame();
-		//ImGui::NewFrame();
-		//
-		//ImGui::Begin("Hello, world!");
-		//ImGui::End();
-		//
-		//
-		//ImGui::Render();
-		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		
 		Gui::instance->render();
 
 #pragma endregion IMGUI
