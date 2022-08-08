@@ -1,6 +1,7 @@
 #include "waveloader.h"
 
 
+/*
 #define WAVELOADER_RIFF "RIFF"
 #define WAVELOADER_WAVE "WAVE"
 #define WAVELOADER_FMT "fmt "
@@ -88,4 +89,4 @@ namespace archt {
 		return data;
 	}
 
-}
+}*/

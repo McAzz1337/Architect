@@ -133,11 +133,8 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pokemon.cpp" />
-    <ClCompile Include="readwave.cpp" />
-    <ClCompile Include="src\audio\openal\albuffer.cpp" />
     <ClCompile Include="src\audio\openal\allistener.cpp" />
     <ClCompile Include="src\audio\openal\audiorenderer.cpp" />
-    <ClCompile Include="src\audio\openal\musicbuffer.cpp" />
     <ClCompile Include="src\audio\openal\sounddevice.cpp" />
     <ClCompile Include="spritesheet.cpp" />
     <ClCompile Include="src\audio\openal\audiobuffer.cpp" />
@@ -175,11 +172,9 @@
   <ItemGroup>
     <ClInclude Include="pokemon.h" />
     <ClInclude Include="src\app.h" />
-    <ClInclude Include="src\audio\openal\albuffer.h" />
     <ClInclude Include="src\audio\openal\aldebug.h" />
     <ClInclude Include="src\audio\openal\allistener.h" />
     <ClInclude Include="src\audio\openal\audiorenderer.h" />
-    <ClInclude Include="src\audio\openal\musicbuffer.h" />
     <ClInclude Include="src\audio\openal\sounddevice.h" />
     <ClInclude Include="spritesheet.h" />
     <ClInclude Include="src\audio\openal\audiobuffer.h" />
@@ -207,6 +202,7 @@
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\stb\stb\stbi_image_write.h" />
     <ClInclude Include="src\stb\stb\stb_image.h" />
+    <ClInclude Include="src\thread\mythread.h" />
     <ClInclude Include="src\thread\thread.h" />
     <ClInclude Include="src\timer.h" />
     <ClInclude Include="vendor\imgui\imconfig.h" />

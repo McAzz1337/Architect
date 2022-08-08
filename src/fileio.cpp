@@ -106,7 +106,7 @@ namespace archt {
 		return end - begin;
 	}
 
-	void getEntries(const std::string& dir, std::vector<std::string>& dst) {
+	void listDirectoryEntries(const std::string& dir, std::vector<std::string>& dst) {
 
 		for (const auto entry : std::filesystem::directory_iterator(dir)) {
 			dst.push_back(entry.path().filename().string());

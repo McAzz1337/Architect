@@ -6,6 +6,8 @@
 #include "src/filesystem/filemanager.h"
 #include "src/input/input.h"
 #include "src/thread/thread.h"
+#include "src/thread/mythread.h"
+
 
 // archt graphics
 #include "src/gfx/opengl/camera.h"
@@ -47,7 +49,6 @@
 #include <ios>
 #include <fstream>
 
-extern void readWave(const char* filePath);
 
 double scrollTime = 10.0;
 float scrollY = 0.0f;
@@ -58,8 +59,7 @@ int main() {
 
 	using namespace archt;
 
-	//readWave("D:/GithubRepos/Architect/src/assets/audio/backgroundmusic/pokemon-rgby-wild-pokemon-battle-music.wav");
-	
+
 	GLWindow* window = GLRenderAPI::init();
 	GLRenderer2D::init();
 
@@ -69,8 +69,8 @@ int main() {
 
 
 	//GLShader* shader = (GLShader*) FileManager::instance.loadFile("src/assets/shaders/shader/shader", FileManager::FileType::GL_SHADER_T);
-	GLShader* fastShader = new GLShader("src/assets/shaders/fastshader/fastshader"); 
-	GLShader* transferShader = new GLShader("src/assets/shaders/transfer/transfer"); 
+	GLShader* fastShader = new GLShader("src/assets/shaders/fastshader/fastshader");
+	GLShader* transferShader = new GLShader("src/assets/shaders/transfer/transfer");
 
 	Uniformbuffer* uniformBuffer = new Uniformbuffer(nullptr, 4 * 16 * 1000);
 	fastShader->registerUniformBuffer(uniformBuffer);
@@ -84,8 +84,8 @@ int main() {
 
 	SpriteSheet* trainerSheet = new SpriteSheet("src/assets/img/trainers.png");
 	SpriteSheet* spriteSheet = new SpriteSheet("src/assets/img/pokememes.png");
-	
-	
+
+
 	pokemon.setSpriteSheet(spriteSheet);
 	pokemon.setShader(fastShader);
 
@@ -95,7 +95,8 @@ int main() {
 #pragma region SOUND_SETUP
 	SoundDevice::init();
 	AudioRenderer::init();
-	AudioBuffer* music = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/backgroundmusic/complete_osd_genII_custom.wav");
+	//AudioBuffer* music = new AudioBuffer("src/assets/audio/backgroundmusic/complete_osd_genII_custom.wav");
+	AudioBuffer* music = new AudioBuffer("src/assets/audio/Pokemon Gold wave files/01 Pokemon GS Main Theme.wav");
 	AudioBuffer* music1 = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/backgroundmusic/title_screen.wav");
 	AudioBuffer* music2 = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/ak47-1.wav");
 
@@ -105,7 +106,7 @@ int main() {
 #pragma endregion SOUND_SETUP
 
 #pragma region IMGUI_SETUP
-	
+
 	Gui::init(window);
 	GLRenderAPI::createGuiInfoWindow();
 
@@ -133,17 +134,17 @@ int main() {
 
 		pokemon.setVbo(verteces, vSize);
 		pokemon.setIbo(indeces, iSize);
-		
+
 		trainer.setVbo(verteces, vSize);
 		trainer.setIbo(indeces, iSize);
-		
+
 		for (int i = 0; i < pokemonCount; i++) {
 			pokemons[i].setSpriteSheet(spriteSheet);
 			pokemons[i].setShader(fastShader);
 			pokemons[i].setVbo(verteces, vSize);
 			pokemons[i].setIbo(indeces, iSize);
 		}
-		
+
 
 	}
 #pragma endregion BUFFER_SETUP
@@ -161,7 +162,7 @@ int main() {
 	{
 		pokemon.setSpriteSize(spriteSize);
 		pokemon.setFootprintSize(spriteSheet->normalizeUv(footprintSize, footprintSize));
-		
+
 		trainer.setSpriteSize(trainerSheet->normalizeUv(size, size));
 		trainer.setFootprintSize({ 0.0f, 0.0f });
 
@@ -169,28 +170,28 @@ int main() {
 			pokemons[i].setSpriteSize(spriteSize);
 			pokemons[i].setFootprintSize(spriteSheet->normalizeUv(footprintSize, footprintSize));
 		}
-		
+
 
 		glm::vec2 offsets[Pokemon::Sprite::NONE];
 		offsets[Pokemon::Sprite::FRONT] = glm::vec2(0.0f, 0.0f);
 		offsets[Pokemon::Sprite::FRONT_SHINY] = glm::vec2(0.0f, 0.0f);
-		
+
 		offsets[Pokemon::Sprite::FRONT_ALT] = glm::vec2(0.0f, 0.0f);
 		offsets[Pokemon::Sprite::FRONT_ALT_SHINY] = glm::vec2(0.0f, 0.0f);
-		
-		
+
+
 		offsets[Pokemon::Sprite::BACK] = glm::vec2(0.0f, 0.0f);
 		offsets[Pokemon::Sprite::BACK_SHINY] = glm::vec2(0.0f, 0.0f);
-		
+
 		offsets[Pokemon::Sprite::FOOTPRINT] = glm::vec2(0.0f, 0.0f);
-		
+
 		pokemon.loadOffset("src/assets/img/pokememes_offset.txt");
 		trainer.setUVOffsets(offsets);
 
 		int y = 0;
 		std::vector<std::string> cryFiles;
 		std::string dir = "src/assets/audio/cries";
-		archt::getEntries(dir, cryFiles);
+		listDirectoryEntries(dir, cryFiles);
 		for (int i = 0; i < pokemonCount; i++) {
 			pokemons[i].loadOffset("src/assets/img/pokememes_offset.txt");
 
@@ -202,7 +203,7 @@ int main() {
 
 			pokemons[i].setSprite(Pokemon::Sprite::FRONT);
 			//pokemons[i].translate({ (float) x - 4.5f, (float) y, -5.0f });
-		
+
 			//AudioBuffer* cry = new AudioBuffer(dir + "/" + cryFiles[i]);
 			//pokemons[i].setCry(cry);
 		}
@@ -211,7 +212,7 @@ int main() {
 	}
 	pokemon.setUvs({ 0.0f, 0.0f });
 	pokemon.setSprite(Pokemon::Sprite::FRONT);
-	
+
 	trainer.setUvs(trainerSheet->normalizeUv(0, 10 * size));
 	trainer.setSprite(Pokemon::Sprite::FRONT);
 	trainer.translate({ -1.5f, 0.0f, 0.0f });
@@ -222,13 +223,12 @@ int main() {
 
 
 
-	
 
 	std::vector<std::string> pokemonNames;
 	archt::readFileSplit("src/assets/img/pokemon_list.txt", pokemonNames, true);
 
 
-	
+
 	std::vector<std::pair<int, int>> markedPokemon;
 
 	auto markedWindow = [&markedPokemon, &pokemonNames]() {
@@ -253,9 +253,11 @@ int main() {
 	};
 	Gui::instance->addGuiWindow(markedWindow);
 
+	
 	double elapsed = 0.0;
 	double elapsed2 = 0.0;
 	while (true) {
+
 
 
 		DeltaTime::instance.update();
@@ -268,7 +270,9 @@ int main() {
 
 		window->pollEvents();
 
-		
+
+
+
 
 #pragma region CONTROLS
 		bool shift = Input::isPress(GLFW_KEY_LEFT_SHIFT) || Input::isHeld(GLFW_KEY_LEFT_SHIFT);
@@ -378,10 +382,10 @@ int main() {
 		}
 
 
-		
+
 
 		bool scroll = elapsed > 1.0;
-		
+
 
 		if (elapsed > 3.0 && swapSprites) {
 			sprite++;
@@ -399,13 +403,15 @@ int main() {
 			elapsed = 0.0;
 		}
 
-		
-		
+
+
+	
+
 		GLRenderer2D::clear();
 		GLRenderer2D::beginScene(&cam);
-		
+
 		GLRenderer2D::submit(&pokemons[index]);
-		
+
 		// scrolling pokemon
 		//GLRenderer2D::submit(&pokemons[index]);
 		//for (int i = 0; i < pokemonCount; i++) {
@@ -413,14 +419,14 @@ int main() {
 		//	pokemons[i].translate({ 0.0f, -0.001f, 0.0f });
 		//}
 
-		
+
 		GLRenderer2D::render();
 		GLRenderer2D::flush();
 		GLRenderer2D::endScene();
 
-		
-	
-	
+
+
+
 
 		AudioRenderer::render();
 
@@ -431,7 +437,7 @@ int main() {
 		//}
 
 #pragma region IMGUI
-		
+
 		Gui::instance->render();
 
 #pragma endregion IMGUI
@@ -445,7 +451,7 @@ int main() {
 	}
 
 	if (markedPokemon.size() > 0) {
-		
+
 		int size = markedPokemon.size();
 		const std::string outputFile = "C:/Users/marcf/OneDrive/Desktop/MARKED_POKEMEMES.txt";
 		std::ofstream out;
@@ -471,7 +477,7 @@ int main() {
 
 	//ImGui_ImplGlfw_Shutdown();
 	//ImGui_ImplOpenGL3_Shutdown();
-	
+
 	Gui::terminate();
 	AudioRenderer::terminate();
 	SoundDevice::terminate();

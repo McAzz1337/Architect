@@ -15,7 +15,7 @@ namespace archt {
 		float pos[3] = { 0.0f, 0.0f, 0.0f};
 		float velocity[3] = { 0.0f, 0.0f, 0.0f };
 		int loops = 0;
-		mutable ALBuffer* buffer = nullptr;
+		mutable AudioBuffer* buffer = nullptr;
 
 	public:
 		AudioSource();
