@@ -31,6 +31,7 @@ namespace archt {
 
 
 	uint32_t GLRenderAPI::clearMask = 0;
+	uint32_t GLRenderAPI::polygonMode = GL_TRIANGLES;
 
 
 	GLWindow* GLRenderAPI::init() {
@@ -116,6 +117,22 @@ namespace archt {
 		glFrontFace(frontFace);
 		glCullFace(cullFace);
 	}
+
+	void GLRenderAPI::setPolygonMode(uint32_t face, uint32_t mode) {
+		switch (mode) {
+			case GL_LINE: 
+				polygonMode = GL_LINES; 
+				break;
+			case GL_FILL: 
+				polygonMode = GL_TRIANGLES; 
+				break;
+			default: 
+				polygonMode = GL_TRIANGLES; 
+				break;
+		}
+		glPolygonMode(face, mode);
+	}
+
 
 	void GLRenderAPI::setClearMask(uint32_t mask) {
 		clearMask = mask;

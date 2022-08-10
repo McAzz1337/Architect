@@ -17,12 +17,13 @@ namespace archt {
 		u = ((v.x * s.y - v.x * r.y) + (v.y * r.x - v.y * s.x)) / (w.x * v.y - w.y * v.x);
 		t = (s.x - r.x + u * w.x) / v.x;
 
-		if (t >= 0.0f && t <= 1.0f && u >= 0.0f && u <= 1.0f) {
-			//__debugbreak();
-		}
-
 		return { t, u };
 	}
 
+	bool rayIntersect(const glm::vec2& a1, const glm::vec2& b1, const glm::vec2& a2, const glm::vec2& b2) {
+		glm::vec2 result = solveRayEquation(a1, b1, a2, b2);
+
+		return result.x >= 0.0f && result.x <= 1.0f && result.y >= 0.0f && result.y <= 1.0f;
+	}
 
 }

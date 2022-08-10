@@ -110,7 +110,7 @@ namespace archt {
 
 		fread(data, 2, header.dataSize, file);
 
-#if 1
+#if 0
 		printf("%s wave header:\n", path.c_str());
 		printf("riff: %s\n", header.riff.c_str());
 		printf("fileSize: %i\n", header.size);

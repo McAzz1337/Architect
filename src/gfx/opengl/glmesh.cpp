@@ -136,16 +136,15 @@ namespace archt {
 
 		for (int i = 0; i < size; i++) {
 
+			int ii = i == size - 1 ? 0 : i + 1;
 			for (int j = 0; j < oSize; j++) {
 
-				glm::vec2 coeficients = solveRayEquation(pos[i], 
-														 pos[(i == size - 1) ? 0 : i + 1],
-														 oPos[j],
-														 oPos[(j == oSize - 1) ? 0 : j + 1]);
-				if (coeficients.x >= 0.0f && coeficients.x <= 1.0f &&
-					coeficients.y >= 0.0f && coeficients.y <= 1.0f) {
+				if (rayIntersect(	pos[i],
+									pos[ii],
+									oPos[j],
+									oPos[(j == oSize - 1) ? 0 : j + 1])) {
 					colided = true;
-					coliderId = other.id;
+					coliderId = other.id; 
 					return true;
 				}
 			}

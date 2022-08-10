@@ -40,7 +40,7 @@ namespace archt {
 
 	void GLRenderer2D::init() {
 
-		meshes = new GLMesh*[MAX_OBJECTS];
+		meshes = new GLMesh * [MAX_OBJECTS];
 
 
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
@@ -61,12 +61,12 @@ namespace archt {
 		ibo = new IBO(indeces, MAX_INDECES);
 		ibo->allocateOnGPU();
 
-		vao = new GLVertexarray(vbo, ibo, false);
-		vao->setVertexAttribPointer(0, 3, (const void*) offsetof(Vertex, pos));
-		vao->setVertexAttribPointer(1, 3, (const void*) offsetof(Vertex, normal));
-		vao->setVertexAttribPointer(2, 2, (const void*) offsetof(Vertex, uv));
-		vao->setVertexAttribPointer(3, 1, (const void*) offsetof(Vertex, texId));
-		vao->setVertexAttribPointer(4, 1, (const void*) offsetof(Vertex, matrixId));
+		vao = new GLVertexarray(vbo, ibo);
+		//vao->setVertexAttribPointer(0, 3, (const void*) offsetof(Vertex, pos));
+		//vao->setVertexAttribPointer(1, 3, (const void*) offsetof(Vertex, normal));
+		//vao->setVertexAttribPointer(2, 2, (const void*) offsetof(Vertex, uv));
+		//vao->setVertexAttribPointer(3, 1, (const void*) offsetof(Vertex, texId));
+		//vao->setVertexAttribPointer(4, 1, (const void*) offsetof(Vertex, matrixId));
 
 
 		matrices = new glm::mat4[GLRenderAPI::maxMatrices];
@@ -154,7 +154,7 @@ namespace archt {
 				currentTexture++;
 			}
 
-		
+
 			vb->setMatrixId((float) currentMatrix);
 			matrices[currentMatrix] = (projectionView * mesh->getModelMatrix());
 
@@ -170,6 +170,8 @@ namespace archt {
 	void GLRenderer2D::endBatch() {
 		currentTexture = 0;
 	}
+
+
 
 	void GLRenderer2D::sort() {
 
@@ -258,7 +260,7 @@ namespace archt {
 	int GLRenderer2D::fetchTextureIndex(int tex) {
 
 		for (int i = 0; i < GLRenderAPI::getMaxTextureCount(); i++) {
-			
+
 			if (textures[i] == tex)
 				return i;
 		}

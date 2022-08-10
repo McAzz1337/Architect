@@ -14,10 +14,11 @@
 #include "src/gfx/opengl/glmesh.h"
 #include "src/gfx/opengl/glrenderapi.h"
 #include "src/gfx/opengl/glrenderer2d.h"
+#include "src/gfx/opengl/wireframerenderer.h"
+
 #include "src/gfx/opengl/glshader.h"
 #include "src/gfx/opengl/gltexture.h"
 #include "src/gfx/opengl/glwindow.h"
-#include "src/gfx/opengl/wireframerenderer.h"
 
 
 // audio
@@ -338,26 +339,31 @@ int main() {
 		}
 
 
-		//GLRenderer2D::clear();
-		//GLRenderer2D::beginScene(&cam);
-		//
-		//GLRenderer2D::submit(&pokemon);
-		//GLRenderer2D::submit(&pokemon1);
-		//
-		//
-		//GLRenderer2D::render();
-		//GLRenderer2D::flush();
-		//GLRenderer2D::endScene();
+		//GLRenderAPI::setPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+#if 1
+		GLRenderer2D::clear();
+		GLRenderer2D::beginScene(&cam);
+		
+		GLRenderer2D::submit(&pokemon);
+		GLRenderer2D::submit(&pokemon1);
+		
+		
+		GLRenderer2D::render();
+		GLRenderer2D::flush();
+		GLRenderer2D::endScene();
+#else
 		WireframeRenderer::clear();
 		WireframeRenderer::beginScene(&cam);
+		
 		WireframeRenderer::submit(&pokemon);
 		WireframeRenderer::submit(&pokemon1);
+		
 		
 		WireframeRenderer::render();
 		WireframeRenderer::flush();
 		WireframeRenderer::endScene();
-
+#endif
 
 		AudioRenderer::render();
 
@@ -389,6 +395,7 @@ int main() {
 	Gui::terminate();
 	AudioRenderer::terminate();
 	SoundDevice::terminate();
+	WireframeRenderer::terminate();
 	GLRenderer2D::terminate();
 	GLRenderAPI::terminate();
 	FileManager::instance.deleteAllFiles();

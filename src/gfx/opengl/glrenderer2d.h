@@ -50,6 +50,7 @@ namespace archt {
 		static void startBatch();
 		static void endBatch();
 
+		static uint32_t* reorderIndeces(uint32_t* src, int size, int& out_size);
 		static void sort();
 		static void render();
 		static void draw();

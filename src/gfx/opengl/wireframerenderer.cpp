@@ -1,5 +1,6 @@
 #include "wireframerenderer.h"
 
+#include "glrenderapi.h"
 namespace archt {
 
 	const int WireframeRenderer::MAX_OBJECTS = 1000;
@@ -27,7 +28,6 @@ namespace archt {
 
 	void WireframeRenderer::init() {
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		meshes = new GLMesh * [MAX_OBJECTS];
 		for (int i = 0; i < MAX_OBJECTS; i++) {
@@ -72,7 +72,7 @@ namespace archt {
 	}
 
 	void WireframeRenderer::clear() {
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GLRenderAPI::clearMask);
 	}
 
 	void WireframeRenderer::submit(GLMesh* mesh, glm::vec4 color) {
@@ -97,9 +97,10 @@ namespace archt {
 		currentMesh = 0;
 	}
 
-	uint32_t* WireframeRenderer::reorderIndeces(uint32_t* src, uint32_t size) {
+	uint32_t* WireframeRenderer::reorderIndeces(uint32_t* src, uint32_t size, uint32_t& out_size) {
 
-		uint32_t* dst = new uint32_t[8]{
+		out_size = 8;
+		uint32_t* dst = new uint32_t[out_size]{
 			0, 1, 1, 2, 2, 3, 3, 0
 		};
 
@@ -137,13 +138,14 @@ namespace archt {
 
 			vb->setTexId((float) i);
 
-			uint32_t* indeces = reorderIndeces(ib->getData(), iSize);
+			uint32_t size = 0;
+			uint32_t* indeces = reorderIndeces(ib->getData(), iSize, size);
 
 			vbo->write(currentVertex, vb->getData(), vSize);
-			ibo->write(currentIndex, indeces, 8, currentVertex);
+			ibo->write(currentIndex, indeces, size, currentVertex);
 
 			currentVertex += vSize;
-			currentIndex += 8;
+			currentIndex += size;
 		}
 	}
 
@@ -185,8 +187,9 @@ namespace archt {
 		}
 
 
-
+		GLRenderAPI::setPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDrawElements(GL_LINES, currentIndex, GL_UNSIGNED_INT, nullptr);
+		GLRenderAPI::setPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
 

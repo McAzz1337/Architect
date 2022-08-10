@@ -16,7 +16,6 @@ out vec4 _out;
 
 void main() {
 	
-	//_out = vec4(_uv.x, _uv.y, 0.0, 1.0);
 	
 	vec4 color = texture(tex[_texId], _uv);
 	
@@ -25,5 +24,4 @@ void main() {
 	}
 	
 	_out = color * tint;
-	//_out = vec4(_uv.x, _uv.y, 0.0, 1.0);
 }

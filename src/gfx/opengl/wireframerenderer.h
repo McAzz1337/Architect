@@ -7,7 +7,7 @@
 namespace archt {
 
 	class WireframeRenderer {
-		
+
 		static const int MAX_OBJECTS;
 		static const int MAX_VERTECES;
 		static const int MAX_INDECES;
@@ -40,7 +40,7 @@ namespace archt {
 		static void beginScene(Camera* camera);
 		static void endScene();
 
-		static uint32_t* reorderIndeces(uint32_t* src, uint32_t size);
+		static uint32_t* reorderIndeces(uint32_t* src, uint32_t size, uint32_t& out_size);
 
 		static void beginBatch();
 		static void endBatch();
