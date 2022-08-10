@@ -32,6 +32,12 @@ namespace archt {
 
 		void resetMatrix();
 
+		bool checkCollision(const GLMesh& other) const;
+
+		glm::vec2* getPositionsTranslated(int& out_size) const;
+
+		void printMatrix() const;
+
 		void setVbo(VBO* vbo);
 		void setVbo(Vertex* verteces, uint32_t size);
 

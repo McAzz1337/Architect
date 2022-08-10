@@ -27,10 +27,13 @@ namespace archt {
 
 		void print(int end) const;
 
+		glm::vec3* getPositionalCoordinates(int& out_size) const;
+		
 		inline Vertex* getData() const { return data; }
 		inline int getSize() const { return size; }
 		inline int bytes() const { return size * sizeof(Vertex); }
 		inline int hasGPUAllocation() const { return id != 0; }
+
 	};
 
 

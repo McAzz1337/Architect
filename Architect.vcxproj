@@ -158,6 +158,7 @@
     <ClCompile Include="src\gfx\opengl\uniformbuffer.cpp" />
     <ClCompile Include="src\gfx\vertex.cpp" />
     <ClCompile Include="src\input\input.cpp" />
+    <ClCompile Include="src\math\soe2.cpp" />
     <ClCompile Include="src\stb\stb\stbi_image_write.c" />
     <ClCompile Include="src\stb\stb\stb_image.c" />
     <ClCompile Include="src\timer.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="src\gfx\opengl\uniformbuffer.h" />
     <ClInclude Include="src\gfx\vertex.h" />
     <ClInclude Include="src\input\input.h" />
+    <ClInclude Include="src\math\soe2.h" />
     <ClInclude Include="src\stb\stb\stbi_image_write.h" />
     <ClInclude Include="src\stb\stb\stb_image.h" />
     <ClInclude Include="src\thread\mythread.h" />

@@ -83,6 +83,15 @@ namespace archt {
 		printf("-------------------\n");
 	}
 
+	glm::vec3* VBO::getPositionalCoordinates(int& out_size) const{
+		out_size = size;
+		glm::vec3* positions = new glm::vec3[size];
+		for (int i = 0; i < size; i++) {
+			positions[i] = data[i].pos;
+		}
+		return positions;
+	}
+
 	void VBO::setTexId(float id) {
 		for (int i = 0; i < size; i++) {
 			data[i].texId = id;

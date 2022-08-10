@@ -141,7 +141,7 @@
 141	Kabutops
 142	Aerodactyl
 143	Snorlax
-144	Articun
+144	Articuno
 145	Zapdos
 146	Moltres
 147	Dratini

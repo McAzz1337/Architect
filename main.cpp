@@ -54,6 +54,7 @@ double scrollTime = 10.0;
 float scrollY = 0.0f;
 float step = 0.0f;
 
+bool debug = false;
 
 int main() {
 
@@ -64,6 +65,13 @@ int main() {
 	GLRenderer2D::init();
 
 	Input::init();
+
+#pragma region IMGUI_SETUP
+	Gui::init(window);
+	GLRenderAPI::createGuiInfoWindow();
+
+#pragma endregion IMGUI_SETUP
+
 
 	Camera cam(M_PI / 3.0f, 1080.0f / 720.0f, 0.001f, 1000.0f);
 
@@ -76,11 +84,9 @@ int main() {
 	fastShader->registerUniformBuffer(uniformBuffer);
 	transferShader->registerUniformBuffer(uniformBuffer);
 
-	int pokemonCount = 251;// GLRenderAPI::getMaxMatricesCount();
 
 	Pokemon pokemon;
-	Pokemon* pokemons = new Pokemon[pokemonCount];
-	Pokemon trainer;
+	Pokemon pokemon1;
 
 	SpriteSheet* trainerSheet = new SpriteSheet("src/assets/img/trainers.png");
 	SpriteSheet* spriteSheet = new SpriteSheet("src/assets/img/pokememes.png");
@@ -88,9 +94,8 @@ int main() {
 
 	pokemon.setSpriteSheet(spriteSheet);
 	pokemon.setShader(fastShader);
-
-	trainer.setSpriteSheet(trainerSheet);
-	trainer.setShader(fastShader);
+	pokemon1.setSpriteSheet(spriteSheet);
+	pokemon1.setShader(fastShader);
 
 #pragma region SOUND_SETUP
 	SoundDevice::init();
@@ -105,12 +110,6 @@ int main() {
 
 #pragma endregion SOUND_SETUP
 
-#pragma region IMGUI_SETUP
-
-	Gui::init(window);
-	GLRenderAPI::createGuiInfoWindow();
-
-#pragma endregion IMGUI_SETUP
 
 
 #pragma region BUFFER_SETUP
@@ -134,16 +133,8 @@ int main() {
 
 		pokemon.setVbo(verteces, vSize);
 		pokemon.setIbo(indeces, iSize);
-
-		trainer.setVbo(verteces, vSize);
-		trainer.setIbo(indeces, iSize);
-
-		for (int i = 0; i < pokemonCount; i++) {
-			pokemons[i].setSpriteSheet(spriteSheet);
-			pokemons[i].setShader(fastShader);
-			pokemons[i].setVbo(verteces, vSize);
-			pokemons[i].setIbo(indeces, iSize);
-		}
+		pokemon1.setVbo(verteces, vSize);
+		pokemon1.setIbo(indeces, iSize);
 
 
 	}
@@ -162,15 +153,8 @@ int main() {
 	{
 		pokemon.setSpriteSize(spriteSize);
 		pokemon.setFootprintSize(spriteSheet->normalizeUv(footprintSize, footprintSize));
-
-		trainer.setSpriteSize(trainerSheet->normalizeUv(size, size));
-		trainer.setFootprintSize({ 0.0f, 0.0f });
-
-		for (int i = 0; i < pokemonCount; i++) {
-			pokemons[i].setSpriteSize(spriteSize);
-			pokemons[i].setFootprintSize(spriteSheet->normalizeUv(footprintSize, footprintSize));
-		}
-
+		pokemon1.setSpriteSize(spriteSize);
+		pokemon1.setFootprintSize(spriteSheet->normalizeUv(footprintSize, footprintSize));
 
 		glm::vec2 offsets[Pokemon::Sprite::NONE];
 		offsets[Pokemon::Sprite::FRONT] = glm::vec2(0.0f, 0.0f);
@@ -186,72 +170,21 @@ int main() {
 		offsets[Pokemon::Sprite::FOOTPRINT] = glm::vec2(0.0f, 0.0f);
 
 		pokemon.loadOffset("src/assets/img/pokememes_offset.txt");
-		trainer.setUVOffsets(offsets);
-
-		int y = 0;
-		std::vector<std::string> cryFiles;
-		std::string dir = "src/assets/audio/cries";
-		listDirectoryEntries(dir, cryFiles);
-		for (int i = 0; i < pokemonCount; i++) {
-			pokemons[i].loadOffset("src/assets/img/pokememes_offset.txt");
-
-			int x = i % 10;
-			y = (i - x) / 10;
-
-
-			pokemons[i].setUvs(spriteSheet->normalizeUv(x * strides.x, y * strides.y));
-
-			pokemons[i].setSprite(Pokemon::Sprite::FRONT);
-			//pokemons[i].translate({ (float) x - 4.5f, (float) y, -5.0f });
-
-			//AudioBuffer* cry = new AudioBuffer(dir + "/" + cryFiles[i]);
-			//pokemons[i].setCry(cry);
-		}
-		scrollY = (float) y / -100.0f;
-		step = scrollY / (float) scrollTime;
+		pokemon1.loadOffset("src/assets/img/pokememes_offset.txt");
 	}
+
 	pokemon.setUvs({ 0.0f, 0.0f });
 	pokemon.setSprite(Pokemon::Sprite::FRONT);
+	pokemon1.setUvs({ 0.0f, 0.0f });
+	pokemon1.setSprite(Pokemon::Sprite::FRONT);
 
-	trainer.setUvs(trainerSheet->normalizeUv(0, 10 * size));
-	trainer.setSprite(Pokemon::Sprite::FRONT);
-	trainer.translate({ -1.5f, 0.0f, 0.0f });
+	pokemon1.translate({ 1.0f, 0.0f, 0.0f });
 
 #pragma endregion UV_SETUP
 
 	FileManager::instance.logAllocateMemory(FileManager::DataType::KILO_BYTES);
 
 
-
-
-	std::vector<std::string> pokemonNames;
-	archt::readFileSplit("src/assets/img/pokemon_list.txt", pokemonNames, true);
-
-
-
-	std::vector<std::pair<int, int>> markedPokemon;
-
-	auto markedWindow = [&markedPokemon, &pokemonNames]() {
-		if (ImGui::Begin("Marked Pokemon")) {
-			int size = markedPokemon.size();
-			std::string spriteName = "";
-			for (int i = 0; i < size; i++) {
-
-				switch (markedPokemon[i].second) {
-					case Pokemon::Sprite::FRONT:			spriteName = "FRONT";			break;
-					case Pokemon::Sprite::FRONT_SHINY:		spriteName = "FRONT_SHINY";		break;
-					case Pokemon::Sprite::FRONT_ALT:		spriteName = "FRONT_ALT";		break;
-					case Pokemon::Sprite::FRONT_ALT_SHINY:	spriteName = "FRONT_ALT_SHINY"; break;
-					case Pokemon::Sprite::BACK:				spriteName = "BACK";			break;
-					case Pokemon::Sprite::BACK_SHINY:		spriteName = "BACK_SHINY";		break;
-				}
-
-				ImGui::Text("%s\t%s", pokemonNames[markedPokemon[i].first].c_str(), spriteName.c_str());
-			}
-		}
-		ImGui::End();
-	};
-	Gui::instance->addGuiWindow(markedWindow);
 
 	
 	double elapsed = 0.0;
@@ -277,9 +210,9 @@ int main() {
 #pragma region CONTROLS
 		bool shift = Input::isPress(GLFW_KEY_LEFT_SHIFT) || Input::isHeld(GLFW_KEY_LEFT_SHIFT);
 		bool control = Input::isPress(GLFW_KEY_LEFT_CONTROL) || Input::isHeld(GLFW_KEY_LEFT_CONTROL);
-		float translation = 0.03f;
+		float translation = 0.003f;
 		if (control) {
-			translation = 0.003f;
+			translation = 0.03f;
 		}
 		else if (shift) {
 			translation = 0.3f;
@@ -287,19 +220,20 @@ int main() {
 
 
 		if (Input::isPress(GLFW_KEY_W) || Input::isHeld(GLFW_KEY_W)) {
-			cam.translate({ 0.0f, 0.0f, -translation });
+			//cam.translate({ 0.0f, 0.0f, -translation });
+			pokemon.translate({ 0.0f, translation, 0.0f});
 		}
 		else if (Input::isPress(GLFW_KEY_S) || Input::isHeld(GLFW_KEY_S)) {
-			cam.translate({ 0.0f, 0.0f, translation });
-
+			//cam.translate({ 0.0f, 0.0f, translation });
+			pokemon.translate({ 0.0f, -translation, 0.0f});
 		}
 
 
 		if (Input::isPress(GLFW_KEY_A) || Input::isHeld(GLFW_KEY_A)) {
-			cam.translate({ -translation, 0.0f, 0.0f });
+			pokemon.translate({ -translation, 0.0f, 0.0f });
 		}
 		else if (Input::isPress(GLFW_KEY_D) || Input::isHeld(GLFW_KEY_D)) {
-			cam.translate({ translation, 0.0f, 0.0f });
+			pokemon.translate({ translation, 0.0f, 0.0f });
 		}
 
 		if (Input::isPress(GLFW_KEY_E) || Input::isHeld(GLFW_KEY_E)) {
@@ -309,6 +243,15 @@ int main() {
 			cam.translate({ 0.0f, -translation, 0.0f });
 		}
 
+		
+		static bool debugLock = false;
+		if (Input::isPress(GLFW_KEY_G) || Input::isHeld(GLFW_KEY_G) && !debugLock) {
+			debug = !debug;
+			debugLock = true;
+		}
+		else if (Input::isPress(GLFW_KEY_G) || Input::isHeld(GLFW_KEY_G) && debugLock) {
+			debugLock = false;
+		}
 
 
 		float dx = size / 20.0f;
@@ -328,9 +271,7 @@ int main() {
 			if (sprite == Pokemon::Sprite::NONE) {
 				sprite = Pokemon::Sprite::FRONT;
 			}
-			for (int i = 0; i < pokemonCount; i++) {
-				pokemons[i].setSprite((Pokemon::Sprite) sprite);
-			}
+			
 			pokemon.setSprite((Pokemon::Sprite) sprite);
 			backSpaceWasPressed = true;
 		}
@@ -354,70 +295,16 @@ int main() {
 		}
 #pragma endregion CONTROLS
 
-
-		static bool swapSprites = true;
-		static int index = 0;
-		static int sprite = Pokemon::Sprite::FRONT;
-		static bool spaceLock = false;
-		static bool zeroLock = false;
-
-		if (Input::isPress(GLFW_KEY_KP_0) || Input::isHeld(GLFW_KEY_KP_0)) {
-			if (!zeroLock) {
-				markedPokemon.push_back(std::make_pair(index, sprite));
-				zeroLock = true;
-			}
-		}
-		else if (Input::isRelease(GLFW_KEY_KP_0) && zeroLock) {
-			zeroLock = false;
+		if (pokemon.checkCollision(pokemon1)) {
+			printf("Collision\n");
 		}
 
-		if (Input::isPress(GLFW_KEY_SPACE) || Input::isHeld(GLFW_KEY_SPACE)) {
-			if (!spaceLock) {
-				swapSprites = !swapSprites;
-				spaceLock = true;
-			}
-		}
-		else if (Input::isRelease(GLFW_KEY_SPACE) && spaceLock) {
-			spaceLock = false;
-		}
-
-
-
-
-		bool scroll = elapsed > 1.0;
-
-
-		if (elapsed > 3.0 && swapSprites) {
-			sprite++;
-			if (sprite == Pokemon::Sprite::FOOTPRINT) {
-				sprite = Pokemon::Sprite::FRONT;
-				index++;
-				if (index == pokemonCount) {
-					index = 0;
-				}
-			}
-			pokemons[index].setSprite((Pokemon::Sprite) sprite);
-			elapsed = 0.0;
-		}
-		else if (!swapSprites) {
-			elapsed = 0.0;
-		}
-
-
-
-	
 
 		GLRenderer2D::clear();
 		GLRenderer2D::beginScene(&cam);
 
-		GLRenderer2D::submit(&pokemons[index]);
-
-		// scrolling pokemon
-		//GLRenderer2D::submit(&pokemons[index]);
-		//for (int i = 0; i < pokemonCount; i++) {
-		//	GLRenderer2D::submit(&pokemons[i]);
-		//	pokemons[i].translate({ 0.0f, -0.001f, 0.0f });
-		//}
+		GLRenderer2D::submit(&pokemon);
+		GLRenderer2D::submit(&pokemon1);
 
 
 		GLRenderer2D::render();
@@ -450,30 +337,7 @@ int main() {
 		}
 	}
 
-	if (markedPokemon.size() > 0) {
-
-		int size = markedPokemon.size();
-		const std::string outputFile = "C:/Users/marcf/OneDrive/Desktop/MARKED_POKEMEMES.txt";
-		std::ofstream out;
-		out.open(outputFile);
-
-		std::string spriteName = "";
-		for (int i = 0; i < size; i++) {
-
-			switch (markedPokemon[i].second) {
-				case Pokemon::Sprite::FRONT:			spriteName = "FRONT";			break;
-				case Pokemon::Sprite::FRONT_SHINY:		spriteName = "FRONT_SHINY";		break;
-				case Pokemon::Sprite::FRONT_ALT:		spriteName = "FRONT_ALT";		break;
-				case Pokemon::Sprite::FRONT_ALT_SHINY:	spriteName = "FRONT_ALT_SHINY"; break;
-				case Pokemon::Sprite::BACK:				spriteName = "BACK";			break;
-				case Pokemon::Sprite::BACK_SHINY:		spriteName = "BACK_SHINY";		break;
-			}
-
-			out << pokemonNames[markedPokemon[i].first] << "\t\t" << spriteName << std::endl;
-		}
-		out.close();
-	}
-
+	
 
 	//ImGui_ImplGlfw_Shutdown();
 	//ImGui_ImplOpenGL3_Shutdown();
