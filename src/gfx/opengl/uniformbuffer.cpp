@@ -8,7 +8,14 @@ namespace archt {
 	Uniformbuffer::Uniformbuffer() {
 	}
 
-	Uniformbuffer::Uniformbuffer(void* data, uint32_t size, uint32_t binding) : data(data), size(size), binding(binding) {
+	Uniformbuffer::Uniformbuffer(const std::string& name, 
+								 void* data, uint32_t size, 
+								 uint32_t binding) 
+		
+									: name (name), 
+									data(data), 
+									size(size), 
+									binding(binding) {
 	
 		glGenBuffers(1, &id);
 		glBindBuffer(GL_UNIFORM_BUFFER, id);

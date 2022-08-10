@@ -25,9 +25,10 @@ namespace archt {
 		std::string fsrc;
 
 		mutable std::unordered_map<std::string, int> uniforms;
-		std::vector<std::string> uniformBuffers;
+		std::vector<std::string> uniformBufferNames;
 
-		Uniformbuffer* uniformBuffer = nullptr;
+		//Uniformbuffer* uniformBuffer = nullptr;
+		std::vector<Uniformbuffer*> uniformBuffers;
 
 	public:
 		GLShader();
@@ -45,7 +46,8 @@ namespace archt {
 		void setUniform2f(const std::string& name, float* uniform) const;
 		void setUniform3f(const std::string& name, float* uniform) const;
 		void setUniform4f(const std::string& name, float* uniform) const;
-		
+		void setUniform4fv(const std::string& name, float* uniforms, int count) const;
+
 
 		void setUniform1i(const std::string& name, int uniform) const;
 		void setUniform1iv(const std::string& name, int count, int* uniforms) const;
@@ -60,7 +62,7 @@ namespace archt {
 		void logShaderSource() const;
 
 		inline uint32_t getProgramId() const { return id; }
-		inline Uniformbuffer* getUniformBuffer() const { return uniformBuffer; }
+		inline const std::vector<Uniformbuffer*>& getUniformBuffers() const { return uniformBuffers; }
 		inline const std::string& getFileName() const { return file; }
 
 	private:

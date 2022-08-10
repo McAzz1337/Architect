@@ -17,6 +17,8 @@
 #include "src/gfx/opengl/glshader.h"
 #include "src/gfx/opengl/gltexture.h"
 #include "src/gfx/opengl/glwindow.h"
+#include "src/gfx/opengl/wireframerenderer.h"
+
 
 // audio
 #include "src/audio/openal/sounddevice.h"
@@ -26,6 +28,9 @@
 
 // gui
 #include "src/gfx/gui/gui.h"
+
+// math
+#include "src/math/rayequation.h"
 
 //imgui
 #include "vendor/imgui/imgui.h"
@@ -63,12 +68,45 @@ int main() {
 
 	GLWindow* window = GLRenderAPI::init();
 	GLRenderer2D::init();
+	WireframeRenderer::init();
 
 	Input::init();
 
 #pragma region IMGUI_SETUP
 	Gui::init(window);
 	GLRenderAPI::createGuiInfoWindow();
+
+	{
+		glm::vec2 a1 = { -3.0f, 3.0f };
+		glm::vec2 b1 = { 1.0f, 0.0f };
+
+		glm::vec2 a2 = { -2.0f, 1.0f };
+		glm::vec2 b2 = { 2.0f, 2.0f };
+
+		glm::vec2 c = solveRayEquation(a1, b1, a2, b2);
+		
+		glm::vec2 v = b1 - a1;
+		glm::vec2 w = b2 - a2;
+
+		glm::vec2 p1 = a1 + c.x * v;
+		glm::vec2 p2 = a2 + c.y * w;
+
+
+		auto lambda = [&c, &p1, &p2]() {
+			ImGui::Begin("Ray equation");
+			ImGui::Text("t = %f", c.x);
+			ImGui::Text("u = %f", c.y);
+
+			ImGui::Text("p1 = %f\t %f", p1.x, p1.y);
+			ImGui::Text("p2 = %f\t %f", p2.x, p2.y);
+
+
+
+			ImGui::End();
+		};
+		Gui::instance->addGuiWindow(lambda);
+	}
+
 
 #pragma endregion IMGUI_SETUP
 
@@ -80,7 +118,7 @@ int main() {
 	GLShader* fastShader = new GLShader("src/assets/shaders/fastshader/fastshader");
 	GLShader* transferShader = new GLShader("src/assets/shaders/transfer/transfer");
 
-	Uniformbuffer* uniformBuffer = new Uniformbuffer(nullptr, 4 * 16 * 1000);
+	Uniformbuffer* uniformBuffer = new Uniformbuffer("matrices", nullptr, 4 * 16 * 1000);
 	fastShader->registerUniformBuffer(uniformBuffer);
 	transferShader->registerUniformBuffer(uniformBuffer);
 
@@ -295,24 +333,30 @@ int main() {
 		}
 #pragma endregion CONTROLS
 
-		if (pokemon.checkCollision(pokemon1)) {
+		if (pokemon.checkCollision(pokemon1, cam)) {
 			printf("Collision\n");
 		}
 
 
-		GLRenderer2D::clear();
-		GLRenderer2D::beginScene(&cam);
+		//GLRenderer2D::clear();
+		//GLRenderer2D::beginScene(&cam);
+		//
+		//GLRenderer2D::submit(&pokemon);
+		//GLRenderer2D::submit(&pokemon1);
+		//
+		//
+		//GLRenderer2D::render();
+		//GLRenderer2D::flush();
+		//GLRenderer2D::endScene();
 
-		GLRenderer2D::submit(&pokemon);
-		GLRenderer2D::submit(&pokemon1);
-
-
-		GLRenderer2D::render();
-		GLRenderer2D::flush();
-		GLRenderer2D::endScene();
-
-
-
+		WireframeRenderer::clear();
+		WireframeRenderer::beginScene(&cam);
+		WireframeRenderer::submit(&pokemon);
+		WireframeRenderer::submit(&pokemon1);
+		
+		WireframeRenderer::render();
+		WireframeRenderer::flush();
+		WireframeRenderer::endScene();
 
 
 		AudioRenderer::render();

@@ -61,7 +61,13 @@ namespace archt {
 		ibo = new IBO(indeces, MAX_INDECES);
 		ibo->allocateOnGPU();
 
-		vao = new GLVertexarray(vbo, ibo);
+		vao = new GLVertexarray(vbo, ibo, false);
+		vao->setVertexAttribPointer(0, 3, (const void*) offsetof(Vertex, pos));
+		vao->setVertexAttribPointer(1, 3, (const void*) offsetof(Vertex, normal));
+		vao->setVertexAttribPointer(2, 2, (const void*) offsetof(Vertex, uv));
+		vao->setVertexAttribPointer(3, 1, (const void*) offsetof(Vertex, texId));
+		vao->setVertexAttribPointer(4, 1, (const void*) offsetof(Vertex, matrixId));
+
 
 		matrices = new glm::mat4[GLRenderAPI::maxMatrices];
 
@@ -211,10 +217,15 @@ namespace archt {
 		activeShader->bind();
 		std::string shaderName = "";
 		extractFileName(activeShader->getFileName(), shaderName);
-		if (Uniformbuffer* buffer = activeShader->getUniformBuffer()) {
-			buffer->bind();
-			buffer->write(0, (void*) matrices, currentMatrix * sizeof(glm::mat4));
-			buffer->upload();
+		const std::vector<Uniformbuffer*>& buffers = activeShader->getUniformBuffers();
+		if (buffers.size() > 0) {
+			for (int i = 0; i < buffers.size(); i++) {
+				buffers[i]->bind();
+				if (buffers[i]->getName() == "matrices") {
+					buffers[i]->write(0, (void*) matrices, currentMatrix * sizeof(glm::mat4));
+				}
+				buffers[i]->upload();
+			}
 		}
 		else {
 			activeShader->setMatrixf4v("mvp", matrices, currentMatrix);

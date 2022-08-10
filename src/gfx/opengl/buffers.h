@@ -20,7 +20,7 @@ namespace archt {
 		void deallocateOnGPU();
 		void bind() const;
 		void write(uint32_t offset, Vertex* d, uint32_t size);
-		void upload(int offset = 0, int length = 0, int mode = GL_DYNAMIC_DRAW) const;
+		void upload(int offset = 0, int length = 0) const;
 
 		void setTexId(float id);
 		void setMatrixId(float id);

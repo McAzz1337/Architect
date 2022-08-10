@@ -10,10 +10,11 @@ namespace archt {
 		uint32_t binding = 0;
 		void* data = nullptr;
 		uint32_t size = 0;
+		std::string name;
 
 	public:
 		Uniformbuffer();
-		Uniformbuffer(void* data, uint32_t size, uint32_t binding = 0);
+		Uniformbuffer(const std::string& name, void* data, uint32_t size, uint32_t binding = 0);
 		~Uniformbuffer();
 
 		void write(uint32_t offset, void* d, uint32_t size);
@@ -24,6 +25,7 @@ namespace archt {
 		void bind() const;
 		void bindUniformBlock(uint32_t shaderId, const std::string& blockName) const;
 
+		inline const std::string& getName() const { return name; }
 	};
 
 

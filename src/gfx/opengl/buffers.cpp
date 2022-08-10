@@ -51,21 +51,21 @@ namespace archt {
 		}
 	}
 
-	void VBO::upload(int offset, int length, int mode) const {
+	void VBO::upload(int offset, int length) const {
+		
 		if (length == 0)
 			length = size;
 		if (offset * sizeof(Vertex) + length * sizeof(Vertex) > bytes()) {
 			__debugbreak();
 		}
 		CALL(glBufferSubData(GL_ARRAY_BUFFER, offset * sizeof(Vertex), length * sizeof(Vertex), data));
-		//glBufferData(GL_ARRAY_BUFFER, bytes(), data, mode);
 	}
 
 	void VBO::allocateOnGPU(int size, int mode) {
 		glGenBuffers(1, &id);
 		bind();
 		
-		size = size < 0 ? bytes() : size * sizeof(uint32_t);
+		size = size < 0 ? bytes() : size * sizeof(Vertex);
 		glBufferData(GL_ARRAY_BUFFER, size, data, mode);
 	}
 

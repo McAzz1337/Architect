@@ -71,7 +71,7 @@ namespace archt {
 			}
 		}
 			
-		readFileSplit(srcPath + "/uniformbuffers.txt", uniformBuffers, true);
+		readFileSplit(srcPath + "/uniformbuffers.txt", uniformBufferNames, true);
 
 	}
 
@@ -150,6 +150,13 @@ namespace archt {
 			glUniform4f(location, uniform[0], uniform[1], uniform[2], uniform[3]);
 	}
 
+	void GLShader::setUniform4fv(const std::string& name, float* uniforms, int count) const {
+		int location = getUniformLocation(name);
+		if (location > -1)
+			glUniform4fv(location, count, uniforms);
+	}
+
+
 	void GLShader::setUniform1i(const std::string& name, int uniform) const {
 		int location = getUniformLocation(name);
 		if (location > -1)
@@ -181,10 +188,7 @@ namespace archt {
 	}
 
 	void GLShader::registerUniformBuffer(Uniformbuffer* buffer) {
-		if (uniformBuffer)
-			return;
-
-		uniformBuffer = buffer;
+		uniformBuffers.push_back(buffer);
 	}
 
 

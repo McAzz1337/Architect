@@ -129,6 +129,12 @@
     <ClCompile Include="src\math\soe2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\math\rayequation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gfx\opengl\wireframerenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\fileio.h">
@@ -266,6 +272,12 @@
     <ClInclude Include="src\math\soe2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\math\rayequation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gfx\opengl\wireframerenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\assets\shaders\shader\shader.frag" />
@@ -274,6 +286,8 @@
     <None Include="src\assets\shaders\fastshader\fastshader.frag" />
     <None Include="src\assets\shaders\transfer\transfer.vert" />
     <None Include="src\assets\shaders\transfer\transfer.frag" />
+    <None Include="src\assets\shaders\wireframeshader\wireframeshader.vert" />
+    <None Include="src\assets\shaders\wireframeshader\wireframeshader.frag" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\assets\shaders\shader\uniforms.txt" />
@@ -283,5 +297,7 @@
     <Text Include="src\assets\shaders\transfer\uniformbuffers.txt" />
     <Text Include="src\assets\shaders\transfer\uniforms.txt" />
     <Text Include="src\assets\img\pokemon_list.txt" />
+    <Text Include="src\assets\shaders\wireframeshader\uniformbuffers.txt" />
+    <Text Include="src\assets\shaders\wireframeshader\uniforms.txt" />
   </ItemGroup>
 </Project>

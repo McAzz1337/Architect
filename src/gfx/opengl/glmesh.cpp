@@ -5,7 +5,8 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "../../math/soe2.h"
+
+#include "../../math/rayequation.h"
 
 #include "../gui/gui.h"
 
@@ -13,18 +14,35 @@ extern bool debug;
 
 namespace archt {
 
+	int GLMesh::count = 0;
 
 
 	GLMesh::GLMesh() {
+		id = count;
+		count++;
+		
 		Gui::instance->addGuiWindow([this]() {
+			std::string windowName = "Pokemon " + std::to_string(id); 
+			ImGui::Begin(windowName.c_str());
 			glm::mat4 m = this->getModelMatrix();
-			ImGui::Begin("Pokemon");
 			ImGui::Text("Matrix");
 			ImGui::Text("%f\t%f\t%f\t%f", m[0][0], m[0][1], m[0][2], m[0][3]);
 			ImGui::Text("%f\t%f\t%f\t%f", m[1][0], m[1][1], m[1][2], m[1][3]);
 			ImGui::Text("%f\t%f\t%f\t%f", m[2][0], m[2][1], m[2][2], m[2][3]);
 			ImGui::Text("%f\t%f\t%f\t%f", m[3][0], m[3][1], m[3][2], m[3][3]);
 
+			//int size = 0;
+			//glm::vec2* pos = getPositionsTranslated(cam, size);
+			//
+			//ImGui::Text("Positions:");
+			//for (int i = 0; i < size; i++) {
+			//	ImGui::Text("Vertex[%i]:\t%f\t%f", i, pos->x, pos->y);
+			//}
+
+			if (this->colided)
+				ImGui::Text("Collided with id = %i", coliderId);
+
+			ImGui::Text("----------------------------");
 
 			ImGui::End();
 									});
@@ -108,51 +126,54 @@ namespace archt {
 		modelMatrix = m;
 	}
 
-	bool GLMesh::checkCollision(const GLMesh& other) const {
+	bool GLMesh::checkCollision(const GLMesh& other, const Camera& cam) const {
 		
 		int oSize = 0;
-		glm::vec2* oPos = other.getPositionsTranslated(oSize);
+		glm::vec2* oPos = other.getPositionsTranslated(cam, oSize);
 
 		int size = 0;
-		glm::vec2* pos = getPositionsTranslated(size);
-		
-		static bool isDebug = false;
-		if (debug)
-			isDebug = true;
+		glm::vec2* pos = getPositionsTranslated(cam, size);
+
 		for (int i = 0; i < size; i++) {
-				
-			glm::vec2 a1 = pos[i];
-			glm::vec2 b1 = pos[(i == size - 1) ? 0 : i + 1];
-			
+
 			for (int j = 0; j < oSize; j++) {
-			
-				glm::vec2 a2 = oPos[j];
-				glm::vec2 b2 = oPos[(j == oSize - 1) ? 0 : j + 1];
-				
-				SOE2 soe(a1, b1, a2, b2);
-				
-				if (soe.solve(isDebug))
+
+				glm::vec2 coeficients = solveRayEquation(pos[i], 
+														 pos[(i == size - 1) ? 0 : i + 1],
+														 oPos[j],
+														 oPos[(j == oSize - 1) ? 0 : j + 1]);
+				if (coeficients.x >= 0.0f && coeficients.x <= 1.0f &&
+					coeficients.y >= 0.0f && coeficients.y <= 1.0f) {
+					colided = true;
+					coliderId = other.id;
 					return true;
+				}
 			}
-			if (isDebug) isDebug = false;
 		}
 
-		delete pos;
-		delete oPos;
+
+		delete[] oPos;
+		delete[] pos;
+		
+		colided = false;
+		coliderId = -1;
 
 		return false;
 	}
 
-	glm::vec2* GLMesh::getPositionsTranslated(int& out_size) const {
+	glm::vec2* GLMesh::getPositionsTranslated(const Camera& cam, int& out_size) const {
 
 		out_size = vbo->getSize();
 		Vertex* verteces = vbo->getData();
 		glm::vec2* positions = new glm::vec2[out_size];
 
 		glm::vec4 pos = modelMatrix[3];
+		glm::mat4 vp = cam.getProjectionView();
+
 
 		for (int i = 0; i < out_size; i++) {
-			positions[i] = glm::vec2(modelMatrix[3] + glm::vec4(verteces[i].pos, 1.0f));
+			glm::vec4 t = vp * modelMatrix * glm::vec4(verteces[i].pos, 1.0f);
+			positions[i] = glm::vec2(t.x, t.y);
 		}
 
 		return positions;

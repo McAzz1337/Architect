@@ -156,8 +156,10 @@
     <ClCompile Include="src\gfx\opengl\glvertexarray.cpp" />
     <ClCompile Include="src\gfx\opengl\glwindow.cpp" />
     <ClCompile Include="src\gfx\opengl\uniformbuffer.cpp" />
+    <ClCompile Include="src\gfx\opengl\wireframerenderer.cpp" />
     <ClCompile Include="src\gfx\vertex.cpp" />
     <ClCompile Include="src\input\input.cpp" />
+    <ClCompile Include="src\math\rayequation.cpp" />
     <ClCompile Include="src\math\soe2.cpp" />
     <ClCompile Include="src\stb\stb\stbi_image_write.c" />
     <ClCompile Include="src\stb\stb\stb_image.c" />
@@ -199,8 +201,10 @@
     <ClInclude Include="src\gfx\opengl\glvertexarray.h" />
     <ClInclude Include="src\gfx\opengl\glwindow.h" />
     <ClInclude Include="src\gfx\opengl\uniformbuffer.h" />
+    <ClInclude Include="src\gfx\opengl\wireframerenderer.h" />
     <ClInclude Include="src\gfx\vertex.h" />
     <ClInclude Include="src\input\input.h" />
+    <ClInclude Include="src\math\rayequation.h" />
     <ClInclude Include="src\math\soe2.h" />
     <ClInclude Include="src\stb\stb\stbi_image_write.h" />
     <ClInclude Include="src\stb\stb\stb_image.h" />
@@ -224,6 +228,8 @@
     <None Include="src\assets\shaders\shader\shader.vert" />
     <None Include="src\assets\shaders\transfer\transfer.frag" />
     <None Include="src\assets\shaders\transfer\transfer.vert" />
+    <None Include="src\assets\shaders\wireframeshader\wireframeshader.frag" />
+    <None Include="src\assets\shaders\wireframeshader\wireframeshader.vert" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\assets\img\pokememes_offset.txt" />
@@ -233,6 +239,8 @@
     <Text Include="src\assets\shaders\shader\uniforms.txt" />
     <Text Include="src\assets\shaders\transfer\uniformbuffers.txt" />
     <Text Include="src\assets\shaders\transfer\uniforms.txt" />
+    <Text Include="src\assets\shaders\wireframeshader\uniformbuffers.txt" />
+    <Text Include="src\assets\shaders\wireframeshader\uniforms.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

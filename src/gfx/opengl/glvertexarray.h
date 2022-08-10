@@ -10,10 +10,13 @@ namespace archt {
 
 	public:
 		GLVertexarray();
-		GLVertexarray(VBO* vbo, IBO* ibo);
+		GLVertexarray(VBO* vbo, IBO* ibo, bool fullVertex = true);
 		~GLVertexarray();
 
+		void setVertexAttribPointer(int index, int count, const void* offset);
+
 		void bind() const;
+
 
 	};
 

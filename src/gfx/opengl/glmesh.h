@@ -3,6 +3,7 @@
 #include "buffers.h"
 #include "gltexture.h"
 #include "glshader.h"
+#include "camera.h"
 
 #include <glm/mat4x4.hpp>
 #include <string>
@@ -12,7 +13,14 @@ namespace archt {
 
 	class GLMesh {
 
+		static int count;
+
+
 	protected:
+		int id = -1;
+		mutable bool colided = false;
+		mutable int coliderId = -1;
+
 		VBO* vbo = nullptr;
 		IBO* ibo = nullptr;
 		GLTexture* tex = nullptr;
@@ -32,9 +40,9 @@ namespace archt {
 
 		void resetMatrix();
 
-		bool checkCollision(const GLMesh& other) const;
+		bool checkCollision(const GLMesh& other, const Camera& cam) const;
 
-		glm::vec2* getPositionsTranslated(int& out_size) const;
+		glm::vec2* getPositionsTranslated(const Camera& cam, int& out_size) const;
 
 		void printMatrix() const;
 
