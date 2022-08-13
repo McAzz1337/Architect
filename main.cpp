@@ -1,5 +1,7 @@
 #include <iostream>
 
+#if 0
+
 // archt misc
 #include "src/chronos/deltatime.h"
 #include "src/fileio.h"
@@ -341,7 +343,7 @@ int main() {
 
 		//GLRenderAPI::setPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-#if 1
+//#if 1
 		GLRenderer2D::clear();
 		GLRenderer2D::beginScene(&cam);
 		
@@ -352,7 +354,7 @@ int main() {
 		GLRenderer2D::render();
 		GLRenderer2D::flush();
 		GLRenderer2D::endScene();
-#else
+//#else
 		WireframeRenderer::clear();
 		WireframeRenderer::beginScene(&cam);
 		
@@ -363,7 +365,7 @@ int main() {
 		WireframeRenderer::render();
 		WireframeRenderer::flush();
 		WireframeRenderer::endScene();
-#endif
+//#endif
 
 		AudioRenderer::render();
 
@@ -402,3 +404,48 @@ int main() {
 
 	return 0;
 }
+
+#else {
+
+#include "src/core.h"
+
+#include "src/gfx/opengl/glrenderapi.h"
+#include "src/input/input.h"
+
+#include "src/entity/component/camera_new.h"
+#include "src/entity/component.h"
+#include "src/gfx/opengl/glwindow.h"
+
+int main() {
+	using namespace archt;
+
+	GLWindow* window = GLRenderAPI::init();
+	
+	Input::init();
+
+	ptr<Camera_new> camera = std::make_shared<Camera_new>(60.0f, 1080.0f / 720.0f, 0.001f, 100.0f);
+
+
+	while (true) {
+
+		window->pollEvents();
+
+
+
+
+
+		window->swapBuffer();
+
+		if (window->shouldClose()) {
+			break;
+		}
+	}
+
+
+	return 0;
+}
+
+
+
+
+#endif

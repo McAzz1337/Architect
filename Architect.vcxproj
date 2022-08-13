@@ -141,6 +141,10 @@
     <ClCompile Include="src\audio\openal\audiosource.cpp" />
     <ClCompile Include="src\audio\waveloader.cpp" />
     <ClCompile Include="src\chronos\deltatime.cpp" />
+    <ClCompile Include="src\entity\component.cpp" />
+    <ClCompile Include="src\entity\component\buffers_new.cpp" />
+    <ClCompile Include="src\entity\component\camera_new.cpp" />
+    <ClCompile Include="src\entity\component\material\uniform.cpp" />
     <ClCompile Include="src\fileio.cpp" />
     <ClCompile Include="src\filesystem\filemanager.cpp" />
     <ClCompile Include="src\gfx\gui\gui.cpp" />
@@ -184,6 +188,13 @@
     <ClInclude Include="src\audio\openal\audiosource.h" />
     <ClInclude Include="src\audio\waveloader.h" />
     <ClInclude Include="src\chronos\deltatime.h" />
+    <ClInclude Include="src\core.h" />
+    <ClInclude Include="src\entity\component.h" />
+    <ClInclude Include="src\entity\component\buffers_new.h" />
+    <ClInclude Include="src\entity\component\camera_new.h" />
+    <ClInclude Include="src\entity\component\material\material.h" />
+    <ClInclude Include="src\entity\component\material\uniform.h" />
+    <ClInclude Include="src\entity\component\Mesh.h" />
     <ClInclude Include="src\fileio.h" />
     <ClInclude Include="src\filesystem\filemanager.h" />
     <ClInclude Include="src\gfx\gui\gui.h" />
