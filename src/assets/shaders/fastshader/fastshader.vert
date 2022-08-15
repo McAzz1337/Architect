@@ -23,7 +23,7 @@ void main () {
 	gl_Position = mvp[matrixIndex] * vec4(pos, 1.0);
 
 
-	_normal  = normal;
+	_normal  = vec3(mvp[matrixIndex] * vec4(pos, 1.0)); // normal;
 	_uv = uv;
 	_texId = int(texId);
 	_matrixId = matrixId;

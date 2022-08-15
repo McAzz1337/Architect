@@ -30,6 +30,7 @@ namespace archt {
 
 		friend class GLRenderer2D;
 		friend class WireframeRenderer;
+		friend class Renderer2D;
 
 		static GLWindow* init();
 		static void terminate();

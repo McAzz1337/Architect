@@ -66,7 +66,7 @@ namespace archt {
 		bind();
 		
 		size = size < 0 ? bytes() : size * sizeof(Vertex);
-		glBufferData(GL_ARRAY_BUFFER, size, data, mode);
+		CALL(glBufferData(GL_ARRAY_BUFFER, size, data, mode));
 	}
 
 	void VBO::deallocateOnGPU() {
@@ -90,6 +90,14 @@ namespace archt {
 			positions[i] = data[i].pos;
 		}
 		return positions;
+	}
+
+	void VBO::setVerteces(Vertex* verteces, uint32_t size) {
+		if (data)
+			delete[] data;
+
+		data = verteces;
+		this->size = size;
 	}
 
 	void VBO::setTexId(float id) {
@@ -167,7 +175,7 @@ namespace archt {
 		bind();
 		
 		size = size < 0 ? bytes() : size * sizeof(uint32_t);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, mode);
+		CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, mode));
 	}
 	
 	void IBO::deallocateOnGPU() {
@@ -183,6 +191,14 @@ namespace archt {
 			printf("%i ", data[i]);
 		}
 		printf("\n---------------------\n");
+	}
+
+	void IBO::setIndeces(uint32_t* indeces, uint32_t size) {
+		if (data)
+			delete[] data;
+
+		data = indeces;
+		this->size = size;
 	}
 
 

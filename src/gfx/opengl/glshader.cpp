@@ -22,9 +22,9 @@ namespace archt {
 	GLShader::GLShader() {}
 
 	GLShader::GLShader(const std::string& path) : file(path) {
-		readFile(path + VS_EXT, vsrc);
-		readFile(path + GS_EXT, gsrc);
-		readFile(path + FS_EXT, fsrc);
+		readFile(path + VS_EXT, vsrc, true);
+		readFile(path + GS_EXT, gsrc, true);
+		readFile(path + FS_EXT, fsrc, true);
 
 
 		GLShaderConstants::modifySahderSource(vsrc);
@@ -32,7 +32,7 @@ namespace archt {
 			GLShaderConstants::modifySahderSource(gsrc);
 		GLShaderConstants::modifySahderSource(fsrc);
 
-		//logShaderSource();
+		logShaderSource();
 
 		int vid = 0;
 		int gid = 0;

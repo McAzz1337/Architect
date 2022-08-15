@@ -29,6 +29,9 @@ namespace archt {
 
 		glm::vec3* getPositionalCoordinates(int& out_size) const;
 		
+		void setVerteces(Vertex* verteces, uint32_t size);
+
+
 		inline Vertex* getData() const { return data; }
 		inline int getSize() const { return size; }
 		inline int bytes() const { return size * sizeof(Vertex); }
@@ -58,6 +61,7 @@ namespace archt {
 
 		void print(int end) const;
 
+		void setIndeces(uint32_t* indeces, uint32_t size);
 
 		inline uint32_t* getData() const { return data; }
 		inline int getSize() const { return size; }

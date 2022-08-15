@@ -409,28 +409,112 @@ int main() {
 
 #include "src/core.h"
 
-
+#include "src/gfx/render/renderer.h"
 
 int main() {
 	using namespace archt;
 
 	GLWindow* window = GLRenderAPI::init();
 
+
+
 	Gui::init(window);
 	GLRenderAPI::createGuiInfoWindow();
+
+	Renderer renderer;
+	//Renderer2D::createInstance();
 
 	Input::init();
 
 	ptr<Camera_new> camera = make_ptr<Camera_new>( 60.0f, 1080.0f / 720.0f, 0.001f, 100.0f);
+
+	ptr<Entity> entity = make_ptr<Entity>();
+
+
+#pragma region SETUP
+	{
+
+		float u = 1.0f / 1711;
+		float v = 18.0f / 5609;
+		float sizeX = 56.0f / 1711;
+		float sizeY = 56.0f / 5609;
+
+		uint32_t vSize = 4;
+		Vertex* verteces = new Vertex[vSize]{
+			Vertex({ -0.5f,  0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 1.0f }, 0.0f, 0.0f),
+			Vertex({  0.5f,  0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 1.0f}, 0.0f, 0.0f),
+			Vertex({  0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 0.0f}, 0.0f, 0.0f),
+			Vertex({ -0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 0.0f}, 0.0f, 0.0f)
+		};
+
+
+
+
+		uint32_t iSize = 6;
+		uint32_t* indeces = new uint32_t[iSize]{
+			0, 1, 2,
+			0, 2, 3
+		};
+		
+		ptr<Mesh> mesh = make_ptr<Mesh>();
+
+		mesh->setVBO(verteces, vSize);
+		mesh->setIBO(indeces, iSize);
+
+		mesh->getVBO()->allocateOnGPU();
+		mesh->getIBO()->allocateOnGPU();
+		
+
+		ptr<Material> material = make_ptr<Material>("src/assets/shaders/testshader/testshader", "src/assets/img/item.png");
+		Uniformbuffer* uniformBuffer = new Uniformbuffer("matrices", nullptr, 4 * 16 * 1000);
+		material->getShader().registerUniformBuffer(uniformBuffer);
+
+		mesh->addComponent(material);
+
+		entity->addComponent(mesh);
+	}
+
+#pragma endregion SETUP
+
+
+
 
 
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	while (true) {
 
 		window->pollEvents();
-		glClear(GL_COLOR_BUFFER_BIT);
+#pragma region CONTROLS
+
+		if (Input::isPress(GLFW_KEY_W) || Input::isHeld(GLFW_KEY_W)) {
+			camera->translate({ 0.0f, 0.0f, 0.003f});
+		}
+		else if (Input::isPress(GLFW_KEY_S) || Input::isHeld(GLFW_KEY_S)) {
+			camera->translate({ 0.0f, 0.0f, -0.003f});
+		}
+
+		if (Input::isPress(GLFW_KEY_D) || Input::isHeld(GLFW_KEY_D)) {
+			camera->translate({ 0.003f, 0.0f, 0.0f });
+		}
+		else if (Input::isPress(GLFW_KEY_A) || Input::isHeld(GLFW_KEY_A)) {
+			camera->translate({ -0.003f, 0.0f, 0.0f });
+		}
+
+#pragma endregion CONTROLS
 
 
+
+		renderer.clear();
+		renderer.render(entity, camera);
+
+		//Renderer2D::instance->clear();
+		//Renderer2D::instance->beginScene(camera);
+		//
+		//Renderer2D::instance->submit(entity);
+		//
+		//Renderer2D::instance->render();
+		//Renderer2D::instance->endScene();
+		//Renderer2D::instance->flush();
 
 		Gui::instance->render();
 
@@ -440,6 +524,16 @@ int main() {
 			break;
 		}
 	}
+
+	delete window;
+
+	Input::terminate();
+
+	Gui::terminate();
+
+	Renderer2D::deleteInstance();
+	
+	GLRenderAPI::terminate();
 
 
 	return 0;

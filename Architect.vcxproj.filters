@@ -141,10 +141,25 @@
     <ClCompile Include="src\entity\component\camera_new.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entity\component\buffers_new.cpp">
+    <ClCompile Include="src\entity\component\material\uniform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\entity\component\material\uniform.cpp">
+    <ClCompile Include="src\entity\component\mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\component\transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\component\material\material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gfx\render\renderer2d.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gfx\render\renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -299,9 +314,6 @@
     <ClInclude Include="src\entity\component\mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\entity\component\buffers_new.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -314,6 +326,21 @@
     <ClInclude Include="src\ptr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\entity\component\transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\component\enitity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gfx\render\renderer2d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gfx\render\renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\assets\shaders\shader\shader.frag" />
@@ -324,6 +351,8 @@
     <None Include="src\assets\shaders\transfer\transfer.frag" />
     <None Include="src\assets\shaders\wireframeshader\wireframeshader.vert" />
     <None Include="src\assets\shaders\wireframeshader\wireframeshader.frag" />
+    <None Include="src\assets\shaders\testshader\testshader.vert" />
+    <None Include="src\assets\shaders\testshader\testshader.frag" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\assets\shaders\shader\uniforms.txt" />

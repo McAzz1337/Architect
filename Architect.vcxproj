@@ -105,12 +105,12 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;_USE_MATH_DEFINES;GLM_FORCE_RADIANS;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\vendor\glm;$(ProjectDir)\vendor\glfw-3.3.6.bin.WIN64\include;$(ProjectDir)\vendor\glew\include;$(ProjectDir)\vendor\assimp\include;$(ProjectDir)\vendor\openal\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\vendor\glm;$(ProjectDir)\vendor\glfw\include;$(ProjectDir)\vendor\glew\include;$(ProjectDir)\vendor\assimp\include;$(ProjectDir)\vendor\openal\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)\vendor\openal\libs\Win64\EFX-Util_MT;$(ProjectDir)\vendor\openal\libs\Win64;$(ProjectDir)\vendor\glfw-3.3.6.bin.WIN64\lib-vc2022;$(ProjectDir)\vendor\glew\lib\Release\x64;$(ProjectDir)\vendor\assimp\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)\vendor\openal\libs\Win64\EFX-Util_MT;$(ProjectDir)\vendor\openal\libs\Win64;$(ProjectDir)\vendor\glfw\lib-vc2022;$(ProjectDir)\vendor\glew\lib\Release\x64;$(ProjectDir)\vendor\assimp\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;assimp.lib;glew32s.lib;glfw3.lib;OpenAL32.lib;EFX-Util.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -142,9 +142,12 @@
     <ClCompile Include="src\audio\waveloader.cpp" />
     <ClCompile Include="src\chronos\deltatime.cpp" />
     <ClCompile Include="src\entity\component.cpp" />
-    <ClCompile Include="src\entity\component\buffers_new.cpp" />
     <ClCompile Include="src\entity\component\camera_new.cpp" />
+    <ClCompile Include="src\entity\component\material\material.cpp" />
     <ClCompile Include="src\entity\component\material\uniform.cpp" />
+    <ClCompile Include="src\entity\component\mesh.cpp" />
+    <ClCompile Include="src\entity\component\transform.cpp" />
+    <ClCompile Include="src\entity\entity.cpp" />
     <ClCompile Include="src\fileio.cpp" />
     <ClCompile Include="src\filesystem\filemanager.cpp" />
     <ClCompile Include="src\gfx\gui\gui.cpp" />
@@ -161,6 +164,8 @@
     <ClCompile Include="src\gfx\opengl\glwindow.cpp" />
     <ClCompile Include="src\gfx\opengl\uniformbuffer.cpp" />
     <ClCompile Include="src\gfx\opengl\wireframerenderer.cpp" />
+    <ClCompile Include="src\gfx\render\renderer.cpp" />
+    <ClCompile Include="src\gfx\render\renderer2d.cpp" />
     <ClCompile Include="src\gfx\vertex.cpp" />
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\math\rayequation.cpp" />
@@ -190,11 +195,13 @@
     <ClInclude Include="src\chronos\deltatime.h" />
     <ClInclude Include="src\core.h" />
     <ClInclude Include="src\entity\component.h" />
-    <ClInclude Include="src\entity\component\buffers_new.h" />
     <ClInclude Include="src\entity\component\camera_new.h" />
+    <ClInclude Include="src\entity\component\enitity.h" />
     <ClInclude Include="src\entity\component\material\material.h" />
     <ClInclude Include="src\entity\component\material\uniform.h" />
     <ClInclude Include="src\entity\component\mesh.h" />
+    <ClInclude Include="src\entity\component\transform.h" />
+    <ClInclude Include="src\entity\entity.h" />
     <ClInclude Include="src\fileio.h" />
     <ClInclude Include="src\filesystem\filemanager.h" />
     <ClInclude Include="src\gfx\gui\gui.h" />
@@ -213,6 +220,8 @@
     <ClInclude Include="src\gfx\opengl\glwindow.h" />
     <ClInclude Include="src\gfx\opengl\uniformbuffer.h" />
     <ClInclude Include="src\gfx\opengl\wireframerenderer.h" />
+    <ClInclude Include="src\gfx\render\renderer.h" />
+    <ClInclude Include="src\gfx\render\renderer2d.h" />
     <ClInclude Include="src\gfx\vertex.h" />
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\math\rayequation.h" />
@@ -238,6 +247,8 @@
     <None Include="src\assets\shaders\fastshader\fastshader.vert" />
     <None Include="src\assets\shaders\shader\shader.frag" />
     <None Include="src\assets\shaders\shader\shader.vert" />
+    <None Include="src\assets\shaders\testshader\testshader.frag" />
+    <None Include="src\assets\shaders\testshader\testshader.vert" />
     <None Include="src\assets\shaders\transfer\transfer.frag" />
     <None Include="src\assets\shaders\transfer\transfer.vert" />
     <None Include="src\assets\shaders\wireframeshader\wireframeshader.frag" />

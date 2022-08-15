@@ -1,8 +1,9 @@
 #pragma once
 
-#include <memory>
+#include "../ptr.h"
 #include <vector>
 
+#include <iostream>
 
 
 namespace archt {
@@ -10,23 +11,23 @@ namespace archt {
 
 	class Component {
 
-		std::shared_ptr<Component> parent = nullptr;
-		std::vector<std::shared_ptr<Component>> children;
+		ptr<Component> parent = nullptr;
+		std::vector<ptr<Component>> children;
 
 	public:
 		Component();
-		~Component();
+		virtual ~Component();
 
 		template<class T>
-		void addComponent(std::shared_ptr<T> component) {
-			if (std::shared_ptr<Component>  c = std::dynamic_pointer_cast<Component>(component)) {
+		void addComponent(ptr<T> component) {
+			if (ptr<Component>  c = std::dynamic_pointer_cast<Component>(component)) {
 				children.push_back(c);
 			}
 		}
 
 		template<class T>
-		void removeComponent(std::shared_ptr<T> component) {
-			if (std::shared_ptr<Component>  c = std::dynamic_pointer_cast<Component>(component)) {
+		void removeComponent(ptr<T> component) {
+			if (ptr<Component>  c = std::dynamic_pointer_cast<Component>(component)) {
 				int size = children.size();
 				for (int i = 0; i < size; i++) {
 					if (children[i].get() == c.get()) {
@@ -63,28 +64,27 @@ namespace archt {
 
 
 
-
-
-
 		template<class T>
-		std::shared_ptr<T> getComponent() {
+		ptr<T> getComponent() {
 			
 			int size = children.size();
 			for (int i = 0; i < size; i++) {
-				if (std::shared_ptr<T> t = std::dynamic_pointer_cast<T>(children[i])) {
+				if (ptr<T> t = std::dynamic_pointer_cast<T>(children[i])) {
+					//std::cout << "returned component as < " << typeid(T).name() << ">" << std::endl;
 					return t;
 				}
 			}
+			__debugbreak();
 			return nullptr;
 		}
 
 		template<class T>
-		std::vector<std::shared_ptr<T>> getComponents() {
+		std::vector<ptr<T>> getComponents() {
 		
-			std::vector<std::shared_ptr<T>> list;
+			std::vector<ptr<T>> list;
 			int size = children.size();
 			for (int i = 0; i < size; i++) {
-				if (std::shared_ptr<T> t = std::dynamic_pointer_cast<T>(children[i])) {
+				if (ptr<T> t = std::dynamic_pointer_cast<T>(children[i])) {
 					return t;
 				}
 			}
