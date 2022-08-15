@@ -87,7 +87,7 @@ int main() {
 		glm::vec2 b2 = { 2.0f, 2.0f };
 
 		glm::vec2 c = solveRayEquation(a1, b1, a2, b2);
-		
+
 		glm::vec2 v = b1 - a1;
 		glm::vec2 w = b2 - a2;
 
@@ -227,7 +227,7 @@ int main() {
 
 
 
-	
+
 	double elapsed = 0.0;
 	double elapsed2 = 0.0;
 	while (true) {
@@ -262,11 +262,11 @@ int main() {
 
 		if (Input::isPress(GLFW_KEY_W) || Input::isHeld(GLFW_KEY_W)) {
 			//cam.translate({ 0.0f, 0.0f, -translation });
-			pokemon.translate({ 0.0f, translation, 0.0f});
+			pokemon.translate({ 0.0f, translation, 0.0f });
 		}
 		else if (Input::isPress(GLFW_KEY_S) || Input::isHeld(GLFW_KEY_S)) {
 			//cam.translate({ 0.0f, 0.0f, translation });
-			pokemon.translate({ 0.0f, -translation, 0.0f});
+			pokemon.translate({ 0.0f, -translation, 0.0f });
 		}
 
 
@@ -284,7 +284,7 @@ int main() {
 			cam.translate({ 0.0f, -translation, 0.0f });
 		}
 
-		
+
 		static bool debugLock = false;
 		if (Input::isPress(GLFW_KEY_G) || Input::isHeld(GLFW_KEY_G) && !debugLock) {
 			debug = !debug;
@@ -312,7 +312,7 @@ int main() {
 			if (sprite == Pokemon::Sprite::NONE) {
 				sprite = Pokemon::Sprite::FRONT;
 			}
-			
+
 			pokemon.setSprite((Pokemon::Sprite) sprite);
 			backSpaceWasPressed = true;
 		}
@@ -346,26 +346,26 @@ int main() {
 //#if 1
 		GLRenderer2D::clear();
 		GLRenderer2D::beginScene(&cam);
-		
+
 		GLRenderer2D::submit(&pokemon);
 		GLRenderer2D::submit(&pokemon1);
-		
-		
+
+
 		GLRenderer2D::render();
 		GLRenderer2D::flush();
 		GLRenderer2D::endScene();
-//#else
+		//#else
 		WireframeRenderer::clear();
 		WireframeRenderer::beginScene(&cam);
-		
+
 		WireframeRenderer::submit(&pokemon);
 		WireframeRenderer::submit(&pokemon1);
-		
-		
+
+
 		WireframeRenderer::render();
 		WireframeRenderer::flush();
 		WireframeRenderer::endScene();
-//#endif
+		//#endif
 
 		AudioRenderer::render();
 
@@ -389,7 +389,7 @@ int main() {
 		}
 	}
 
-	
+
 
 	//ImGui_ImplGlfw_Shutdown();
 	//ImGui_ImplOpenGL3_Shutdown();
@@ -409,30 +409,30 @@ int main() {
 
 #include "src/core.h"
 
-#include "src/gfx/opengl/glrenderapi.h"
-#include "src/input/input.h"
 
-#include "src/entity/component/camera_new.h"
-#include "src/entity/component.h"
-#include "src/gfx/opengl/glwindow.h"
 
 int main() {
 	using namespace archt;
 
 	GLWindow* window = GLRenderAPI::init();
-	
+
+	Gui::init(window);
+	GLRenderAPI::createGuiInfoWindow();
+
 	Input::init();
 
-	ptr<Camera_new> camera = std::make_shared<Camera_new>(60.0f, 1080.0f / 720.0f, 0.001f, 100.0f);
+	ptr<Camera_new> camera = make_ptr<Camera_new>( 60.0f, 1080.0f / 720.0f, 0.001f, 100.0f);
 
 
+	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	while (true) {
 
 		window->pollEvents();
+		glClear(GL_COLOR_BUFFER_BIT);
 
 
 
-
+		Gui::instance->render();
 
 		window->swapBuffer();
 

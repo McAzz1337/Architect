@@ -5,8 +5,13 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
+
+#include <typeinfo>
 
 namespace archt {
+
+
 
 	struct Uniform {
 
@@ -15,12 +20,9 @@ namespace archt {
 
 		Uniform();
 		Uniform(const std::string& name, int size);
-		~Uniform();
+		virtual ~Uniform();
 
-		template<class T>
-		static inline T* uniform_cast(Uniform* uniform) {
-			return dynamic_cast<T>(uniform);
-		}
+	
 
 	};
 
@@ -63,4 +65,25 @@ namespace archt {
 		~UniformFloat4();
 
 	};
+
+	struct UniformMatrix4 : public Uniform {
+
+		glm::mat4 uniform = glm::mat4(1.0f);
+
+		UniformMatrix4();
+		UniformMatrix4(const std::string& name, const glm::mat4& uniform);
+		~UniformMatrix4();
+
+	};
+
+
+	template<class T>
+	T* uniform_cast(Uniform* uniform) {
+		return dynamic_cast<T*>(uniform);
+	}
+
+	template<>
+	UniformFloat4* uniform_cast<UniformFloat4>(Uniform* uniform) {
+		return dynamic_cast<UniformFloat4*>(uniform);
+	}
 }

@@ -167,7 +167,7 @@
     <ClCompile Include="src\math\soe2.cpp" />
     <ClCompile Include="src\stb\stb\stbi_image_write.c" />
     <ClCompile Include="src\stb\stb\stb_image.c" />
-    <ClCompile Include="src\timer.cpp" />
+    <ClCompile Include="src\chronos\timer.cpp" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="vendor\imgui\imgui_draw.cpp" />
@@ -194,7 +194,7 @@
     <ClInclude Include="src\entity\component\camera_new.h" />
     <ClInclude Include="src\entity\component\material\material.h" />
     <ClInclude Include="src\entity\component\material\uniform.h" />
-    <ClInclude Include="src\entity\component\Mesh.h" />
+    <ClInclude Include="src\entity\component\mesh.h" />
     <ClInclude Include="src\fileio.h" />
     <ClInclude Include="src\filesystem\filemanager.h" />
     <ClInclude Include="src\gfx\gui\gui.h" />
@@ -221,7 +221,8 @@
     <ClInclude Include="src\stb\stb\stb_image.h" />
     <ClInclude Include="src\thread\mythread.h" />
     <ClInclude Include="src\thread\thread.h" />
-    <ClInclude Include="src\timer.h" />
+    <ClInclude Include="src\chronos\timer.h" />
+    <ClInclude Include="src\ptr.h" />
     <ClInclude Include="vendor\imgui\imconfig.h" />
     <ClInclude Include="vendor\imgui\imgui.h" />
     <ClInclude Include="vendor\imgui\imgui_impl_glfw.h" />

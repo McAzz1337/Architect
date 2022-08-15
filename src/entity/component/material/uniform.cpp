@@ -1,50 +1,71 @@
 #include "uniform.h"
 
-archt::Uniform::Uniform() {}
+#include <typeinfo>
 
-archt::Uniform::Uniform(const std::string& name, int size) : name(name), size(size) {}
+namespace archt {
 
-archt::Uniform::~Uniform() {}
+	static void test() {
+		Uniform* u = new UniformFloat4("vec", { 1.0f });
+		
+		UniformFloat4* vec = uniform_cast<UniformFloat4>(u);
+	}
 
+	Uniform::Uniform() {}
 
+	Uniform::Uniform(const std::string& name, int size) : name(name), size(size) {}
 
-
-archt::UniformFloat1::UniformFloat1() {}
-
-archt::UniformFloat1::UniformFloat1(const std::string& name, float uniform) {}
-
-archt::UniformFloat1::~UniformFloat1() {}
-
-
-
-
-
-
-archt::UniformFloat2::UniformFloat2() {}
-
-archt::UniformFloat2::UniformFloat2(const std::string& name, const glm::vec2& uniform) {}
-
-archt::UniformFloat2::~UniformFloat2() {}
+	Uniform::~Uniform() {}
 
 
 
 
+	UniformFloat1::UniformFloat1() {}
 
-archt::UniformFloat3::UniformFloat3() {}
+	UniformFloat1::UniformFloat1(const std::string& name, float uniform) : Uniform(name, 1) {}
 
-archt::UniformFloat3::UniformFloat3(const std::string& name, const glm::vec3& uniform) {}
-
-archt::UniformFloat3::~UniformFloat3() {}
+	UniformFloat1::~UniformFloat1() {}
 
 
 
 
 
 
+	UniformFloat2::UniformFloat2() {}
+
+	UniformFloat2::UniformFloat2(const std::string& name, const glm::vec2& uniform) : Uniform(name, 2) {}
+
+	UniformFloat2::~UniformFloat2() {}
 
 
-archt::UniformFloat4::UniformFloat4() {}
 
-archt::UniformFloat4::UniformFloat4(const std::string& name, const glm::vec4& uniform) {}
 
-archt::UniformFloat4::~UniformFloat4() {}
+
+	UniformFloat3::UniformFloat3() {}
+
+	UniformFloat3::UniformFloat3(const std::string& name, const glm::vec3& uniform) : Uniform(name, 3) {}
+
+	UniformFloat3::~UniformFloat3() {}
+
+
+
+
+
+
+
+
+	UniformFloat4::UniformFloat4() {}
+
+	UniformFloat4::UniformFloat4(const std::string& name, const glm::vec4& uniform) : Uniform(name, 4) {}
+
+	UniformFloat4::~UniformFloat4() {}
+
+
+
+
+
+	UniformMatrix4::UniformMatrix4() {}
+
+	UniformMatrix4::UniformMatrix4(const std::string& name, const glm::mat4& uniform) : Uniform(name, 1) {}
+
+	UniformMatrix4::~UniformMatrix4() {}
+}

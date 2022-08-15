@@ -1,6 +1,12 @@
 #pragma once
 
-#include <memory>
+#include "ptr.h"
 
-template<class T>
-using ptr = std::shared_ptr<T>;
+#include "gfx/gui/gui.h"
+
+#include "gfx/opengl/glrenderapi.h"
+#include "input/input.h"
+
+#include "entity/component/camera_new.h"
+#include "entity/component.h"
+#include "gfx/opengl/glwindow.h"

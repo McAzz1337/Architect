@@ -66,7 +66,7 @@
     <ClCompile Include="src\filesystem\filemanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\timer.cpp">
+    <ClCompile Include="src\chronos\timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gfx\opengl\uniformbuffer.cpp">
@@ -203,7 +203,7 @@
     <ClInclude Include="src\filesystem\filemanager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\timer.h">
+    <ClInclude Include="src\chronos\timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\gfx\opengl\uniformbuffer.h">
@@ -296,7 +296,7 @@
     <ClInclude Include="src\entity\component\camera_new.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\entity\component\Mesh.h">
+    <ClInclude Include="src\entity\component\mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\entity\component\buffers_new.h">
@@ -309,6 +309,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\entity\component\material\uniform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ptr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
