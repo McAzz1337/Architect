@@ -3,7 +3,7 @@
 #include "glinclude.h"
 #include "gldebug.h"
 
-#include "../stb/stb/stb_image.h"
+#include "../../stb/stb/stb_image.h"
 
 namespace archt {
 

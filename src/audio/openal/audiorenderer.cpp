@@ -7,7 +7,7 @@
 #include <typeindex>
 
 
-//#define PLAY
+#define PLAY
 
 namespace archt {
 

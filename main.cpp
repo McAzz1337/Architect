@@ -143,8 +143,8 @@ int main() {
 	AudioRenderer::init();
 	//AudioBuffer* music = new AudioBuffer("src/assets/audio/backgroundmusic/complete_osd_genII_custom.wav");
 	AudioBuffer* music = new AudioBuffer("src/assets/audio/Pokemon Gold wave files/01 Pokemon GS Main Theme.wav");
-	AudioBuffer* music1 = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/backgroundmusic/title_screen.wav");
-	AudioBuffer* music2 = new AudioBuffer("D:/GithubRepos/Architect/src/assets/audio/ak47-1.wav");
+	AudioBuffer* music1 = new AudioBuffer("src/assets/audio/backgroundmusic/title_screen.wav");
+	AudioBuffer* music2 = new AudioBuffer("src/assets/audio/ak47-1.wav");
 
 	AudioRenderer::setBackgroundMusic(music);
 	AudioRenderer::playBackgroundMusic();
@@ -346,26 +346,26 @@ int main() {
 //#if 1
 		GLRenderer2D::clear();
 		GLRenderer2D::beginScene(&cam);
-
+		
 		GLRenderer2D::submit(&pokemon);
 		GLRenderer2D::submit(&pokemon1);
-
-
+		
+		
 		GLRenderer2D::render();
 		GLRenderer2D::flush();
 		GLRenderer2D::endScene();
-		//#else
+//#else
 		WireframeRenderer::clear();
 		WireframeRenderer::beginScene(&cam);
-
+		
 		WireframeRenderer::submit(&pokemon);
 		WireframeRenderer::submit(&pokemon1);
-
-
+		
+		
 		WireframeRenderer::render();
 		WireframeRenderer::flush();
 		WireframeRenderer::endScene();
-		//#endif
+//#endif
 
 		AudioRenderer::render();
 

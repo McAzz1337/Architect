@@ -32,7 +32,8 @@ namespace archt {
 	}
 
 	void resizeCallback(GLFWwindow* window, int width, int height) {
-		
+		GLWindow* w= (GLWindow*) glfwGetWindowUserPointer(window);
+		w->setSize(width, height);
 	}
 
 	
@@ -54,7 +55,7 @@ namespace archt {
 		glfwSetKeyCallback(window, keyCallback);
 	
 		glfwSetWindowSizeCallback(window, resizeCallback);
-		
+		glfwSetWindowUserPointer(window, this);
 	}
 
 
@@ -90,6 +91,8 @@ namespace archt {
 	void GLWindow::setSize(int width, int height) {
 		w = width;
 		h = height;
+
+		glViewport(0, 0, w, h);
 	}
 
 	
