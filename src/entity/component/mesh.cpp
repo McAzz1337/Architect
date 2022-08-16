@@ -8,7 +8,7 @@ namespace archt {
 
 	Mesh::Mesh() {
 		//addComponent(make_ptr<Transform>());
-		//modelMatrix = glm::mat4(1.0f);
+		modelMatrix = Transform();
 	}
 
 	Mesh::~Mesh() {}

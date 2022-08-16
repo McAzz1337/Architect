@@ -439,10 +439,10 @@ int main() {
 #pragma region SETUP
 	{
 
-		float u = 1.0f / 1711;
-		float v = 18.0f / 5609;
-		float sizeX = 56.0f / 1711;
-		float sizeY = 56.0f / 5609;
+		float u = 1.0f / 1711.0f;
+		float v = 18.0f / 5609.0f;
+		float sizeX = 56.0f / 1711.0f;
+		float sizeY = 56.0f / 5609.0f;
 
 		uint32_t vSize = 4;
 		Vertex* verteces = new Vertex[vSize]{
@@ -451,8 +451,6 @@ int main() {
 			Vertex({  0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { u + sizeX, v + sizeY}, 0.0f, 0.0f),
 			Vertex({ -0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { u, v + sizeY}, 0.0f, 0.0f)
 		};
-
-
 
 
 		uint32_t iSize = 6;
@@ -478,7 +476,7 @@ int main() {
 
 
 #ifdef SIMPLE_RENDERER
-		ptr<Material> material = make_ptr<Material>("src/assets/shaders/testshader/testshader", "src/assets/img/item.png");
+		ptr<Material> material = make_ptr<Material>("src/assets/shaders/testshader/testshader", "src/assets/img/pokememes.png");
 #else
 		ptr<Material> material = make_ptr<Material>("src/assets/shaders/fastshader/fastshader", "src/assets/img/pokememes.png");
 		Uniformbuffer* uniformBuffer = new Uniformbuffer("matrices", nullptr, 4 * 16 * 1000);

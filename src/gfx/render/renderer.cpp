@@ -127,11 +127,14 @@ namespace archt {
 		shader->setMat4("mvp", mvp.getMatrix());
 
 		GLTexture* tex = entity->getComponent<Mesh>()->getComponent<Material>()->getTexture();
-		tex->bind(1);
-		vbo->setTexId(1.0f);
+		tex->bind(0);
+		vbo->setTexId(0.0f);
 		vbo->upload();
+		ibo->upload();
 
 		CALL(glDrawElements(GL_TRIANGLES, ibo->getSize(), GL_UNSIGNED_INT, nullptr));
+
+		delete vao;
 	}
 
 	void Renderer::flush() {
@@ -239,9 +242,7 @@ namespace archt {
 				buffers[i]->upload();
 			}
 		}
-		vbo->bind();
 		vbo->upload();
-		ibo->bind();
 		ibo->upload();
 
 		CALL(glDrawElements(GL_TRIANGLES, currentIndex, GL_UNSIGNED_INT, nullptr));
