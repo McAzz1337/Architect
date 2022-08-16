@@ -6,6 +6,7 @@ namespace archt {
 	
 	
 	Transform::Transform() : matrix(glm::mat4(1.0f)) {}
+
 	
 	Transform::Transform(float f) : matrix(glm::mat4(f)) {}
 	

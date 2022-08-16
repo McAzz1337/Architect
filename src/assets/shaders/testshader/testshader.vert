@@ -11,8 +11,8 @@ uniform mat4 mvp;
 out vec3 _pos;
 out vec3 _normal;
 out vec2 _uv;
-out int _texId;
-out int _matrixId;
+out flat int _texId;
+out float _matrixId;
 
 void main() {
 
@@ -22,6 +22,6 @@ void main() {
 	_normal = normal;
 	_uv = uv;
 	_texId = int(texId);
-	_matrixId = int(matrixId);
+	_matrixId = matrixId;
 
 }

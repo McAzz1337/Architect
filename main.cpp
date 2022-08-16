@@ -411,6 +411,9 @@ int main() {
 
 #include "src/gfx/render/renderer.h"
 
+#define SIMPLE_RENDERER
+
+
 int main() {
 	using namespace archt;
 
@@ -466,11 +469,14 @@ int main() {
 
 		mesh1->setVBO(verteces, vSize);
 		mesh1->setIBO(indeces, iSize);
+#ifdef SIMPLE_RENDERER
+		mesh->getVBO()->allocateOnGPU();
+		mesh->getIBO()->allocateOnGPU();
+
+#endif
 
 
 
-
-		//#define SIMPLE_RENDERER
 #ifdef SIMPLE_RENDERER
 		ptr<Material> material = make_ptr<Material>("src/assets/shaders/testshader/testshader", "src/assets/img/item.png");
 #else

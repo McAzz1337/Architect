@@ -114,7 +114,7 @@ namespace archt {
 		VBO* vbo = entity->getComponent<Mesh>()->getVBO();
 		IBO* ibo = entity->getComponent<Mesh>()->getIBO();
 
-		vao = new GLVertexarray(vbo, ibo);
+		GLVertexarray* vao = new GLVertexarray(vbo, ibo);
 	
 		GLShader* shader = &entity->getComponent<Mesh>()->getComponent<Material>()->getShader();
 		shader->bind();
@@ -126,7 +126,12 @@ namespace archt {
 
 		shader->setMat4("mvp", mvp.getMatrix());
 
-		glDrawElements(GL_TRIANGLES, ibo->getSize(), GL_UNSIGNED_INT, nullptr);
+		GLTexture* tex = entity->getComponent<Mesh>()->getComponent<Material>()->getTexture();
+		tex->bind(1);
+		vbo->setTexId(1.0f);
+		vbo->upload();
+
+		CALL(glDrawElements(GL_TRIANGLES, ibo->getSize(), GL_UNSIGNED_INT, nullptr));
 	}
 
 	void Renderer::flush() {

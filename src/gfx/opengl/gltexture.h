@@ -19,7 +19,7 @@ namespace archt {
 		GLTexture(const std::string& path);
 		virtual ~GLTexture();
 
-		void bind(int index) const;
+		void bind(int index = 0) const;
 
 
 		inline const std::string& getFilePath() const { return file; }
