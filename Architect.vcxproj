@@ -196,7 +196,6 @@
     <ClInclude Include="src\core.h" />
     <ClInclude Include="src\entity\component.h" />
     <ClInclude Include="src\entity\component\camera_new.h" />
-    <ClInclude Include="src\entity\component\enitity.h" />
     <ClInclude Include="src\entity\component\material\material.h" />
     <ClInclude Include="src\entity\component\material\uniform.h" />
     <ClInclude Include="src\entity\component\mesh.h" />

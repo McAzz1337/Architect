@@ -16,7 +16,7 @@ namespace archt {
 		VBO(Vertex* verteces, uint32_t size);
 		~VBO();
 
-		void allocateOnGPU(int bytes = -1, int mode = GL_DYNAMIC_DRAW);
+		void allocateOnGPU(int size = -1, int mode = GL_DYNAMIC_DRAW);
 		void deallocateOnGPU();
 		void bind() const;
 		void write(uint32_t offset, Vertex* d, uint32_t size);

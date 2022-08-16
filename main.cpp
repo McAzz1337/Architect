@@ -421,7 +421,8 @@ int main() {
 	Gui::init(window);
 	GLRenderAPI::createGuiInfoWindow();
 
-	Renderer renderer;
+	Renderer::createInstance();
+	Renderer::instance->setRenderSettings();
 	//Renderer2D::createInstance();
 
 	Input::init();
@@ -429,6 +430,7 @@ int main() {
 	ptr<Camera_new> camera = make_ptr<Camera_new>( 60.0f, 1080.0f / 720.0f, 0.001f, 100.0f);
 
 	ptr<Entity> entity = make_ptr<Entity>();
+	ptr<Entity> entity1 = make_ptr<Entity>();
 
 
 #pragma region SETUP
@@ -441,10 +443,10 @@ int main() {
 
 		uint32_t vSize = 4;
 		Vertex* verteces = new Vertex[vSize]{
-			Vertex({ -0.5f,  0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 1.0f }, 0.0f, 0.0f),
-			Vertex({  0.5f,  0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 1.0f}, 0.0f, 0.0f),
-			Vertex({  0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 0.0f}, 0.0f, 0.0f),
-			Vertex({ -0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 0.0f}, 0.0f, 0.0f)
+			Vertex({ -0.5f,  0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { u, v}, 0.0f, 0.0f),
+			Vertex({  0.5f,  0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { u + sizeX, v}, 0.0f, 0.0f),
+			Vertex({  0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { u + sizeX, v + sizeY}, 0.0f, 0.0f),
+			Vertex({ -0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { u, v + sizeY}, 0.0f, 0.0f)
 		};
 
 
@@ -455,33 +457,51 @@ int main() {
 			0, 1, 2,
 			0, 2, 3
 		};
-		
+
 		ptr<Mesh> mesh = make_ptr<Mesh>();
+		ptr<Mesh> mesh1 = make_ptr<Mesh>();
 
 		mesh->setVBO(verteces, vSize);
 		mesh->setIBO(indeces, iSize);
 
-		mesh->getVBO()->allocateOnGPU();
-		mesh->getIBO()->allocateOnGPU();
-		
+		mesh1->setVBO(verteces, vSize);
+		mesh1->setIBO(indeces, iSize);
 
+
+
+
+		//#define SIMPLE_RENDERER
+#ifdef SIMPLE_RENDERER
 		ptr<Material> material = make_ptr<Material>("src/assets/shaders/testshader/testshader", "src/assets/img/item.png");
+#else
+		ptr<Material> material = make_ptr<Material>("src/assets/shaders/fastshader/fastshader", "src/assets/img/pokememes.png");
 		Uniformbuffer* uniformBuffer = new Uniformbuffer("matrices", nullptr, 4 * 16 * 1000);
 		material->getShader().registerUniformBuffer(uniformBuffer);
+#endif
+
 
 		mesh->addComponent(material);
+		mesh1->addComponent(material);
+		mesh1->createGuiWindow(camera);
 
 		entity->addComponent(mesh);
+
+		mesh1->translate({ 0.3f, 0.3f, 0.0f });
+		entity1->addComponent(mesh1);
+		
 	}
 
 #pragma endregion SETUP
 
 
 
+	
 
 
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	while (true) {
+
+
+	
 
 		window->pollEvents();
 #pragma region CONTROLS
@@ -494,18 +514,34 @@ int main() {
 		}
 
 		if (Input::isPress(GLFW_KEY_D) || Input::isHeld(GLFW_KEY_D)) {
-			camera->translate({ 0.003f, 0.0f, 0.0f });
+			//camera->translate({ 0.003f, 0.0f, 0.0f });
+			entity1->getComponent<Mesh>()->translate({ 0.03f, 0.0f, 0.0f });
 		}
 		else if (Input::isPress(GLFW_KEY_A) || Input::isHeld(GLFW_KEY_A)) {
-			camera->translate({ -0.003f, 0.0f, 0.0f });
+			//camera->translate({ -0.003f, 0.0f, 0.0f });
+			entity1->getComponent<Mesh>()->translate({ -0.03f, 0.0f, 0.0f });
 		}
 
 #pragma endregion CONTROLS
 
 
 
-		renderer.clear();
-		renderer.render(entity, camera);
+#ifdef SIMPLE_RENDERER
+		Renderer::instance->clear();
+		Renderer::instance->render(entity, camera);
+#else
+		Renderer::instance->clear();
+		Renderer::instance->beginScene(camera);
+		
+		Renderer::instance->submit(entity);
+		Renderer::instance->submit(entity1);
+
+
+		Renderer::instance->render();
+		Renderer::instance->endScene();
+		Renderer::instance->flush();
+#endif
+
 
 		//Renderer2D::instance->clear();
 		//Renderer2D::instance->beginScene(camera);
@@ -530,6 +566,8 @@ int main() {
 	Input::terminate();
 
 	Gui::terminate();
+
+	Renderer::deleteInstance();
 
 	Renderer2D::deleteInstance();
 	

@@ -2,11 +2,13 @@
 
 #include "../../ptr.h"
 
+#include "../../gfx/gui/gui.h"
 
 namespace archt {
 
 	Mesh::Mesh() {
-		addComponent(make_ptr<Transform>());
+		//addComponent(make_ptr<Transform>());
+		//modelMatrix = glm::mat4(1.0f);
 	}
 
 	Mesh::~Mesh() {}
@@ -27,6 +29,23 @@ namespace archt {
 
 	void Mesh::resetMatrix() {
 		modelMatrix.reset();
+	}
+
+	void Mesh::createGuiWindow(ptr<Camera_new> cam) {
+		
+		auto lambda = [this, &cam] {
+			glm::mat4 m = (cam->getProjectionView() * modelMatrix).getMatrix();
+
+			ImGui::Begin("Mesh");
+			ImGui::Text("Matrix:");
+
+			for (int i = 0; i < 4; i++) {
+				ImGui::Text("%f\t%f\t%f\t%f", m[i][0], m[i][1], m[i][2], m[i][3]);
+			}
+
+			ImGui::End();
+		};
+		Gui::instance->addGuiWindow(lambda);
 	}
 
 	void Mesh::setVBO(Vertex* verteces, uint32_t size) {

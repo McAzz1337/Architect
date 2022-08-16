@@ -14,8 +14,12 @@ namespace archt {
 	VBO::VBO() {}
 
 	VBO::VBO(Vertex* verteces, uint32_t size)  {
+		
 		data = new Vertex[size];
-		memcpy_s(data, size * sizeof(Vertex), verteces, size * sizeof(Vertex));
+		
+		if (verteces)
+			memcpy_s(data, size * sizeof(Vertex), verteces, size * sizeof(Vertex));
+		
 		this->size = size;
 	}
 	
@@ -120,8 +124,12 @@ namespace archt {
 	IBO::IBO() {}
 
 	IBO::IBO(uint32_t* indeces, uint32_t size)  {
+		
 		data = new uint32_t[size];
-		memcpy_s(data, size * sizeof(uint32_t), indeces, size * sizeof(uint32_t));
+		
+		if (indeces)
+			memcpy_s(data, size * sizeof(uint32_t), indeces, size * sizeof(uint32_t));
+		
 		this->size = size;
 	}
 

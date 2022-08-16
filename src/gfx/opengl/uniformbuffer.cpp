@@ -40,7 +40,7 @@ namespace archt {
 			void* newData = malloc((offset + size) * sizeof(float));
 			memcpy_s(newData, offset, data, offset);
 			memcpy_s(&((float*) newData)[offset], size, d, size );
-			delete[] data;
+			delete[] (float*) data;
 			data = newData;
 			this->size = offset + size;
 		}

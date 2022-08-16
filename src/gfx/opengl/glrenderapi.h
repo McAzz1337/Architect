@@ -31,10 +31,14 @@ namespace archt {
 		friend class GLRenderer2D;
 		friend class WireframeRenderer;
 		friend class Renderer2D;
+		friend class Renderer;
+
 
 		static GLWindow* init();
 		static void terminate();
 		
+		static void setClearColor(const glm::vec4& color);
+
 		static void enable(uint32_t feature);
 		static void disable(uint32_t feature);
 

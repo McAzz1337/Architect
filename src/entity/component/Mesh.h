@@ -33,6 +33,7 @@ namespace archt {
 		glm::vec2* getPositionsTranslated(const Camera_new& cam, int& out_size) const;
 
 
+		void createGuiWindow(ptr<Camera_new> cam);
 
 		void setVBO(Vertex* verteces, uint32_t size);
 		void setIBO(uint32_t* indeces, uint32_t size);
@@ -40,7 +41,7 @@ namespace archt {
 		inline VBO* getVBO() { return vbo; }
 		inline IBO* getIBO() { return ibo; }
 		 
-		inline Transform* getTransform() { return &modelMatrix; }
+		inline const Transform& getTransform() const { return modelMatrix; }
 
 	};
 

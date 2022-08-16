@@ -184,7 +184,7 @@ namespace archt {
 
 			ImGui::TextColored(white, "Available memory: ");
 			ImGui::SameLine();
-			ImGui::TextColored(turqoise, std::to_string(availableMemory).c_str());
+			ImGui::TextColored(turqoise, std::to_string(queryAvailableMemory()).c_str());
 
 
 			ImGui::TextColored(white, "Texture slots:\t");
@@ -199,6 +199,10 @@ namespace archt {
 
 	int GLRenderAPI::queryTotalMemory() {
 		return totalMemory;
+	}
+
+	void GLRenderAPI::setClearColor(const glm::vec4& color) {
+		glClearColor(color.r, color.g, color.b, color.a);
 	}
 
 	int GLRenderAPI::getMaxTextureCount() {

@@ -2,6 +2,8 @@
 
 #include "ptr.h"
 
+#include "chronos/deltatime.h"
+
 #include "gfx/gui/gui.h"
 
 #include "gfx/opengl/glrenderapi.h"
