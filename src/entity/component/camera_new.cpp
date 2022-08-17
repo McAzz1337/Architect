@@ -12,7 +12,7 @@ namespace archt {
 		projection = Transform(glm::perspective(fov, aspect, near, far));
 		view = Transform();
 
-		translate({ 0.0f, 0.0f, -0.3f });
+		translate({ 0.0f, 0.0f, -1.0f });
 
 
 		auto lambda = [this]() {

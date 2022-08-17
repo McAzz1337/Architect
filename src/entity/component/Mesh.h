@@ -28,9 +28,9 @@ namespace archt {
 
 		void resetMatrix();
 
-		bool checkCollision(const Mesh& other, const Camera_new& cam) const;
+		bool checkCollision(ptr<Mesh> other, ptr<Camera_new> cam) const;
 
-		glm::vec2* getPositionsTranslated(const Camera_new& cam, int& out_size) const;
+		glm::vec2* getPositionsTranslated(ptr<Camera_new> cam, int& out_size) const;
 
 
 		void createGuiWindow(ptr<Camera_new> cam);

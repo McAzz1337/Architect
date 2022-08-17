@@ -411,7 +411,7 @@ int main() {
 
 #include "src/gfx/render/renderer.h"
 
-#define SIMPLE_RENDERER
+//#define SIMPLE_RENDERER
 
 
 int main() {
@@ -430,7 +430,7 @@ int main() {
 
 	Input::init();
 
-	ptr<Camera_new> camera = make_ptr<Camera_new>( 60.0f, 1080.0f / 720.0f, 0.001f, 100.0f);
+	ptr<Camera_new> camera = make_ptr<Camera_new>( M_PI / 3.0f, 1080.0f / 720.0f, 0.001f, 100.0f);
 
 	ptr<Entity> entity = make_ptr<Entity>();
 	ptr<Entity> entity1 = make_ptr<Entity>();
@@ -529,6 +529,9 @@ int main() {
 #pragma endregion CONTROLS
 
 
+		if (entity->getComponent<Mesh>()->checkCollision(entity1->getComponent<Mesh>(), camera)) {
+			printf("collision\n");
+		}
 
 #ifdef SIMPLE_RENDERER
 		Renderer::instance->clear();
