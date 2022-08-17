@@ -1,6 +1,9 @@
 #pragma once
 
 #include "../ptr.h"
+
+#include <glm/mat4x4.hpp>
+
 #include <vector>
 
 #include <iostream>
@@ -38,31 +41,6 @@ namespace archt {
 			}
 
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		template<class T>
 		ptr<T> getComponent() {

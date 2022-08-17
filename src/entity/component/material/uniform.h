@@ -82,8 +82,5 @@ namespace archt {
 		return dynamic_cast<T*>(uniform);
 	}
 
-	template<>
-	UniformFloat4* uniform_cast<UniformFloat4>(Uniform* uniform) {
-		return dynamic_cast<UniformFloat4*>(uniform);
-	}
+	
 }

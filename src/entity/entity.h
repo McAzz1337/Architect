@@ -4,12 +4,13 @@
 
 namespace archt {
 
+
 	class Entity : public Component {
+
 
 	public:
 		Entity();
 		~Entity();
-
 
 	};
 

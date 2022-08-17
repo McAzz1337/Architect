@@ -105,7 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;_USE_MATH_DEFINES;GLM_FORCE_RADIANS;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\vendor\glm;$(ProjectDir)\vendor\glfw\include;$(ProjectDir)\vendor\glew\include;$(ProjectDir)\vendor\assimp\include;$(ProjectDir)\vendor\openal\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\vendor\glm;$(ProjectDir)\vendor\glfw\include;$(ProjectDir)\vendor\glew\include;$(ProjectDir)\vendor\assimp\include;$(ProjectDir)\vendor\openal\include;$(ProjectDir)\vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -170,6 +170,9 @@
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\math\rayequation.cpp" />
     <ClCompile Include="src\math\soe2.cpp" />
+    <ClCompile Include="src\scene\component_s.cpp" />
+    <ClCompile Include="src\scene\entity_s.cpp" />
+    <ClCompile Include="src\scene\scene.cpp" />
     <ClCompile Include="src\stb\stb\stbi_image_write.c" />
     <ClCompile Include="src\stb\stb\stb_image.c" />
     <ClCompile Include="src\chronos\timer.cpp" />
@@ -225,6 +228,9 @@
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\math\rayequation.h" />
     <ClInclude Include="src\math\soe2.h" />
+    <ClInclude Include="src\scene\component_s.h" />
+    <ClInclude Include="src\scene\entity_s.h" />
+    <ClInclude Include="src\scene\scene.h" />
     <ClInclude Include="src\stb\stb\stbi_image_write.h" />
     <ClInclude Include="src\stb\stb\stb_image.h" />
     <ClInclude Include="src\thread\mythread.h" />

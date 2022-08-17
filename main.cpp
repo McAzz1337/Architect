@@ -413,6 +413,7 @@ int main() {
 
 //#define SIMPLE_RENDERER
 
+#include <entt/entt.hpp>
 
 int main() {
 	using namespace archt;
@@ -429,6 +430,10 @@ int main() {
 	//Renderer2D::createInstance();
 
 	Input::init();
+
+	Scene scene;
+	Entity_s e = scene.createEntity();
+	scene.addComponent<Transform_s>(e);
 
 	ptr<Camera_new> camera = make_ptr<Camera_new>( M_PI / 3.0f, 1080.0f / 720.0f, 0.001f, 100.0f);
 

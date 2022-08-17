@@ -12,6 +12,7 @@ namespace archt {
 	void splitPath(const std::string& path, std::string& pathDst, std::string& fileDst);
 
 	void split(const std::string& src, const char delimeter, std::string* tokens, int size);
+	void split(const std::string& src, std::vector<std::string>& dst, const char delimeter);
 
 	uint64_t requestFileSize(const std::string& path);
 	void listDirectoryEntries(const std::string& dir, std::vector<std::string>& dst);

@@ -85,6 +85,22 @@ namespace archt {
 		}
 	}
 
+	void split(const std::string& src, std::vector<std::string>& dst, const char delimeter) {
+		
+		int end = src.find(delimeter);
+		int start = 0;
+
+		do {
+
+			dst.push_back(src.substr(start, end));
+
+			start = end + 1;
+			end = src.find(delimeter);
+		} while (end != std::string::npos);
+
+	}
+
+
 
 	uint64_t requestFileSize(const std::string& path) {
 		

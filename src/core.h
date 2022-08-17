@@ -8,6 +8,7 @@
 
 #include "gfx/opengl/glrenderapi.h"
 #include "gfx/opengl/uniformbuffer.h"
+#include "gfx/opengl/glwindow.h"
 
 #include "gfx/render/renderer2d.h"
 
@@ -19,6 +20,6 @@
 #include "entity/component/mesh.h"
 #include "entity/component/material/material.h"
 
-
-
-#include "gfx/opengl/glwindow.h"
+#include "scene/scene.h"
+#include "scene/entity_s.h"
+#include "scene/component_s.h"
