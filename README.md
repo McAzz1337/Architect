@@ -21,7 +21,8 @@ GLFW &emsp; &emsp;     [ProjectDir]/vendor/glfw/include/GLFW &emsp; [ProjectDir]
 GLEW &emsp; &emsp;     [ProjectDir]/vendor/glew/include/GL &emsp; &emsp; [ProjectDir]/vendor/glew/lib/Release/x64<br />
 glm  &emsp;  &emsp; &ensp;    [ProjectDir]/vendor/glm/glm<br />
 ImGui &emsp; &emsp;    [ProjectDir]/vendor/imgui<br />
-OpenAl &emsp;   [ProjectDir]/vendor/openal/include/AL &emsp; [ProjectDir]/vendor/openal/libs/Win64 / $(ProjectDir)/vendor/openal/libs/Win64/EFX-Util_MT<br />
+OpenAl &emsp; &ensp;  [ProjectDir]/vendor/openal/include/AL &emsp; [ProjectDir]/vendor/openal/libs/Win64 <br /> 
+$(ProjectDir)/vendor/openal/libs/Win64/EFX-Util_MT<br />
 entt &emsp; &emsp;     [ProjectDir]/vendor/entt/include<br />
 assimp &emsp; &emsp;    [ProjectDir]/vendor/assimp/include/assimp &emsp; [ProjectDir]/vendor/assimp/lib/x64<br />
 
