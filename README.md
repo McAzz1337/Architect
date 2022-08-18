@@ -17,14 +17,14 @@ PLATFORM_WINDOWS (only a very small piece of code relies on the windows header, 
 The engine relies on the following liabrary dependencies and have to be placed in 
 the specified folders (if you don't want to chnage dependency and library directories in the project settings).<br />
 [library<br /> include folder<br /> library folder]<br /><br />
-GLFW <br />[ProjectDir]/vendor/glfw/include/GLFW<br /> [ProjectDir]/vendor/glfw/lib-vc2022<br />
-GLEW <br />   [ProjectDir]/vendor/glew/include/GL <br /> [ProjectDir]/vendor/glew/lib/Release/x64<br />
-glm  <br />[ProjectDir]/vendor/glm/glm<br />
-ImGui <br /> [ProjectDir]/vendor/imgui<br />
-OpenAl <br />[ProjectDir]/vendor/openal/include/AL <br />[ProjectDir]/vendor/openal/libs/Win64 <br /> 
-<br />$(ProjectDir)/vendor/openal/libs/Win64/EFX-Util_MT<br />
-entt <br />[ProjectDir]/vendor/entt/include<br />
-assimp<br /> [ProjectDir]/vendor/assimp/include/assimp &emsp; [ProjectDir]/vendor/assimp/lib/x64<br />
+GLFW <br />&emsp;$(ProjectDir)/vendor/glfw/include/GLFW<br />&emsp;$(ProjectDir)/vendor/glfw/lib-vc2022<br />
+GLEW <br />&emsp;$(ProjectDir)/vendor/glew/include/GL <br />&emsp;$(ProjectDir)/vendor/glew/lib/Release/x64<br />
+glm  <br />&emsp;$(ProjectDir)/vendor/glm/glm<br />
+ImGui <br /> &emsp;$(ProjectDir)/vendor/imgui<br />
+OpenAl <br />&emsp;$(ProjectDir)/vendor/openal/include/AL <br />&emsp;$(ProjectDir)/vendor/openal/libs/Win64 <br /> 
+<br />&emsp;$(ProjectDir)/vendor/openal/libs/Win64/EFX-Util_MT<br />
+entt <br />&emsp;$(ProjectDir)/vendor/entt/include<br />
+assimp<br />&emsp; $(ProjectDir)/vendor/assimp/include/assimp <br />&emsp;$(ProjectDir)/vendor/assimp/lib/x64<br />
 
 Library file names<br />
 opengl32.lib<br />
