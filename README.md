@@ -6,6 +6,7 @@ The main focus of this project is to provide an engine, API and editor for 2D ga
 
 # Branches
 It is recommended to use the master branch since it is a stable & tested version of the engine.
+Other branches might not work or introduce bugs.
 
 # Preprocessor statements used
 _DEBUG<br />
