@@ -22,8 +22,8 @@ GLEW &emsp;&emsp;&nbsp;   [ProjectDir]/vendor/glew/include/GL &emsp; &emsp; [Pro
 glm  &emsp;&emsp;&ensp;&nbsp;&nbsp;&nbsp;  [ProjectDir]/vendor/glm/glm<br />
 ImGui &emsp;&emsp;&nbsp;  [ProjectDir]/vendor/imgui<br />
 OpenAl &emsp;&ensp;  [ProjectDir]/vendor/openal/include/AL &emsp; [ProjectDir]/vendor/openal/libs/Win64 <br /> 
-&emsp;&emsp;&emsp;&emsp;&emsp;;&emsp;;&emsp;;&emsp; $(ProjectDir)/vendor/openal/libs/Win64/EFX-Util_MT<br />
-entt &emsp;&emsp;     [ProjectDir]/vendor/entt/include<br />
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; $(ProjectDir)/vendor/openal/libs/Win64/EFX-Util_MT<br />
+entt &emsp;&emsp;&emsp;     [ProjectDir]/vendor/entt/include<br />
 assimp &emsp;&emsp;    [ProjectDir]/vendor/assimp/include/assimp &emsp; [ProjectDir]/vendor/assimp/lib/x64<br />
 
 Library file names<br />
