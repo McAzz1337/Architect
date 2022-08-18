@@ -13,6 +13,7 @@ _USE_MATH_DEFINES<br />
 GLM_FORCE_RADIANS<br />
 PLATFORM_WINDOWS (only a very small piece of code relies on the windows header, which easily can be rewritten for MacOs and Linux)<br />
 
+# Dependencies
 The engine relies on the following liabrary dependencies and have to be placed in 
 the specified folders (if you don't want to chnage dependency and library directories in the project settings).<br />
 [library , include folder , library folder]<br />
