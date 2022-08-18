@@ -5,7 +5,7 @@ For the time being OpenGl is supported, but in the future DirectX and Vulkan sup
 The main focus odf this project is to provide an engine, API and editor for 2D games that is comprehensive and easy to handle 
 
 # Feature Branch
-It is not recommenden to clone the freature branch since it is a working branch with frequent changes which might not work.
+It is not recommenden to use the freature branch since it is a working branch with frequent changes which might not work.
 
 # Preprocessor statements used
 _DEBUG<br />
