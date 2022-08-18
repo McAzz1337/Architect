@@ -5,13 +5,13 @@ For the time being OpenGl is supported, but in the future DirectX and Vulkan sup
 The main focus odf this project is to provide an engine, API and editor for 2D games that is comprehensive and easy to handle 
 
 # Preprocessor statements used
-_DEBUG
-_CONSOLE
-_CRT_SECURE_NO_WARNINGS
-GLEW_STATIC
-_USE_MATH_DEFINES
-GLM_FORCE_RADIANS
-PLATFORM_WINDOWS (only a very small piece of code relies on the windows header, which easily can be rewritten for MacOs and Linux)
+_DEBUG<br />
+_CONSOLE<br />
+_CRT_SECURE_NO_WARNINGS<br />
+GLEW_STATIC<br />
+_USE_MATH_DEFINES<br />
+GLM_FORCE_RADIANS<br />
+PLATFORM_WINDOWS (only a very small piece of code relies on the windows header, which easily can be rewritten for MacOs and Linux)<br />
 
 The engine relies on the following liabrary dependencies and have to be placed in 
 the specified folders (if you don't want to chnage dependency and library directories in the project settings)
