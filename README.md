@@ -18,8 +18,8 @@ The engine relies on the following liabrary dependencies and have to be placed i
 the specified folders (if you don't want to chnage dependency and library directories in the project settings).<br />
 [library , include folder , library folder]<br />
 GLFW &emsp; &emsp;     [ProjectDir]/vendor/glfw/include/GLFW &emsp; [ProjectDir]/vendor/glfw/lib-vc2022<br />
-GLEW &emsp; &emsp;     [ProjectDir]/vendor/glew/include/GL &emsp; &emsp; [ProjectDir]/vendor/glew/lib/Release/x64<br />
-glm &emsp;  &emsp;      [ProjectDir]/vendor/glm/glm<br />
+GLEW &emsp; &emsp; &nbsp;    [ProjectDir]/vendor/glew/include/GL &emsp; &emsp; [ProjectDir]/vendor/glew/lib/Release/x64<br />
+glm &emsp;  &emsp;     [ProjectDir]/vendor/glm/glm<br />
 ImGui &emsp; &emsp;    [ProjectDir]/vendor/imgui<br />
 OpenAl &emsp;   [ProjectDir]/vendor/openal/include/AL &emsp; [ProjectDir]/vendor/openal/libs/Win64 / $(ProjectDir)/vendor/openal/libs/Win64/EFX-Util_MT<br />
 entt &emsp; &emsp;     [ProjectDir]/vendor/entt/include<br />
