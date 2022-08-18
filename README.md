@@ -43,3 +43,4 @@ If you decide to link glew dynamicaly just remove the GLEW_STATIC preprocessor s
 Some assets that are harcoded by string are not available in the repository, thus the program will not compile.
 Place your own assets in the corresponding folders in the src/assets directory and use them according to the
 examples in the main.cpp file provided
+Furthermore, the .wav files in the src/assets/audio directory might not work
