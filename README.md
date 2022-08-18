@@ -1,11 +1,11 @@
 # Architect
 
-# Feature Branch
-It is not recommenden to clone the freature branch since it is a working branch with frequent changes which might not work.
-
 Architect is a 64-bit Game engine for 2D games, still in its early stage.
 For the time being OpenGl is supported, but in the future DirectX and Vulkan support will be added.
 The main focus odf this project is to provide an engine, API and editor for 2D games that is comprehensive and easy to handle 
+
+# Feature Branch
+It is not recommenden to clone the freature branch since it is a working branch with frequent changes which might not work.
 
 # Preprocessor statements used
 _DEBUG<br />
