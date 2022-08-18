@@ -2,7 +2,10 @@
 
 Architect is a 64-bit Game engine for 2D games, still in its early stage.
 For the time being OpenGl is supported, but in the future DirectX and Vulkan support will be added.
-The main focus odf this project is to provide an engine, API and editor for 2D games that is comprehensive and easy to handle 
+The main focus of this project is to provide an engine, API and editor for 2D games that is comprehensive and easy to handle 
+
+# Branches
+It is recommended to use the master branch since it is a stable & tested version of the engine.
 
 # Preprocessor statements used
 _DEBUG<br />
