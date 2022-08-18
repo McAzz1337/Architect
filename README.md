@@ -25,7 +25,7 @@ OpenAl &emsp;   [ProjectDir]/vendor/openal/include/AL &emsp; [ProjectDir]/vendor
 entt &emsp; &emsp;     [ProjectDir]/vendor/entt/include<br />
 assimp &emsp; &emsp;    [ProjectDir]/vendor/assimp/include/assimp &emsp; [ProjectDir]/vendor/assimp/lib/x64<br />
 
-Library .lib file names<br />
+Library file names<br />
 opengl32.lib<br />
 assimp.lib<br />
 glew32s.lib<br />
