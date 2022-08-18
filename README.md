@@ -19,7 +19,7 @@ the specified folders (if you don't want to chnage dependency and library direct
 [library , include folder , library folder]<br />
 GLFW &emsp;&emsp;&nbsp;   [ProjectDir]/vendor/glfw/include/GLFW &emsp; [ProjectDir]/vendor/glfw/lib-vc2022<br />
 GLEW &emsp;&emsp;&nbsp;   [ProjectDir]/vendor/glew/include/GL &emsp; &emsp; [ProjectDir]/vendor/glew/lib/Release/x64<br />
-glm  &emsp;&emsp;&ensp;&nbsp;&nbsp;  [ProjectDir]/vendor/glm/glm<br />
+glm  &emsp;&emsp;&ensp;&nbsp;&nbsp;&nbsp;  [ProjectDir]/vendor/glm/glm<br />
 ImGui &emsp;&emsp;&nbsp;  [ProjectDir]/vendor/imgui<br />
 OpenAl &emsp;&ensp;  [ProjectDir]/vendor/openal/include/AL &emsp; [ProjectDir]/vendor/openal/libs/Win64 <br /> 
 &emsp;&emsp;&emsp;&emsp;&emsp;;&emsp;;&emsp;;&emsp; $(ProjectDir)/vendor/openal/libs/Win64/EFX-Util_MT<br />
