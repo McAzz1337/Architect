@@ -23,3 +23,5 @@
 #include "scene/scene.h"
 #include "scene/entity_s.h"
 #include "scene/component_s.h"
+
+#include "system/systeminfo.h"

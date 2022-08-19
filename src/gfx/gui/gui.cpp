@@ -11,6 +11,8 @@ namespace archt{
 
 
 	Gui* Gui::instance = nullptr;
+	const int Gui::MAX_WINDOWS = 20;
+	int Gui::index = 0;
 
 
 	Gui::Gui(glm::ivec2 windowSize) {
@@ -41,9 +43,13 @@ namespace archt{
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		for (GuiWindow& w : windows)
+		for (GuiWindow& w : constantWindows)
 			w.render();
 
+		for (int i = 0; i < index; i++) {
+			perFrameWindows[i].render();
+		}
+		index = 0;
 
 		ImGui::Render();
 
@@ -58,8 +64,17 @@ namespace archt{
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
+	void Gui::submitWIndow(std::function<void()> renderFunc) {
+		if (index == MAX_WINDOWS) {
+			printf("MAX_WINDOW limit reached");
+			__debugbreak();
+		}
+		perFrameWindows[index] = GuiWindow(renderFunc);
+		index++;
+	}
+
 	void Gui::addGuiWindow(std::function<void()> renderFunc) {
-		windows.push_back(GuiWindow(renderFunc));
+		constantWindows.push_back(GuiWindow(renderFunc));
 	}
 
 	void Gui::init(GLWindow* window) {

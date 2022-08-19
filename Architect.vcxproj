@@ -176,6 +176,7 @@
     <ClCompile Include="src\stb\stb\stbi_image_write.c" />
     <ClCompile Include="src\stb\stb\stb_image.c" />
     <ClCompile Include="src\chronos\timer.cpp" />
+    <ClCompile Include="src\system\systeminfo.cpp" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="vendor\imgui\imgui_draw.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="src\scene\scene.h" />
     <ClInclude Include="src\stb\stb\stbi_image_write.h" />
     <ClInclude Include="src\stb\stb\stb_image.h" />
+    <ClInclude Include="src\system\systeminfo.h" />
     <ClInclude Include="src\thread\mythread.h" />
     <ClInclude Include="src\thread\thread.h" />
     <ClInclude Include="src\chronos\timer.h" />

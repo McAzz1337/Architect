@@ -346,26 +346,26 @@ int main() {
 //#if 1
 		GLRenderer2D::clear();
 		GLRenderer2D::beginScene(&cam);
-		
+
 		GLRenderer2D::submit(&pokemon);
 		GLRenderer2D::submit(&pokemon1);
-		
-		
+
+
 		GLRenderer2D::render();
 		GLRenderer2D::flush();
 		GLRenderer2D::endScene();
-//#else
+		//#else
 		WireframeRenderer::clear();
 		WireframeRenderer::beginScene(&cam);
-		
+
 		WireframeRenderer::submit(&pokemon);
 		WireframeRenderer::submit(&pokemon1);
-		
-		
+
+
 		WireframeRenderer::render();
 		WireframeRenderer::flush();
 		WireframeRenderer::endScene();
-//#endif
+		//#endif
 
 		AudioRenderer::render();
 
@@ -411,11 +411,32 @@ int main() {
 
 #include "src/gfx/render/renderer.h"
 
-//#define SIMPLE_RENDERER
-
 #include <entt/entt.hpp>
 
+
+float speed = 0.03f;
+float fastSpeed = 0.08f;
+float lowSPeed = 0.004;
+
+
+//#define SIMPLE_RENDERER
+
+float speeds[3] = { 0.002f, 0.02f, 0.05f };
+
+void controlSpeeds() {
+
+	ImGui::Begin("Camera speed");
+
+	ImGui::SliderFloat("CTRL", &speeds[0], 0.001f, 0.01f);
+	ImGui::SliderFloat("DEFAULT", &speeds[1], 0.01f, 0.04f);
+	ImGui::SliderFloat("SHIFT", &speeds[2], 0.04f, 0.08f);
+
+	ImGui::End();
+}
+
+
 int main() {
+
 	using namespace archt;
 
 	GLWindow* window = GLRenderAPI::init();
@@ -423,6 +444,7 @@ int main() {
 
 
 	Gui::init(window);
+	system_info::createSysteminfoWindow();
 	GLRenderAPI::createGuiInfoWindow();
 
 	Renderer::createInstance();
@@ -435,7 +457,7 @@ int main() {
 	Entity_s e = scene.createEntity();
 	scene.addComponent<Transform_s>(e);
 
-	ptr<Camera_new> camera = make_ptr<Camera_new>( M_PI / 3.0f, 1080.0f / 720.0f, 0.001f, 100.0f);
+	ptr<Camera_new> camera = make_ptr<Camera_new>(M_PI / 3.0f, 1080.0f / 720.0f, 0.001f, 100.0f);
 
 	ptr<Entity> entity = make_ptr<Entity>();
 	ptr<Entity> entity1 = make_ptr<Entity>();
@@ -497,38 +519,57 @@ int main() {
 
 		mesh1->translate({ 0.3f, 0.3f, 0.0f });
 		entity1->addComponent(mesh1);
-		
+
 	}
 
 #pragma endregion SETUP
 
 
 
-	
+
 
 
 	while (true) {
 
 
-	
-
 		window->pollEvents();
+
 #pragma region CONTROLS
 
+
+		Gui::instance->submitWIndow(controlSpeeds);
+
+		float speed = speeds[1];
+
+		if (Input::isPress(GLFW_KEY_LEFT_SHIFT) || Input::isHeld(GLFW_KEY_LEFT_SHIFT)) {
+			speed = speeds[2];
+		}
+		else if (Input::isRelease(GLFW_KEY_LEFT_SHIFT)) {
+			speed = speeds[1];
+		}
+		if (Input::isPress(GLFW_KEY_LEFT_CONTROL) || Input::isHeld(GLFW_KEY_LEFT_CONTROL)) {
+			speed = speeds[0];
+		}
+		else if (Input::isRelease(GLFW_KEY_LEFT_CONTROL)) {
+			speed = speeds[1];
+		}
+
+
+
 		if (Input::isPress(GLFW_KEY_W) || Input::isHeld(GLFW_KEY_W)) {
-			camera->translate({ 0.0f, 0.0f, 0.003f});
+			camera->translate({ 0.0f, 0.0f, speed });
 		}
 		else if (Input::isPress(GLFW_KEY_S) || Input::isHeld(GLFW_KEY_S)) {
-			camera->translate({ 0.0f, 0.0f, -0.003f});
+			camera->translate({ 0.0f, 0.0f, -speed });
 		}
 
 		if (Input::isPress(GLFW_KEY_D) || Input::isHeld(GLFW_KEY_D)) {
 			//camera->translate({ 0.003f, 0.0f, 0.0f });
-			entity1->getComponent<Mesh>()->translate({ 0.03f, 0.0f, 0.0f });
+			entity1->getComponent<Mesh>()->translate({ speed, 0.0f, 0.0f });
 		}
 		else if (Input::isPress(GLFW_KEY_A) || Input::isHeld(GLFW_KEY_A)) {
 			//camera->translate({ -0.003f, 0.0f, 0.0f });
-			entity1->getComponent<Mesh>()->translate({ -0.03f, 0.0f, 0.0f });
+			entity1->getComponent<Mesh>()->translate({ -speed, 0.0f, 0.0f });
 		}
 
 #pragma endregion CONTROLS
@@ -544,7 +585,7 @@ int main() {
 #else
 		Renderer::instance->clear();
 		Renderer::instance->beginScene(camera);
-		
+
 		Renderer::instance->submit(entity);
 		Renderer::instance->submit(entity1);
 
@@ -582,7 +623,7 @@ int main() {
 	Renderer::deleteInstance();
 
 	Renderer2D::deleteInstance();
-	
+
 	GLRenderAPI::terminate();
 
 

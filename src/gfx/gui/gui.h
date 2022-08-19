@@ -13,6 +13,7 @@
 
 namespace archt {
 
+
 	class Gui {
 
 	public:
@@ -20,7 +21,10 @@ namespace archt {
 
 	private:
 
-		std::vector<GuiWindow> windows;
+		std::vector<GuiWindow> constantWindows;
+		static const int MAX_WINDOWS;
+		static int index;
+		GuiWindow* perFrameWindows = new GuiWindow[MAX_WINDOWS];
 
 	public:
 		Gui() = delete;
@@ -29,7 +33,9 @@ namespace archt {
 
 		void render();
 
+		void submitWIndow(std::function<void()> renderFunc);
 		void addGuiWindow(std::function<void()> renderFunc);
+
 
 
 		static void init(GLWindow* window);

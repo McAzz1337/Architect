@@ -8,6 +8,7 @@ namespace archt {
 
 		std::function<void()> renderFunc;
 
+
 	public:
 		GuiWindow();
 		GuiWindow(std::function<void()> renderFunc);
