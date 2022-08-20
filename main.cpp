@@ -444,12 +444,16 @@ int main() {
 
 
 	Gui::init(window);
+	Gui::instance->addGuiWindow([] { ImGui::ShowDemoWindow(); });
 	system_info::createSysteminfoWindow();
 	GLRenderAPI::createGuiInfoWindow();
 
 	Renderer::createInstance();
 	Renderer::instance->setRenderSettings();
-	//Renderer2D::createInstance();
+
+	Framebuffer* fb = new Framebuffer(window->getSize());
+	Framebuffer* fb2 = new Framebuffer(window->getSize());
+
 
 	Input::init();
 
@@ -458,6 +462,11 @@ int main() {
 	scene.addComponent<Transform_s>(e);
 
 	ptr<Camera_new> camera = make_ptr<Camera_new>(M_PI / 3.0f, 1080.0f / 720.0f, 0.001f, 100.0f);
+
+	ptr<Camera_new> camera1 = make_ptr<Camera_new>(M_PI / 3.0f, 1080.0f / 720.0f, 0.001f, 100.0f);
+	camera1->translate({ 1.0f, 0.0f, -1.0f });
+	camera1->rotate((M_PI / 4.0f), { 0.0f, 1.0f, 0.0f });
+
 
 	ptr<Entity> entity = make_ptr<Entity>();
 	ptr<Entity> entity1 = make_ptr<Entity>();
@@ -488,12 +497,24 @@ int main() {
 
 		ptr<Mesh> mesh = make_ptr<Mesh>();
 		ptr<Mesh> mesh1 = make_ptr<Mesh>();
+		ptr<Mesh> cameraMesh = make_ptr<Mesh>();
+
+
 
 		mesh->setVBO(verteces, vSize);
 		mesh->setIBO(indeces, iSize);
 
 		mesh1->setVBO(verteces, vSize);
 		mesh1->setIBO(indeces, iSize);
+
+		verteces[0].uv = glm::vec2(0.0f, 0.0f);
+		verteces[1].uv = glm::vec2(1.0f, 0.0f);
+		verteces[2].uv = glm::vec2(1.0f, 1.0f);
+		verteces[3].uv = glm::vec2(0.0f, 1.0f);
+
+		cameraMesh->setVBO(verteces, vSize);
+		cameraMesh->setIBO(indeces, iSize);
+
 #ifdef SIMPLE_RENDERER
 		mesh->getVBO()->allocateOnGPU();
 		mesh->getIBO()->allocateOnGPU();
@@ -510,15 +531,22 @@ int main() {
 		material->getShader().registerUniformBuffer(uniformBuffer);
 #endif
 
+		ptr<Material> cameraMaterial = make_ptr<Material>("src/assets/shaders/fastshader/fastshader", "src/assets/img/camera.png");
+		cameraMaterial->getShader().registerUniformBuffer(uniformBuffer);
 
 		mesh->addComponent(material);
 		mesh1->addComponent(material);
-		mesh1->createGuiWindow(camera);
+		cameraMesh->addComponent(cameraMaterial);
+		
+		//mesh1->createGuiWindow(camera);
 
 		entity->addComponent(mesh);
 
 		mesh1->translate({ 0.3f, 0.3f, 0.0f });
 		entity1->addComponent(mesh1);
+
+		camera->addComponent<Mesh>(cameraMesh);
+
 
 	}
 
@@ -583,6 +611,8 @@ int main() {
 		Renderer::instance->clear();
 		Renderer::instance->render(entity, camera);
 #else
+
+		Renderer::instance->setRendertarget(fb);
 		Renderer::instance->clear();
 		Renderer::instance->beginScene(camera);
 
@@ -593,6 +623,25 @@ int main() {
 		Renderer::instance->render();
 		Renderer::instance->endScene();
 		Renderer::instance->flush();
+
+
+
+
+
+		Renderer::instance->setRendertarget(fb2);
+		Renderer::instance->clear();
+		Renderer::instance->beginScene(camera1);
+
+		Renderer::instance->submit(camera);
+		Renderer::instance->submit(entity);
+		Renderer::instance->submit(entity1);
+
+
+		Renderer::instance->render();
+		Renderer::instance->endScene();
+		Renderer::instance->flush();
+
+
 #endif
 
 

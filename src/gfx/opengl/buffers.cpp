@@ -100,7 +100,8 @@ namespace archt {
 		if (data)
 			delete[] data;
 
-		data = verteces;
+		data = new Vertex[size];
+		memcpy_s(data, size * sizeof(Vertex), verteces, size * sizeof(Vertex));
 		this->size = size;
 	}
 

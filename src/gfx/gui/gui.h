@@ -19,6 +19,8 @@ namespace archt {
 	public:
 		static Gui* instance;
 
+		bool docked = true;
+
 	private:
 
 		std::vector<GuiWindow> constantWindows;
@@ -31,15 +33,24 @@ namespace archt {
 		Gui(glm::ivec2 windowSize);
 		~Gui();
 
+
 		void render();
+		
+
 
 		void submitWIndow(std::function<void()> renderFunc);
-		void addGuiWindow(std::function<void()> renderFunc);
+		GuiWindow* addGuiWindow(std::function<void()> renderFunc);
 
+		void removeWindow(GuiWindow* window);
 
+		void setDockingMode(bool mode);
 
 		static void init(GLWindow* window);
 		static void terminate();
+	
+	private:
+		void renderDocked();
+		void renderUndocked();
 	};
 
 

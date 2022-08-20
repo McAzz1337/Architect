@@ -53,12 +53,13 @@ namespace archt {
 		printf("texture bound at index : %i\n", index);
 	}
 
-	void GLTexture::createEmptyTexture(GLTexture* tex, int width, int height) {
+	 GLTexture* GLTexture::createEmptyTexture(int width, int height) {
 
+		GLTexture* tex = new GLTexture();
 		tex->w = width;
 		tex->h = height;
 
-		int length = height * width;
+		int length = height * width * 4;
 		unsigned char* data = new unsigned char[length];
 		for (int i = 0; i < length; i++) {
 			data[i] = 0;
@@ -75,14 +76,18 @@ namespace archt {
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		CALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data));
 
 		delete[] data;
+
+		return tex;
 	}
 
 	
-	void GLTexture::createTextureFromData(GLTexture * tex, const unsigned char* data, int width, int height) {
+	 GLTexture* GLTexture::createTextureFromData(const unsigned char* data, int width, int height) {
 		
+		GLTexture* tex = new GLTexture();
+
 		tex->w = width;
 		tex->h = height;
 
@@ -98,6 +103,8 @@ namespace archt {
 
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+		return tex;
 	}
 
 	void GLTexture::flipImage(const unsigned char* src, int width, int height, int comp, unsigned char* dst) {

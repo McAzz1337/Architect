@@ -197,6 +197,10 @@ namespace archt {
 		Gui::instance->addGuiWindow(window);
 	}
 
+	void GLRenderAPI::setViewport(const glm::vec4& v) {
+		glViewport(v.x, v.y, v.z, v.w);
+	}
+
 	int GLRenderAPI::queryTotalMemory() {
 		return totalMemory;
 	}

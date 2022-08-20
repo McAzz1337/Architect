@@ -16,7 +16,10 @@ namespace archt {
 
 		VBO* vbo = nullptr;
 		IBO* ibo = nullptr;
-		Transform modelMatrix;
+		mutable Transform modelMatrix;
+
+		glm::vec3 rotation = glm::vec3(0.0f);
+		glm::vec3 position = glm::vec3(0.0f);
 
 	public:
 		Mesh();
@@ -37,11 +40,21 @@ namespace archt {
 
 		void setVBO(Vertex* verteces, uint32_t size);
 		void setIBO(uint32_t* indeces, uint32_t size);
+		void setTransform(const Transform& t);
+
 
 		inline VBO* getVBO() { return vbo; }
 		inline IBO* getIBO() { return ibo; }
-		 
-		inline const Transform& getTransform() const { return modelMatrix; }
+
+		inline const Transform& getTransform() const {
+			modelMatrix = Transform();
+			modelMatrix.rotate(rotation.x, { 1.0f, 0.0f, 0.0f });
+			modelMatrix.rotate(rotation.y, { 0.0f, 1.0f, 0.0f });
+			modelMatrix.rotate(rotation.z, { 0.0f, 0.0f, 1.0f });
+
+			modelMatrix.translate(position);
+			return modelMatrix;
+		}
 
 	};
 

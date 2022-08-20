@@ -16,11 +16,13 @@ namespace archt {
 
 
 	void Mesh::translate(const glm::vec3& t) {
-		modelMatrix.translate(t);
+		position += t;
+		//modelMatrix.translate(t);
 	}
 
 	void Mesh::rotate(float angle, const glm::vec3& axis) {
-		modelMatrix.rotate(angle, axis);
+		rotation = angle * axis;
+		//modelMatrix.rotate(angle, axis);
 
 	}
 
@@ -106,6 +108,10 @@ namespace archt {
 		if (!ibo)
 			ibo = new IBO();
 		ibo->setIndeces(indeces, size);
+	}
+
+	void Mesh::setTransform(const Transform& t) {
+		modelMatrix = t;
 	}
 
 }

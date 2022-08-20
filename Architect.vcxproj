@@ -154,6 +154,7 @@
     <ClCompile Include="src\gfx\gui\guiwindow.cpp" />
     <ClCompile Include="src\gfx\opengl\buffers.cpp" />
     <ClCompile Include="src\gfx\opengl\camera.cpp" />
+    <ClCompile Include="src\gfx\opengl\framebuffer.cpp" />
     <ClCompile Include="src\gfx\opengl\glmesh.cpp" />
     <ClCompile Include="src\gfx\opengl\glrenderapi.cpp" />
     <ClCompile Include="src\gfx\opengl\glrenderer2d.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="src\gfx\opengl\glwindow.h" />
     <ClInclude Include="src\gfx\opengl\uniformbuffer.h" />
     <ClInclude Include="src\gfx\opengl\wireframerenderer.h" />
+    <ClInclude Include="src\gfx\opengl\framebuffer.h" />
     <ClInclude Include="src\gfx\render\renderer.h" />
     <ClInclude Include="src\gfx\render\renderer2d.h" />
     <ClInclude Include="src\gfx\vertex.h" />

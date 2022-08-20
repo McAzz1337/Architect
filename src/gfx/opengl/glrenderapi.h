@@ -50,6 +50,8 @@ namespace archt {
 		static void addToClearMask(uint32_t mask);
 		static void removeFromClearMask(uint32_t mask);
 
+		static void setViewport(const glm::vec4& v);
+
 
 		static int queryAvailableMemory();
 		static int queryTotalMemory();

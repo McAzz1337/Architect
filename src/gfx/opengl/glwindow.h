@@ -1,6 +1,7 @@
 #pragma once
 #include "glinclude.h"
 #include <glm/vec2.hpp>
+#include <glm/vec4.hpp>
 #include <vector>
 
 namespace archt {
@@ -12,7 +13,8 @@ namespace archt {
 		GLFWwindow* window = nullptr;
 		const char* title;
 		int x, y, w, h;
-
+		mutable bool fullScreen = false;
+		int refreshRate = 0;
 
 	public:
 
@@ -29,10 +31,10 @@ namespace archt {
 		void setTitle(const char* name);
 		void setSize(int width, int height);
 
-
+		void toggleFullscreen() const;
 
 		inline GLFWwindow* getHandle() const { return window; }
 		inline glm::ivec2 getSize() const { return glm::ivec2(w, h); }
-
+		inline glm::ivec4 getBounds() const { return glm::ivec4(x, y, w, h); }
 	};
 }

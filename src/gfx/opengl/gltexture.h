@@ -26,8 +26,8 @@ namespace archt {
 		inline uint32_t getId() const { return id; }
 		inline glm::vec2 getSize() const { return glm::vec2((float) w, (float) h); }
 
-		static void createEmptyTexture(GLTexture* tex, int width, int height);
-		static void createTextureFromData(GLTexture* tex, const unsigned char* data, int width, int height);
+		static GLTexture* createEmptyTexture(int width, int height);
+		static GLTexture* createTextureFromData(const unsigned char* data, int width, int height);
 		static void flipImage(const unsigned char* src, int width, int height, int comp, unsigned char* dst);
 	};
 

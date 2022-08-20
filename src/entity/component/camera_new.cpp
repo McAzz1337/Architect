@@ -1,6 +1,8 @@
 #include "camera_new.h"
 
 #include "../../gfx/gui/gui.h"
+#include "../../entity/component/mesh.h"
+
 namespace archt {
 
 
@@ -36,15 +38,43 @@ namespace archt {
 	}
 
 	void Camera_new::translate(const glm::vec3& t) {
-		view.translate(t);
+		position += t;
 	}
 
 	void Camera_new::rotate(float angle, const glm::vec3& axis) {
-		view.rotate(angle, axis);
+		rotation += angle * axis;
 	}
 
 	void Camera_new::resetMatrix() {
 		view.reset();
+	}
+
+	void Camera_new::applyTransformation() const {
+		view.reset();
+
+		view.rotate(rotation.x, { 1.0f, 0.0f, 0.0f });
+		view.rotate(rotation.y, { 0.0f, 1.0f, 0.0f });
+		view.rotate(rotation.z, { 0.0f, 0.0f, 1.0f });
+
+		view.translate(position);
+
+
+		ptr<Mesh> mesh =  getComponent<Mesh>();
+		
+		if (mesh) {
+			mesh->resetMatrix();
+			mesh->translate(position);
+		}
+	}
+
+	
+
+	void Camera_new::setPosition(glm::vec3 pos) {
+		position = pos;
+	}
+
+	void Camera_new::setRotation(glm::vec3 rot) {
+		rotation = rot;
 	}
 
 

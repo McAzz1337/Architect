@@ -94,16 +94,22 @@ namespace archt {
 	void Renderer::beginScene(ptr<Camera_new> camera) {
 		inScene = true;
 		
-		if (camera != nullptr)
+		//leave in for camera reusability functionality between render passes
+		if (camera != nullptr) 
 			cam = camera;
+
 	}
 
 	void Renderer::endScene() {
 		inScene = false;
 		currentEntity = 0;
+
+		fb->unbind();
+		fb = nullptr;
 	}
 
 	void Renderer::render() {
+	
 		sort();
 		beginBatch();
 		draw();
@@ -140,6 +146,15 @@ namespace archt {
 	void Renderer::flush() {
 	
 	}
+
+	void Renderer::setRendertarget(Framebuffer* frameBuffer) {
+		
+		fb = frameBuffer;
+		
+		if (fb)
+			fb->bind();
+	}
+
 
 	void Renderer::beginBatch() {
 		

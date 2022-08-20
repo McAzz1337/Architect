@@ -9,6 +9,8 @@
 #include "gfx/opengl/glrenderapi.h"
 #include "gfx/opengl/uniformbuffer.h"
 #include "gfx/opengl/glwindow.h"
+#include "gfx/opengl/framebuffer.h"
+
 
 #include "gfx/render/renderer2d.h"
 

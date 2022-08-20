@@ -7,6 +7,8 @@
 #include "../opengl/glvertexarray.h"
 #include "../opengl/glshader.h"
 
+#include "../opengl/framebuffer.h"
+
 
 namespace archt {
 
@@ -26,6 +28,9 @@ namespace archt {
 		bool inScene = false;
 
 		ptr<Camera_new> cam = nullptr;
+
+		Framebuffer* fb = nullptr;
+
 		
 		ptr<Entity>* entities = nullptr;
 		glm::mat4* transforms = nullptr;
@@ -62,6 +67,8 @@ namespace archt {
 		void render();
 		void render(ptr<Entity> entity, ptr<Camera_new> cam);
 		void flush();
+
+		void setRendertarget(Framebuffer* frameBuffer);
 
 	private:
 		void beginBatch();
