@@ -24,6 +24,6 @@ void main() {
 		discard;
 	}
 	
-	_out = color * tint;
-	//_out = vec4(_uv.x, _uv.y, 0.0, 1.0);
+	//_out = color * tint;
+	_out = vec4(_uv.x, _uv.y, 0.0, 1.0);
 }

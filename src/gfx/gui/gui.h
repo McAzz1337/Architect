@@ -28,15 +28,13 @@ namespace archt {
 		static int index;
 		GuiWindow* perFrameWindows = new GuiWindow[MAX_WINDOWS];
 
-	public:
 		Gui() = delete;
 		Gui(glm::ivec2 windowSize);
 		~Gui();
+	public:
 
 
 		void render();
-		
-
 
 		void submitWIndow(std::function<void()> renderFunc);
 		GuiWindow* addGuiWindow(std::function<void()> renderFunc);

@@ -46,7 +46,7 @@ namespace archt {
 		inline VBO* getVBO() { return vbo; }
 		inline IBO* getIBO() { return ibo; }
 
-		inline const Transform& getTransform() const {
+		inline  Transform& getTransform() const {
 			modelMatrix = Transform();
 			modelMatrix.rotate(rotation.x, { 1.0f, 0.0f, 0.0f });
 			modelMatrix.rotate(rotation.y, { 0.0f, 1.0f, 0.0f });

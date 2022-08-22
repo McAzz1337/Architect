@@ -83,12 +83,12 @@ namespace archt {
 
 		};
 		guiWindow = Gui::instance->addGuiWindow(lambda);
-
-
 	}
 
 	Framebuffer::~Framebuffer() {
-		Gui::instance->removeWindow(guiWindow);
+		if (Gui::instance)
+			Gui::instance->removeWindow(guiWindow);
+
 		delete tex;
 
 		glDeleteFramebuffers(1, &id);

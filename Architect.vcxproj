@@ -167,6 +167,7 @@
     <ClCompile Include="src\gfx\opengl\wireframerenderer.cpp" />
     <ClCompile Include="src\gfx\render\renderer.cpp" />
     <ClCompile Include="src\gfx\render\renderer2d.cpp" />
+    <ClCompile Include="src\gfx\render\scenerenderer.cpp" />
     <ClCompile Include="src\gfx\vertex.cpp" />
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\math\rayequation.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="src\gfx\opengl\framebuffer.h" />
     <ClInclude Include="src\gfx\render\renderer.h" />
     <ClInclude Include="src\gfx\render\renderer2d.h" />
+    <ClInclude Include="src\gfx\render\scenerenderer.h" />
     <ClInclude Include="src\gfx\vertex.h" />
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\math\rayequation.h" />

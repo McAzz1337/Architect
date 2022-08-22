@@ -20,12 +20,16 @@ namespace archt {
 		auto lambda = [this]() {
 			ImGui::Begin("Camera");
 
+			applyTransformation();
 			ImGui::Text("Matrix:");
 			glm::mat4 m = view.getMatrix();
 
 			for (int i = 0; i < 4; i++) {
 				ImGui::Text("%f\t%f\t%f\t%f", m[i][0], m[i][1], m[i][2], m[i][3]);
 			}
+			ImGui::Text("Position:\t%f\t%f\t%f", m[3][0], m[3][1], m[3][2]);
+			ImGui::Text("Pos:\t%f\t%f\t%f", position.x, position.y, position.z);
+
 
 			ImGui::End();
 		};

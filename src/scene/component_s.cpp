@@ -2,6 +2,8 @@
 
 #include "../fileio.h"
 
+#include <glm/gtx/transform.hpp>
+
 namespace archt {
 
 
@@ -9,7 +11,23 @@ namespace archt {
 
 	Transform_s::Transform_s() {}
 
-	Transform_s::~Transform_s() {}
+	Transform_s::Transform_s(glm::mat4 transform) : transform(transform) {
+	}
+
+	Transform_s::~Transform_s() {
+	}
+
+	void Transform_s::translate(const glm::vec3& t) {
+		transform = glm::translate(transform, t);
+	}
+
+	void Transform_s::rotate(float angle, const glm::vec3& axis) {
+		transform = glm::rotate(transform, angle, axis);
+	}
+
+	void Transform_s::scale(const glm::vec3& s) {
+		transform = glm::scale(transform, s);
+	}
 
 
 
@@ -19,7 +37,8 @@ namespace archt {
 	Mesh_s::Mesh_s(Vertex* verteces, uint32_t vSize, uint32_t* indeces, uint32_t iSize)
 		: vbo(verteces, vSize), ibo(indeces, iSize) {}
 
-	Mesh_s::~Mesh_s() {}
+	Mesh_s::~Mesh_s() {
+	}
 
 
 
@@ -28,8 +47,9 @@ namespace archt {
 	Material_s::Material_s() {}
 
 	Material_s::Material_s(const std::string& texturePath, const std::string& uniformsPath, const std::string& shaderPath)
-		: tex(texturePath), shader(shaderPath) {
+		: shader(shaderPath) {
 
+		tex = new GLTexture(texturePath);
 		std::vector<std::string> uniformsRaw;
 		readFileSplit(uniformsPath, uniformsRaw, true);
 		
@@ -81,6 +101,7 @@ namespace archt {
 
 	Tag::Tag(const std::string& tag) : tag(tag) {}
 
-	Tag::~Tag() {}
+	Tag::~Tag() {
+	}
 
 }

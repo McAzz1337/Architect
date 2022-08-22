@@ -42,6 +42,8 @@ namespace archt {
 		inline const Transform& getView() const { applyTransformation();  return view; }
 		inline const Transform getProjectionView() const { applyTransformation(); return projection * view; }
 
+		inline const Transform& getViewRaw() const { applyTransformation();  return view; }
+
 		inline const glm::vec3 getPosition() const { return position; }
 		inline const glm::vec3 getRotation() const { return rotation; }
 

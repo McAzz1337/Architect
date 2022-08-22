@@ -11,8 +11,10 @@
 #include "gfx/opengl/glwindow.h"
 #include "gfx/opengl/framebuffer.h"
 
+#include "math/rayequation.h"
 
 #include "gfx/render/renderer2d.h"
+#include "gfx/render/scenerenderer.h"
 
 #include "input/input.h"
 

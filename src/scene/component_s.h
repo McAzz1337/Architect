@@ -8,7 +8,7 @@
 #include "../entity/component/material/uniform.h"
 
 #include <glm/mat4x4.hpp>
-
+#include <glm/vec3.hpp>
 #include <string>
 
 namespace archt {
@@ -18,8 +18,25 @@ namespace archt {
 		glm::mat4 transform = glm::mat4(1.0f);
 
 		Transform_s();
+		Transform_s(glm::mat4 transform);
 		Transform_s(const Transform_s& other) = default;
 		~Transform_s();
+
+		void translate(const glm::vec3& t);
+		void rotate(float angle, const glm::vec3& axis);
+		void scale(const glm::vec3& s);
+
+		inline Transform_s operator*(const Transform_s& other) {
+			return Transform_s(transform * other.transform);
+		}
+
+		inline operator glm::mat4() {
+			return transform;
+		}
+
+		inline operator glm::mat4& () {
+			return transform;
+		}
 
 	};
 
@@ -37,7 +54,7 @@ namespace archt {
 
 	struct Material_s {
 
-		GLTexture tex;
+		GLTexture* tex;
 		Uniform* uniforms = nullptr;
 		GLShader shader;
 
@@ -45,7 +62,7 @@ namespace archt {
 		Material_s(const std::string& texturePath, const std::string& uniformsPath, const std::string& shaderPath);
 		~Material_s();
 
-
+		inline  GLShader* getShader()  { return &shader; }
 	};
 
 	struct Tag {

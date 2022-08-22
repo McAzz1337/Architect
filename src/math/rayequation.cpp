@@ -1,5 +1,5 @@
 #include "rayequation.h"
-
+#include <glm/glm.hpp>
 namespace archt {
 
 
@@ -25,5 +25,14 @@ namespace archt {
 
 		return result.x >= 0.0f && result.x <= 1.0f && result.y >= 0.0f && result.y <= 1.0f;
 	}
+
+	float getAngle(const glm::vec3& point, const glm::vec3& a, const glm::vec3& b) {
+
+		glm::vec3 dir = a - point;
+		glm::vec3 dir1 = b - point;
+
+		return glm::dot(dir, dir1) / (dir.length() * dir.length());
+	}
+
 
 }
