@@ -2,7 +2,7 @@
 
 
 
-#include "../gfx/gui/gui_s.h"
+#include "../gfx/gui/gui.h"
 
 #include <algorithm>
 
@@ -1478,9 +1478,9 @@ namespace archt {
 
 		
 
-		std::string ws2s(const std::wstring& wstr) {
-			return std::string(wstr.begin(), wstr.end());
-		}
+		//std::string ws2s(const std::wstring& wstr) {
+		//	return std::string(wstr.begin(), wstr.end());
+		//}
 
 		std::string convert(const std::wstring& wstr) {
 			std::string ret;
@@ -1552,7 +1552,7 @@ namespace archt {
 			getMemoryMetrics(memStat);
 			CommandLine::Create(id);
 
-			Gui_s::instance->addGuiWindow(renderFunc);
+			Gui::instance->addGuiWindow(renderFunc);
 	
 		}
 

@@ -1,23 +1,29 @@
 #include "guiwindow.h"
 
 
-namespace archt{
+namespace archt {
 
 
-	GuiWindow::GuiWindow() {
-	}
+    GuiWindowBase::~GuiWindowBase() {
 
-	GuiWindow::GuiWindow(std::function<void()> renderFunc) : renderFunc(renderFunc) {
-	}
+    }
 
-	GuiWindow::~GuiWindow() {
-	}
+   
 
-	void GuiWindow::render() {
-		renderFunc();
-	}
+    //GuiWindowVoid::GuiWindowVoid(std::function<void()> renderFunc) : func(renderFunc) {
+    //
+    //}
+    //GuiWindowVoid::~GuiWindowVoid() {
+    //
+    //}
+    //
+    //void GuiWindowVoid::render() {
+    //    func();
+    //}
 
-	void GuiWindow::setRenderFunc(std::function<void()> renderFunc) {
-		this->renderFunc = renderFunc;
-	}
+    GuiWindowVoid::GuiWindowVoid(std::function<void()> func) : f(func) {}
+
+    void GuiWindowVoid::render() {
+        f();
+    }
 }

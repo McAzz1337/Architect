@@ -7,7 +7,7 @@
 
 #include "../../vendor/imgui/imgui.h"
 
-#include "../gui/gui_s.h"
+#include "../gui/gui.h"
 
 #include "../../stb/stb/stb_image.h"
 
@@ -194,7 +194,7 @@ namespace archt {
 			ImGui::End();
 		};
 
-		Gui_s::instance->addGuiWindow(window);
+		Gui::instance->addGuiWindow(window);
 	}
 
 	void GLRenderAPI::setViewport(const glm::vec4& v) {

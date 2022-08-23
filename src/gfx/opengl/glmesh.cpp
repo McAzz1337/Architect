@@ -8,7 +8,7 @@
 
 #include "../../math/rayequation.h"
 
-#include "../gui/gui_s.h"
+#include "../gui/gui.h"
 
 extern bool debug;
 
@@ -22,7 +22,7 @@ namespace archt {
 		count++;
 		
 		
-		Gui_s::instance->addGuiWindow([this]() {
+		Gui::instance->addGuiWindow([this]() {
 			std::string windowName = "Pokemon " + std::to_string(id); 
 			ImGui::Begin(windowName.c_str());
 			glm::mat4 m = this->getModelMatrix();

@@ -120,12 +120,6 @@
     <ClCompile Include="vendor\imgui\imgui_impl_opengl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gfx\gui\guiwindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gfx\gui\gui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\math\soe2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -180,10 +174,10 @@
     <ClCompile Include="src\gfx\render\scenerenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gfx\gui\guiwindow_s.cpp">
+    <ClCompile Include="src\gfx\gui\guiwindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gfx\gui\gui_s.cpp">
+    <ClCompile Include="src\gfx\gui\gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -311,12 +305,6 @@
     <ClInclude Include="vendor\imgui\imgui_impl_opengl3_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\gfx\gui\gui.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gfx\gui\guiwindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\thread\mythread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -380,10 +368,10 @@
     <ClInclude Include="src\gfx\render\scenerenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\gfx\gui\guiwindow_s.h">
+    <ClInclude Include="src\gfx\gui\guiwindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\gfx\gui\gui_s.h">
+    <ClInclude Include="src\gfx\gui\gui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

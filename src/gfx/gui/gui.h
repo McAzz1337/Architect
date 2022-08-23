@@ -1,54 +1,76 @@
 #pragma once
 
 #include "guiwindow.h"
-#include <glm/vec2.hpp>
-#include <vector>
-
 #include "../opengl/glwindow.h"
 
-#include "../../vendor/imgui/imgui.h"
+#include "../../vendor/imgui/imconfig.h"
 #include "../../vendor/imgui/imgui_impl_glfw.h"
 #include "../../vendor/imgui/imgui_impl_opengl3.h"
+#include "../../vendor/imgui/imgui.h"
 
 
 namespace archt {
-
 
 	class Gui {
 
 	public:
 		static Gui* instance;
 
-		bool docked = true;
-
 	private:
 
-		std::vector<GuiWindow> constantWindows;
-		static const int MAX_WINDOWS;
-		static int index;
-		GuiWindow* perFrameWindows = new GuiWindow[MAX_WINDOWS];
+		std::vector<GuiWindowBase*> constantWindows;
+		std::vector<GuiWindowBase*> perFrameWindows;
 
-		Gui() = delete;
+
+
+		bool docked = true;
+
 		Gui(glm::ivec2 windowSize);
 		~Gui();
 	public:
 
+		static void init(GLWindow* window);
+		static void terminate();
 
 		void render();
 
-		void submitWIndow(std::function<void()> renderFunc);
-		GuiWindow* addGuiWindow(std::function<void()> renderFunc);
+		//void submitWindowVoid(std::function<void()> renderFunc);
+		//GuiWindowBase* addGuiWindowVoid(std::function<void()> renderFunc);
+		template <typename F, typename = void>
+		void submitWindow(F&& f) {
+			perFrameWindows.push_back(new GuiWindowVoid(((std::function<void()>) f)));
+		}
 
-		void removeWindow(GuiWindow* window);
+		template <typename F, typename... Args>
+		void submitWindow(F&& f, Args&&... args) {
+			perFrameWindows.push_back(createGuiWindowArgs(f, std::forward<Args>(args)...));
+		}
+
+		template <typename F, typename = void>
+		GuiWindowBase* addGuiWindow(F&& f) {
+			
+			constantWindows.push_back(new GuiWindowVoid(((std::function<void()>) f)));
+			return constantWindows[constantWindows.size() - 1];
+		}
+
+		template <typename F, typename... Args>
+		GuiWindowBase* addGuiWindow(F&& f, Args&&... args) {
+
+			constantWindows.push_back(createGuiWindowArgs(f, std::forward<Args>(args)...));
+			return constantWindows[constantWindows.size() - 1];
+		}
+
+		void removeWindow(GuiWindowBase* window);
 
 		void setDockingMode(bool mode);
 
-		static void init(GLWindow* window);
-		static void terminate();
-	
+
+
 	private:
 		void renderDocked();
 		void renderUndocked();
+
+
 	};
 
 

@@ -288,9 +288,12 @@ int main() {
 	using namespace archt;
 
 	GLWindow* window = GLRenderAPI::init();
+	Gui::init(window);
+	GLRenderAPI::createGuiInfoWindow();
+	system_info::createSysteminfoWindow();
+
 
 	Input::init();
-	Gui_s::init(window);
 
 	Renderer::createInstance();
 
@@ -418,9 +421,7 @@ int main() {
 			ImGui::End();
 		};
 		
-		
-		auto* win = createGuiWindow(lambda, x);
-		Gui_s::instance->addGuiWindow_s(lambda, x);
+		Gui::instance->addGuiWindow(lambda, x);
 	}
 #pragma endregion GUI_WINDOW_TEST
 
@@ -461,7 +462,7 @@ int main() {
 		SceneRenderer::instance->flush();
 
 
-		Gui_s::instance->render();
+		Gui::instance->render();
 
 
 		window->swapBuffer();
@@ -477,7 +478,7 @@ int main() {
 	delete window;
 
 	Renderer::deleteInstance();
-	Gui_s::terminate();
+	Gui::terminate();
 	Input::terminate();
 	GLRenderAPI::terminate();
 

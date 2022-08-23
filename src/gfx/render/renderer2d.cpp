@@ -13,7 +13,7 @@
 #include "../../fileio.h"
 
 
-#include "../gui/gui_s.h"
+#include "../gui/gui.h"
 
 namespace archt {
 
@@ -85,7 +85,7 @@ namespace archt {
 
 			ImGui::End();
 		};
-		Gui_s::instance->addGuiWindow(lambda);
+		Gui::instance->addGuiWindow(lambda);
 	}
 
 	Renderer2D::~Renderer2D() {

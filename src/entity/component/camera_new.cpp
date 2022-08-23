@@ -33,7 +33,7 @@ namespace archt {
 
 			ImGui::End();
 		};
-		//Gui::instance->addGuiWindow(lambda);
+		Gui::instance->addGuiWindow(lambda);
 
 	}
 

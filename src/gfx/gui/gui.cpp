@@ -1,18 +1,12 @@
 #include "gui.h"
 
-#include <functional>
-#include "../../vendor/imgui/imconfig.h"
-#include "../../vendor/imgui/imgui_impl_glfw.h"
-#include "../../vendor/imgui/imgui_impl_opengl3.h"
-#include "../../vendor/imgui/imgui.h"
 
 
-namespace archt{
+namespace archt {
+
 
 
 	Gui* Gui::instance = nullptr;
-	const int Gui::MAX_WINDOWS = 20;
-	int Gui::index = 0;
 
 
 	Gui::Gui(glm::ivec2 windowSize) {
@@ -21,7 +15,7 @@ namespace archt{
 		io.DisplaySize.x = windowSize.x;
 		io.DisplaySize.y = windowSize.y;
 
-		
+
 
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
 			ImGuiStyle& style = ImGui::GetStyle();
@@ -30,44 +24,10 @@ namespace archt{
 		}
 	}
 
-	Gui::~Gui() {
-	
-	}
-
-	void Gui::render() {
-
-		if (docked) 
-			renderDocked();
-		else
-			renderUndocked();
-	}
-
-	void Gui::submitWIndow(std::function<void()> renderFunc) {
-		if (index == MAX_WINDOWS) {
-			printf("MAX_WINDOW limit reached");
-			__debugbreak();
-		}
-		perFrameWindows[index] = GuiWindow(renderFunc);
-		index++;
-	}
-
-	GuiWindow* Gui::addGuiWindow(std::function<void()> renderFunc) {
-		constantWindows.push_back(GuiWindow(renderFunc));
-		return &constantWindows[constantWindows.size() - 1];
-	}
-
-	void Gui::removeWindow(GuiWindow* window) {
-		for (int i = 0; i < constantWindows.size(); i++) {
-			if (&constantWindows[i] == window) {
-				constantWindows.erase(constantWindows.begin() + i);
-				constantWindows.shrink_to_fit();
-				break;
-			}
-		}
-	}
-
+	Gui::~Gui() {}
 
 	void Gui::init(GLWindow* window) {
+	
 		if (instance)
 			return;
 
@@ -75,7 +35,7 @@ namespace archt{
 		ImGui::CreateContext();
 
 		ImGuiIO& io = ImGui::GetIO();
-		(void) io; 
+		(void) io;
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
@@ -87,6 +47,7 @@ namespace archt{
 	}
 
 	void Gui::terminate() {
+	
 		if (instance) {
 			delete instance;
 			instance = nullptr;
@@ -96,11 +57,39 @@ namespace archt{
 		ImGui_ImplOpenGL3_Shutdown();
 	}
 
+	void Gui::render() {
+	
+		if (docked)
+			renderDocked();
+		else
+			renderUndocked();
+	}
+
+	//void Gui::submitWindowVoid(std::function<void()> renderFunc) {
+	//	perFrameWindows.push_back(new GuiWindowVoid(renderFunc));
+	//}
+	//
+	//GuiWindowBase* Gui::addGuiWindowVoid(std::function<void()> renderFunc) {
+	//	constantWindows.push_back(new GuiWindowVoid(renderFunc));
+	//	return constantWindows[constantWindows.size() - 1];
+	//}
+
+	void Gui::removeWindow(GuiWindowBase* window) {
+		for (int i = 0; i < constantWindows.size(); i++) {
+			if (constantWindows[i] == window) {
+				constantWindows.erase(constantWindows.begin() + i);
+				constantWindows.shrink_to_fit();
+				break;
+			}
+		}
+	}
+
 	void Gui::setDockingMode(bool mode) {
-		docked = true;
+		docked = mode;
 	}
 
 	void Gui::renderDocked() {
+	
 
 		ImGuiIO& io = ImGui::GetIO();
 		(void) io;
@@ -181,14 +170,15 @@ namespace archt{
 
 
 			ImGui::EndMenuBar();
-			
-			for (GuiWindow& w : constantWindows)
-				w.render();
 
-			for (int i = 0; i < index; i++) {
-				perFrameWindows[i].render();
+			for (GuiWindowBase* w : constantWindows)
+				w->render();
+
+			for (GuiWindowBase* w : perFrameWindows) {
+				w->render();
 			}
-			index = 0;
+			perFrameWindows.erase(perFrameWindows.begin(), perFrameWindows.end());
+			perFrameWindows.shrink_to_fit();
 
 		}
 		ImGui::End(); // ImGui::DockSpace();
@@ -207,6 +197,7 @@ namespace archt{
 	}
 
 	void Gui::renderUndocked() {
+	
 		ImGuiIO& io = ImGui::GetIO();
 		(void) io;
 
@@ -214,13 +205,14 @@ namespace archt{
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		for (GuiWindow& w : constantWindows)
-			w.render();
+		for (GuiWindowBase* w : constantWindows)
+			w->render();
 
-		for (int i = 0; i < index; i++) {
-			perFrameWindows[i].render();
+		for (GuiWindowBase* w : perFrameWindows) {
+			w->render();
 		}
-		index = 0;
+		perFrameWindows.erase(perFrameWindows.begin(), perFrameWindows.end());
+		perFrameWindows.shrink_to_fit();
 
 		ImGui::Render();
 
@@ -234,8 +226,5 @@ namespace archt{
 		}
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
-
-
-	
 
 }
