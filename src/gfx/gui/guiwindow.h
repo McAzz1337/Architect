@@ -3,11 +3,9 @@
 #include <functional>
 
 namespace archt {
-
 	class GuiWindow {
 
 		std::function<void()> renderFunc;
-
 
 	public:
 		GuiWindow();
@@ -19,5 +17,4 @@ namespace archt {
 
 		void setRenderFunc(std::function<void()> renderFunc);
 	};
-
 }

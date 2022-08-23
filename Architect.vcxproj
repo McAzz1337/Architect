@@ -152,6 +152,8 @@
     <ClCompile Include="src\filesystem\filemanager.cpp" />
     <ClCompile Include="src\gfx\gui\gui.cpp" />
     <ClCompile Include="src\gfx\gui\guiwindow.cpp" />
+    <ClCompile Include="src\gfx\gui\guiwindow_s.cpp" />
+    <ClCompile Include="src\gfx\gui\gui_s.cpp" />
     <ClCompile Include="src\gfx\opengl\buffers.cpp" />
     <ClCompile Include="src\gfx\opengl\camera.cpp" />
     <ClCompile Include="src\gfx\opengl\framebuffer.cpp" />
@@ -211,6 +213,8 @@
     <ClInclude Include="src\filesystem\filemanager.h" />
     <ClInclude Include="src\gfx\gui\gui.h" />
     <ClInclude Include="src\gfx\gui\guiwindow.h" />
+    <ClInclude Include="src\gfx\gui\guiwindow_s.h" />
+    <ClInclude Include="src\gfx\gui\gui_s.h" />
     <ClInclude Include="src\gfx\opengl\buffers.h" />
     <ClInclude Include="src\gfx\opengl\camera.h" />
     <ClInclude Include="src\gfx\opengl\gldebug.h" />

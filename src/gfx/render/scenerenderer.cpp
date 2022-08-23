@@ -5,7 +5,7 @@
 
 #include "../../scene/component_s.h"
 
-#include "../gui/gui.h"
+#include "../gui/gui_s.h"
 
 namespace archt {
 
@@ -200,7 +200,7 @@ namespace archt {
 
 				ImGui::End();
 			};
-			Gui::instance->submitWIndow(lambda);
+			Gui_s::instance->submitWindow(lambda);
 		}
 	
 	}

@@ -11,6 +11,12 @@
 #include "gfx/opengl/glwindow.h"
 #include "gfx/opengl/framebuffer.h"
 
+#include "gfx/gui/gui.h"
+#include "gfx/gui/gui_s.h"
+#include "gfx/gui/guiwindow.h"
+#include "gfx/gui/guiwindow_s.h"
+
+
 #include "math/rayequation.h"
 
 #include "gfx/render/renderer2d.h"

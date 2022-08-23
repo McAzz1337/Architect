@@ -4,7 +4,6 @@
 namespace archt{
 
 
-
 	GuiWindow::GuiWindow() {
 	}
 
@@ -21,5 +20,4 @@ namespace archt{
 	void GuiWindow::setRenderFunc(std::function<void()> renderFunc) {
 		this->renderFunc = renderFunc;
 	}
-
 }

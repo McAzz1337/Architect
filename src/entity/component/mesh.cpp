@@ -95,7 +95,7 @@ namespace archt {
 
 			ImGui::End();
 		};
-		Gui::instance->addGuiWindow(lambda);
+		//Gui::instance->addGuiWindow(lambda);
 	}
 
 	void Mesh::setVBO(Vertex* verteces, uint32_t size) {

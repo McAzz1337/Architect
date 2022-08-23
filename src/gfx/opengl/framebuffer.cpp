@@ -3,7 +3,7 @@
 #include "glinclude.h"
 #include "gldebug.h"
 #include "glrenderapi.h"
-#include "../gui/gui.h"
+#include "../gui/gui_s.h"
 
 namespace archt {
 
@@ -82,12 +82,12 @@ namespace archt {
 
 
 		};
-		guiWindow = Gui::instance->addGuiWindow(lambda);
+		guiWindow = Gui_s::instance->addGuiWindow(lambda);
 	}
 
 	Framebuffer::~Framebuffer() {
-		if (Gui::instance)
-			Gui::instance->removeWindow(guiWindow);
+		if (Gui_s::instance)
+			Gui_s::instance->removeWindow(guiWindow);
 
 		delete tex;
 

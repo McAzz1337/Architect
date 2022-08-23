@@ -290,7 +290,7 @@ int main() {
 	GLWindow* window = GLRenderAPI::init();
 
 	Input::init();
-	Gui::init(window);
+	Gui_s::init(window);
 
 	Renderer::createInstance();
 
@@ -403,9 +403,26 @@ int main() {
 			ImGui::End();
 
 		};
-		Gui::instance->addGuiWindow(lambda);
+		//Gui::instance->addGuiWindow(lambda);
 	}
 
+#pragma region GUI_WINDOW_TEST
+	{
+		int x = 5;
+		
+		auto lambda = [](int a) {
+			ImGui::Begin("test");
+
+			ImGui::Text("a = %i", a);
+
+			ImGui::End();
+		};
+		
+		
+		auto* win = createGuiWindow(lambda, x);
+		Gui_s::instance->addGuiWindow_s(lambda, x);
+	}
+#pragma endregion GUI_WINDOW_TEST
 
 	Framebuffer fb(window->getSize());
 
@@ -444,7 +461,7 @@ int main() {
 		SceneRenderer::instance->flush();
 
 
-		Gui::instance->render();
+		Gui_s::instance->render();
 
 
 		window->swapBuffer();
@@ -460,7 +477,7 @@ int main() {
 	delete window;
 
 	Renderer::deleteInstance();
-	Gui::terminate();
+	Gui_s::terminate();
 	Input::terminate();
 	GLRenderAPI::terminate();
 

@@ -2,7 +2,7 @@
 
 
 
-#include "../gfx/gui/gui.h"
+#include "../gfx/gui/gui_s.h"
 
 #include <algorithm>
 
@@ -1552,7 +1552,7 @@ namespace archt {
 			getMemoryMetrics(memStat);
 			CommandLine::Create(id);
 
-			Gui::instance->addGuiWindow(renderFunc);
+			Gui_s::instance->addGuiWindow(renderFunc);
 	
 		}
 

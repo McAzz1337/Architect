@@ -6,7 +6,7 @@
 #include <glm/vec2.hpp>
 #include <typeindex>
 
-#include "../gui/guiwindow.h"
+#include "../gui/guiwindow_s.h"
 
 namespace archt {
 
@@ -23,7 +23,7 @@ namespace archt {
 		VBO vbo;
 		IBO ibo;
 
-		GuiWindow* guiWindow = nullptr;
+		BaseWindow* guiWindow = nullptr;
 
 	public:
 		Framebuffer() = delete;
