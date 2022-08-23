@@ -14,6 +14,11 @@ namespace archt {
 	Transform_s::Transform_s(glm::mat4 transform) : transform(transform) {
 	}
 
+	Transform_s::Transform_s(const Transform_s& other) : transform(other.transform) {}
+	
+	//Transform_s::Transform_s(Transform_s&& other) noexcept : transform(other.transform)  {}
+
+
 	Transform_s::~Transform_s() {
 	}
 
@@ -34,10 +39,22 @@ namespace archt {
 
 	Mesh_s::Mesh_s() {}
 
-	Mesh_s::Mesh_s(Vertex* verteces, uint32_t vSize, uint32_t* indeces, uint32_t iSize)
-		: vbo(verteces, vSize), ibo(indeces, iSize) {}
+	Mesh_s::Mesh_s(const Mesh_s& other) {
+		vbo = new VBO(other.vbo->getData(), other.vbo->getSize());
+		ibo = new IBO(other.ibo->getData(), other.ibo->getSize());
+	}
+
+	//Mesh_s::Mesh_s(Mesh_s&& other) noexcept : vbo(other.vbo.getData(), other.vbo.getSize()) {}
+
+	Mesh_s::Mesh_s(Vertex* verteces, uint32_t vSize, uint32_t* indeces, uint32_t iSize) {
+		vbo = new VBO(verteces, vSize);
+		ibo = new IBO(indeces, iSize);
+
+	}
 
 	Mesh_s::~Mesh_s() {
+		delete vbo;
+		delete ibo;
 	}
 
 
@@ -45,6 +62,24 @@ namespace archt {
 
 
 	Material_s::Material_s() {}
+
+	Material_s::Material_s(const Material_s& other) : shader(other.shader.getFileName()) {
+		uniformCount = other.uniformCount;
+		for (int i = 0; i < uniformCount; i++) {
+			uniforms[i] = other.uniforms[i];
+		}
+		tex = new GLTexture(other.tex->getFilePath());
+	}
+
+	//Material_s::Material_s(Material_s&& other) noexcept : shader(other.shader.getFileName()) {
+	//	uniformCount = other.uniformCount;
+	//	if (other.uniforms) {
+	//		for (int i = 0; i < uniformCount; i++) {
+	//			uniforms[i] = other.uniforms[i];
+	//		}
+	//	}
+	//	tex = new GLTexture(other.tex->getFilePath());
+	//}
 
 	Material_s::Material_s(const std::string& texturePath, const std::string& uniformsPath, const std::string& shaderPath)
 		: shader(shaderPath) {
@@ -56,7 +91,8 @@ namespace archt {
 		if (uniformsRaw.size() == 0)
 			return;
 
-		uniforms = new Uniform[uniformsRaw.size()];
+		uniformCount = uniformsRaw.size();
+		uniforms = new Uniform[uniformCount];
 
 		for (int i = 0; i < uniformsRaw.size(); i++) {
 			std::string components[2];
@@ -98,6 +134,11 @@ namespace archt {
 	
 	
 	Tag::Tag() {}
+
+	Tag::Tag(const Tag& other) : tag(other.tag) {}
+	
+	//Tag::Tag(Tag&& other) noexcept : tag(other.tag) {}
+
 
 	Tag::Tag(const std::string& tag) : tag(tag) {}
 

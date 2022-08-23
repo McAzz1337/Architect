@@ -19,7 +19,8 @@ namespace archt {
 
 		Transform_s();
 		Transform_s(glm::mat4 transform);
-		Transform_s(const Transform_s& other) = default;
+		Transform_s(const Transform_s& other);
+		//Transform_s(Transform_s&& other) noexcept;
 		~Transform_s();
 
 		void translate(const glm::vec3& t);
@@ -42,10 +43,12 @@ namespace archt {
 
 	struct Mesh_s {
 
-		VBO vbo;
-		IBO ibo;
+		VBO* vbo = nullptr;
+		IBO* ibo = nullptr;
 
 		Mesh_s();
+		Mesh_s(const Mesh_s& other);
+		//Mesh_s(Mesh_s&& other) noexcept;
 		Mesh_s(Vertex* verteces, uint32_t vSize, uint32_t* indeces, uint32_t iSize);
 		~Mesh_s();
 	};
@@ -56,9 +59,12 @@ namespace archt {
 
 		GLTexture* tex;
 		Uniform* uniforms = nullptr;
+		int uniformCount = 0;
 		GLShader shader;
 
 		Material_s();
+		Material_s(const Material_s& other);
+		//Material_s(Material_s&& other) noexcept;
 		Material_s(const std::string& texturePath, const std::string& uniformsPath, const std::string& shaderPath);
 		~Material_s();
 
@@ -70,6 +76,8 @@ namespace archt {
 		std::string tag;
 
 		Tag();
+		Tag(const Tag& other);
+		//Tag(Tag&& other) noexcept;
 		Tag(const std::string& tag);
 		~Tag();
 

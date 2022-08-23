@@ -5,6 +5,8 @@
 
 #include "../../scene/component_s.h"
 
+#include "../gui/gui.h"
+
 namespace archt {
 
 #define RENDERER_NONE_FOUND -1
@@ -90,6 +92,8 @@ namespace archt {
 
 		fb->unbind();
 		fb = nullptr;
+
+		currentEntity = 0;
 	}
 
 	void SceneRenderer::submit(Entity_s entity) {
@@ -108,6 +112,9 @@ namespace archt {
 
 	void SceneRenderer::render() {
 	
+		if (currentEntity == 0)
+			return;
+
 		sort();
 		beginBatch();
 		draw();
@@ -129,7 +136,7 @@ namespace archt {
 
 
 	
-		activeShader = entities[0].getComponent<Material_s>().getShader();
+		activeShader = (entities[0].getComponent<Material_s>()).getShader();
 		Transform_s projectionView = cam->getProjectionView().getMatrix(); // todo switch camera
 		
 		for (int i = 0; i < currentEntity; i++) {
@@ -139,8 +146,8 @@ namespace archt {
 			Material_s& material = entity->getComponent<Material_s>();
 			GLTexture* tex = material.tex;
 		
-			VBO* vb = &mesh.vbo;
-			IBO* ib = &mesh.ibo;
+			VBO* vb = mesh.vbo;
+			IBO* ib = mesh.ibo;
 		
 			uint32_t vSize = vb->getSize();
 			uint32_t iSize = ib->getSize();
@@ -154,6 +161,7 @@ namespace archt {
 		
 				draw();
 				endBatch();
+				activeShader = material.getShader();
 			}
 		
 			if (texSlot == -1) {
@@ -165,6 +173,7 @@ namespace archt {
 			else {
 				vb->setTexId((float) texSlot);
 			}
+
 			transforms[currentTransform] = (projectionView * entity->getComponent<Transform_s>());
 			vb->setMatrixId((float) currentTransform);
 			currentTransform++;
@@ -174,12 +183,29 @@ namespace archt {
 		
 			currentVertex += vSize;
 			currentIndex += iSize;
+			
+			uint32_t cv = currentVertex;
+			uint32_t ci = currentIndex;
+			auto lambda = [i, entity, cv, ci]() {
+
+				std::string text = "Batching stats " + std::to_string(i);
+				ImGui::Begin(text.c_str());
+
+				ImGui::Text("VBO write %i", entity->getComponent<Mesh_s>().vbo->getSize());
+				ImGui::Text("IBO write %i", entity->getComponent<Mesh_s>().ibo->getSize());
+
+				ImGui::Text("currentVertex %i", cv);
+				ImGui::Text("currentIndex %i", ci);
+
+
+				ImGui::End();
+			};
+			Gui::instance->submitWIndow(lambda);
 		}
 	
 	}
 
 	void SceneRenderer::endBatch() {
-		currentEntity = 0;
 		currentTransform = 0;
 		currentVertex = 0;
 		currentIndex = 0;
@@ -230,8 +256,11 @@ namespace archt {
 				buffers[i]->upload();
 			}
 		}
-		vbo->upload();
-		ibo->upload();
+		vbo->upload(0, currentVertex);
+		ibo->upload(0, currentIndex);
+
+		
+
 
 		CALL(glDrawElements(GL_TRIANGLES, currentIndex, GL_UNSIGNED_INT, nullptr));
 

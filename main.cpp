@@ -370,20 +370,20 @@ int main() {
 
 				Mesh_s& mesh = entity.getComponent<Mesh_s>();
 
-				VBO& vbo = mesh.vbo;
-				Vertex* verteces = vbo.getData();
+				VBO* vbo = mesh.vbo;
+				Vertex* verteces = vbo->getData();
 
 				ImGui::Text("Vertex buffer");
-				for (int i = 0; i < vbo.getSize(); i++) {
+				for (int i = 0; i < vbo->getSize(); i++) {
 					Vertex& v = verteces[i];
 					ImGui::Text("%f\t%f\t%f", v.pos.x, v.pos.y, v.pos.z);
 				}
 
-				IBO& ibo = mesh.ibo;
-				uint32_t* indeces = ibo.getData();
+				IBO* ibo = mesh.ibo;
+				uint32_t* indeces = ibo->getData();
 
 				ImGui::Text("Index buffer");
-				for (int i = 0; i < ibo.getSize(); i++) {
+				for (int i = 0; i < ibo->getSize(); i++) {
 					ImGui::Text("%i", indeces[i]);
 				}
 
