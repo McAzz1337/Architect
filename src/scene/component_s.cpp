@@ -86,7 +86,7 @@ namespace archt {
 
 		tex = new GLTexture(texturePath);
 		std::vector<std::string> uniformsRaw;
-		readFileSplit(uniformsPath, uniformsRaw, true);
+		readFileSplit(uniformsPath, uniformsRaw);
 		
 		if (uniformsRaw.size() == 0)
 			return;

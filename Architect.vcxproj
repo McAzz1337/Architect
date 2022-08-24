@@ -140,6 +140,7 @@
     <ClCompile Include="src\audio\openal\audiobuffer.cpp" />
     <ClCompile Include="src\audio\openal\audiosource.cpp" />
     <ClCompile Include="src\audio\waveloader.cpp" />
+    <ClCompile Include="src\chronos\delta.cpp" />
     <ClCompile Include="src\chronos\deltatime.cpp" />
     <ClCompile Include="src\entity\component.cpp" />
     <ClCompile Include="src\entity\component\camera_new.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="src\audio\openal\audiobuffer.h" />
     <ClInclude Include="src\audio\openal\audiosource.h" />
     <ClInclude Include="src\audio\waveloader.h" />
+    <ClInclude Include="src\chronos\delta.h" />
     <ClInclude Include="src\chronos\deltatime.h" />
     <ClInclude Include="src\core.h" />
     <ClInclude Include="src\entity\component.h" />

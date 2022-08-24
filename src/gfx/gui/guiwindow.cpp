@@ -4,22 +4,11 @@
 namespace archt {
 
 
-    GuiWindowBase::~GuiWindowBase() {
+    GuiWindow::~GuiWindow() {
 
     }
 
    
-
-    //GuiWindowVoid::GuiWindowVoid(std::function<void()> renderFunc) : func(renderFunc) {
-    //
-    //}
-    //GuiWindowVoid::~GuiWindowVoid() {
-    //
-    //}
-    //
-    //void GuiWindowVoid::render() {
-    //    func();
-    //}
 
     GuiWindowVoid::GuiWindowVoid(std::function<void()> func) : f(func) {}
 

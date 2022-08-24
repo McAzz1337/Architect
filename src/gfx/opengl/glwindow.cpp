@@ -12,6 +12,8 @@
 
 #include "../../thread/mythread.h"
 
+#include <Windows.h>
+
 namespace archt {
 
 	void keyCallback(GLFWwindow* window, int key, int scan, int action, int mod) {
@@ -71,6 +73,11 @@ namespace archt {
 
 	GLWindow::GLWindow(const char* title, int x, int y, int w, int h)
 		: title(title), x(x), y(y), w(w), h(h) {
+		
+		int aElements[2] = { COLOR_WINDOW };
+		DWORD aNewColors[2];
+		aNewColors[0] = RGB(0x30, 0x30, 0x30);  // light gray 
+		SetSysColors(2, aElements, aNewColors);
 
 		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
@@ -80,12 +87,15 @@ namespace archt {
 		glfwMakeContextCurrent(window);
 		glfwSetWindowPos(window, x, y);
 		
+		glfwSwapInterval(0);
+
 		//toggleFullscreen();
 		
 		glfwSetKeyCallback(window, keyCallback);
 		glfwSetWindowSizeCallback(window, resizeCallback);
 		glfwSetWindowUserPointer(window, this);
 		glfwSetErrorCallback(errorCallback);
+
 	}
 
 
@@ -119,6 +129,10 @@ namespace archt {
 	}
 
 	void GLWindow::setSize(int width, int height) {
+		if (fullScreen) {
+			return;
+		}
+
 		w = width;
 		h = height;
 
@@ -127,9 +141,11 @@ namespace archt {
 
 	void GLWindow::toggleFullscreen() const {
 		if (fullScreen) {
+			fullScreen = false;
 			glfwWindowHint(GLFW_DECORATED, GL_TRUE);
 			glfwSetWindowMonitor(window, nullptr, x, y, w, h, refreshRate);
-			fullScreen = false;
+			glfwSetWindowSize(window, w, h);
+			centerOnScreen();
 		}
 		else {
 			GLFWmonitor* monitor = glfwGetPrimaryMonitor();
@@ -141,12 +157,23 @@ namespace archt {
 			glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
 			glfwWindowHint(GLFW_DECORATED, GL_FALSE);
-			glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, refreshRate);
 			fullScreen = true;
+			glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, refreshRate);
 		}
 	}
 
 	
+
+	void GLWindow::centerOnScreen() const {
+
+		RECT screen;
+		HWND screenWindow = GetDesktopWindow();
+		GetWindowRect(screenWindow, &screen);
+		int x = (screen.right - w) / 2;
+		int y = (screen.bottom - h) / 2;
+
+		glfwSetWindowPos(window, x, y);
+	}
 
 
 }

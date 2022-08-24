@@ -3,6 +3,8 @@
 #include "ptr.h"
 
 #include "chronos/deltatime.h"
+#include "chronos/delta.h"
+
 
 #include "gfx/gui/gui.h"
 
@@ -33,3 +35,5 @@
 #include "scene/component_s.h"
 
 #include "system/systeminfo.h"
+
+#include "fileio.h"

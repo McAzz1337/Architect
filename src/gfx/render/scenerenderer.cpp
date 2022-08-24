@@ -184,23 +184,7 @@ namespace archt {
 			currentVertex += vSize;
 			currentIndex += iSize;
 			
-			uint32_t cv = currentVertex;
-			uint32_t ci = currentIndex;
-			auto lambda = [i, entity, cv, ci]() {
-
-				std::string text = "Batching stats " + std::to_string(i);
-				ImGui::Begin(text.c_str());
-
-				ImGui::Text("VBO write %i", entity->getComponent<Mesh_s>().vbo->getSize());
-				ImGui::Text("IBO write %i", entity->getComponent<Mesh_s>().ibo->getSize());
-
-				ImGui::Text("currentVertex %i", cv);
-				ImGui::Text("currentIndex %i", ci);
-
-
-				ImGui::End();
-			};
-			Gui::instance->submitWindow(lambda);
+		
 		}
 	
 	}
@@ -259,7 +243,30 @@ namespace archt {
 		vbo->upload(0, currentVertex);
 		ibo->upload(0, currentIndex);
 
+		glm::mat4* ts = new glm::mat4[currentTransform];
+		int count = currentTransform;
+		for (int i = 0; i < count; i++) {
+			ts[i] = transforms[i];
+		}
+
+		auto window = [](glm::mat4* transforms, int count) {
+
+			ImGui::Begin("Renderer transforms");
+
+			for (int i = 0; i < count; i++) {
+				glm::mat4& m = transforms[i];
+				ImGui::Text("Transform [%i]", i);
+				for (int j = 0; j < 4; j++) {
+					ImGui::Text("%f\t%f\t%f\t%f", m[j][0], m[j][1], m[j][2], m[j][3]);
+				}
+				ImGui::Separator();
+			}
+
+			delete[] transforms;
+			ImGui::End();
+		};
 		
+		Gui::instance->submitWindow(window, ts, count);
 
 
 		CALL(glDrawElements(GL_TRIANGLES, currentIndex, GL_UNSIGNED_INT, nullptr));

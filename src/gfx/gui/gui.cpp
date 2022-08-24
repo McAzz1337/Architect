@@ -44,6 +44,36 @@ namespace archt {
 		ImGui::StyleColorsDark();
 		glm::ivec2 windowSize = window->getSize();
 		instance = new Gui(windowSize);
+		
+		setStyle();
+	}
+
+	void Gui::setStyle() {
+	
+		ImGuiStyle& style = ImGui::GetStyle();
+
+		style.Colors[ImGuiCol_WindowBg] = ImColor(43, 45, 47);
+		style.Colors[ImGuiCol_ChildBg] = ImColor(30, 30, 30);
+		style.Colors[ImGuiCol_Border] = ImColor(50, 50, 50);
+		
+		style.Colors[ImGuiCol_Tab] = ImColor(50, 50, 50);
+		style.Colors[ImGuiCol_TabActive] = ImColor(121, 128, 134);
+		style.Colors[ImGuiCol_TabUnfocused] = ImColor(30, 30, 30);
+		style.Colors[ImGuiCol_TabUnfocusedActive] = ImColor(30, 30, 30);
+		
+		style.Colors[ImGuiCol_TitleBg] = ImColor(30, 30, 30);
+		style.Colors[ImGuiCol_TitleBgActive] = ImColor(121, 128, 134);
+		style.Colors[ImGuiCol_TitleBgCollapsed] = ImColor(102, 97, 177);
+		
+		style.Colors[ImGuiCol_FrameBg] = ImColor(30, 30, 30);
+		style.Colors[ImGuiCol_FrameBgHovered] = ImColor(30, 30, 30);
+		style.Colors[ImGuiCol_FrameBgActive] = ImColor(60, 60, 60);
+		
+
+		style.Colors[ImGuiCol_SliderGrab] = ImColor(60, 60, 60);
+		style.Colors[ImGuiCol_SliderGrabActive] = ImColor(121, 128, 134);
+
+		printf("styles\n");
 	}
 
 	void Gui::terminate() {
@@ -74,7 +104,7 @@ namespace archt {
 	//	return constantWindows[constantWindows.size() - 1];
 	//}
 
-	void Gui::removeWindow(GuiWindowBase* window) {
+	void Gui::removeWindow(GuiWindow* window) {
 		for (int i = 0; i < constantWindows.size(); i++) {
 			if (constantWindows[i] == window) {
 				constantWindows.erase(constantWindows.begin() + i);
@@ -171,10 +201,10 @@ namespace archt {
 
 			ImGui::EndMenuBar();
 
-			for (GuiWindowBase* w : constantWindows)
+			for (GuiWindow* w : constantWindows)
 				w->render();
 
-			for (GuiWindowBase* w : perFrameWindows) {
+			for (GuiWindow* w : perFrameWindows) {
 				w->render();
 			}
 			perFrameWindows.erase(perFrameWindows.begin(), perFrameWindows.end());
@@ -205,10 +235,10 @@ namespace archt {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		for (GuiWindowBase* w : constantWindows)
+		for (GuiWindow* w : constantWindows)
 			w->render();
 
-		for (GuiWindowBase* w : perFrameWindows) {
+		for (GuiWindow* w : perFrameWindows) {
 			w->render();
 		}
 		perFrameWindows.erase(perFrameWindows.begin(), perFrameWindows.end());

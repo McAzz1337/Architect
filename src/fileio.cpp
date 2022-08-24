@@ -50,8 +50,8 @@ namespace archt {
 	}
 
 
-	void extractFileName(const std::string& path, std::string& dst) {
-		int start = path.find_last_of('/');
+	void extractFileName(const std::string& path, std::string& dst, const char del) {
+		int start = path.find_last_of(del);
 
 		if (start != std::string::npos)
 			dst = path.substr(start + 1);

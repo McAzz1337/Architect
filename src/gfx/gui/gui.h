@@ -18,8 +18,8 @@ namespace archt {
 
 	private:
 
-		std::vector<GuiWindowBase*> constantWindows;
-		std::vector<GuiWindowBase*> perFrameWindows;
+		std::vector<GuiWindow*> constantWindows;
+		std::vector<GuiWindow*> perFrameWindows;
 
 
 
@@ -30,6 +30,7 @@ namespace archt {
 	public:
 
 		static void init(GLWindow* window);
+		static void setStyle();
 		static void terminate();
 
 		void render();
@@ -47,20 +48,20 @@ namespace archt {
 		}
 
 		template <typename F, typename = void>
-		GuiWindowBase* addGuiWindow(F&& f) {
+		GuiWindow* addGuiWindow(F&& f) {
 			
 			constantWindows.push_back(new GuiWindowVoid(((std::function<void()>) f)));
 			return constantWindows[constantWindows.size() - 1];
 		}
 
 		template <typename F, typename... Args>
-		GuiWindowBase* addGuiWindow(F&& f, Args&&... args) {
+		GuiWindow* addGuiWindow(F&& f, Args&&... args) {
 
 			constantWindows.push_back(createGuiWindowArgs(f, std::forward<Args>(args)...));
 			return constantWindows[constantWindows.size() - 1];
 		}
 
-		void removeWindow(GuiWindowBase* window);
+		void removeWindow(GuiWindow* window);
 
 		void setDockingMode(bool mode);
 

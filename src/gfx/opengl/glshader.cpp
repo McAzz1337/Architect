@@ -105,7 +105,7 @@ namespace archt {
 			return uniforms[name];
 		}
 
-		int location = glGetUniformLocation(id, name.data());
+		int location = glGetUniformLocation(id, name.c_str());
 
 #if 1
 		if (location == -1) {

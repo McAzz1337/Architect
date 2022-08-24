@@ -295,7 +295,7 @@ int main() {
 
 	Input::init();
 
-	Renderer::createInstance();
+	//Renderer::createInstance();
 
 	Scene scene;
 #pragma region ENTITY_SETUP
@@ -406,30 +406,59 @@ int main() {
 			ImGui::End();
 
 		};
-		//Gui::instance->addGuiWindow(lambda);
+		Gui::instance->addGuiWindow(lambda);
 	}
 
-#pragma region GUI_WINDOW_TEST
-	{
-		int x = 5;
-		
-		auto lambda = [](int a) {
-			ImGui::Begin("test");
 
-			ImGui::Text("a = %i", a);
+	Framebuffer fb(window->getSize());
+	//window->toggleFullscreen();
+
+	int frames = 0;
+	int highestFps = 0;
+	delta::archt_time last = delta::getTimePoint();
+	delta::archt_time now;
+	float deltaTime = 0.0f;
+	float secondsTimer = 0.0f;
+	float renderTimer = 0.0f;
+	int targetFps = 500;
+	float targetDelta = 1.0f / targetFps;
+	{ 
+		renderTimer += deltaTime;
+		auto lambda = [&renderTimer, &targetFps, &targetDelta, &deltaTime, &frames, &highestFps]() {
+			ImGui::Begin("Frames");
+			std::string fileName = "";
+			extractFileName(__FILE__, fileName, '\\');
+			ImGui::Text("File: %s", fileName.c_str());
+
+			ImGui::Text("Frame count: %i", frames);
+			ImGui::Text("highestFps count: %i", highestFps);
+			ImGui::Text("delta time: %f\seconds", deltaTime);
+			ImGui::Text("render time: %f\seconds", renderTimer);
+
+			if (ImGui::SliderInt("Target FPS: ", &targetFps, 30, 1000)) {
+				targetDelta = 1.0f / targetFps;
+				highestFps = 0;
+			}
 
 			ImGui::End();
 		};
-		
-		Gui::instance->addGuiWindow(lambda, x);
+		Gui::instance->addGuiWindow(lambda);
 	}
-#pragma endregion GUI_WINDOW_TEST
-
-	Framebuffer fb(window->getSize());
-
 
 	while (true) {
 
+		deltaTime = delta::getDelta<delta::seconds>(last);
+		secondsTimer += deltaTime;
+		renderTimer += deltaTime;
+
+		if (secondsTimer > 1.0f) {
+			if (frames > highestFps) {
+				highestFps = frames;
+			}
+			frames = 0;
+			secondsTimer -= 1.0f;
+		}
+		
 		window->pollEvents();
 
 
@@ -446,26 +475,32 @@ int main() {
 			cam->translate({ 0.03f, 0.0f, 0.0f });
 		}
 
-		SceneRenderer::instance->setRendertarget(&fb);
 
-		//Transform_s& t = entity.getComponent<Transform_s>();
-		//t.rotate(M_PI / 60.0f, { 0.0f, 1.0f, 0.0f });
+		
+		if (renderTimer >= targetDelta) {
+			SceneRenderer::instance->setRendertarget(&fb);
 
-		SceneRenderer::instance->clear();
-		SceneRenderer::instance->beginScene(&scene, cam);
+			Transform_s& t = entity.getComponent<Transform_s>();
+			t.rotate(M_PI * deltaTime, { 0.0f, 1.0f, 0.0f });
 
-		SceneRenderer::instance->submit(entity);
+			SceneRenderer::instance->clear();
+			SceneRenderer::instance->beginScene(&scene, cam);
 
-		SceneRenderer::instance->render();
+			SceneRenderer::instance->submit(entity);
 
-		SceneRenderer::instance->endScene();
-		SceneRenderer::instance->flush();
+			SceneRenderer::instance->render();
+
+			SceneRenderer::instance->endScene();
+			SceneRenderer::instance->flush();
 
 
-		Gui::instance->render();
+			Gui::instance->render();
 
 
-		window->swapBuffer();
+			window->swapBuffer();
+			frames++;
+			renderTimer -= targetDelta;
+		}
 
 		if (window->shouldClose()) {
 			break;

@@ -20,10 +20,10 @@ void main() {
 	
 	vec4 color = texture(tex[_texId], _uv);
 	
-	if (color.w == 0.0) {
-		discard;
-	}
+	//if (color.w == 0.0) {
+	//	discard;
+	//}
 	
 	//_out = color * tint;
-	_out = vec4(1.0, 1.0, 1.0, 1.0);
+	_out = tint;
 }

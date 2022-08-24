@@ -8,27 +8,18 @@
 
 namespace archt {
 
-	class GuiWindowBase {
+	class GuiWindow {
 
 	public:
-		GuiWindowBase() = default;
-		virtual ~GuiWindowBase();
+		GuiWindow() = default;
+		virtual ~GuiWindow();
 		virtual void render() = 0;
 	};
 
 
-	//class GuiWindowVoid : public GuiWindowBase {
-	//
-	//	std::function<void()> func;
-	//public:
-	//	GuiWindowVoid() = delete;
-	//	GuiWindowVoid(std::function<void()> renderFunc);
-	//	~GuiWindowVoid();
-	//
-	//	void render() override;
-	//};
+	
 
-	class GuiWindowVoid : public GuiWindowBase {
+	class GuiWindowVoid : public GuiWindow {
 		
 		std::function<void()> f;
 	public:
@@ -38,7 +29,7 @@ namespace archt {
 	};
 
 	template <typename F, typename... Ts>
-	class GuiWindowArgs : public GuiWindowBase {
+	class GuiWindowArgs : public GuiWindow {
 		static_assert(!(std::is_rvalue_reference_v<Ts> && ...));
 	private:
 		F f;

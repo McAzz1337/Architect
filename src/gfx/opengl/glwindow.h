@@ -6,9 +6,11 @@
 
 namespace archt {
 
-
+	void keyCallback(GLFWwindow* window, int key, int scan, int action, int mod);
 
 	class GLWindow {
+
+		friend void keyCallback(GLFWwindow* window, int key, int scan, int action, int mod);
 
 		GLFWwindow* window = nullptr;
 		const char* title;
@@ -32,6 +34,8 @@ namespace archt {
 		void setSize(int width, int height);
 
 		void toggleFullscreen() const;
+
+		void centerOnScreen()const;
 
 		inline GLFWwindow* getHandle() const { return window; }
 		inline glm::ivec2 getSize() const { return glm::ivec2(w, h); }

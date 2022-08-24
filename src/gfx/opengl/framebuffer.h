@@ -23,7 +23,7 @@ namespace archt {
 		VBO vbo;
 		IBO ibo;
 
-		GuiWindowBase* guiWindow = nullptr;
+		GuiWindow* guiWindow = nullptr;
 
 	public:
 		Framebuffer() = delete;
