@@ -130,4 +130,19 @@ namespace archt {
 
 	}
 
+
+
+
+
+
+	void writeFile(const std::string& path, const std::string& src) {
+
+		std::ofstream out(path);
+
+		out << src;
+
+		out.close();
+	}
+
+
 }

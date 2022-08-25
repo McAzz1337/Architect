@@ -23,8 +23,7 @@ namespace archt {
 
 		static const std::string styleFile;
 		
-		bool writeToFile = false;
-		ImColor colors[ImGuiCol_COUNT];
+		ImVec4 defaultColors[ImGuiCol_COUNT];
 
 		bool docked = true;
 
@@ -64,10 +63,27 @@ namespace archt {
 			return constantWindows[constantWindows.size() - 1];
 		}
 
+		// closable windows------------------------------------------------
+		template <typename F, typename = void, typename = bool*>
+		GuiWindow* addGuiWindow_s(F&& f) {
+
+			constantWindows.push_back(new GuiWindowVoid_s(((std::function<void(bool*)>) f)));
+			return constantWindows[constantWindows.size() - 1];
+		}
+
+		template <typename F, typename... Args>
+		GuiWindow* addGuiWindow_s(F&& f, Args&&... args) {
+
+			constantWindows.push_back(createGuiWindowArgs_s(f, std::forward<Args>(args)...));
+			return constantWindows[constantWindows.size() - 1];
+		}
+
 		void removeWindow(GuiWindow* window);
 
 		void setDockingMode(bool mode);
 
+
+		bool hasWindow(const char* name) const;
 
 		void createStyleWindow();
 

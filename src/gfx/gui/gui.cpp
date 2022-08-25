@@ -1,14 +1,78 @@
 #include "gui.h"
 
 
+#include "../../fileio.h"
+
+#include <sstream>
+
+#define ARCHT_VALUE_TO_SYMBOL(x) #x
 
 namespace archt {
+
+	std::string symbols[ImGuiCol_COUNT] = {
+		 "ImGuiCol_Text",
+		 "ImGuiCol_TextDisabled",
+		 "ImGuiCol_WindowBg",
+		 "ImGuiCol_ChildBg",
+		 "ImGuiCol_PopupBg",
+		 "ImGuiCol_Border",
+		 "ImGuiCol_BorderShadow",
+		 "ImGuiCol_FrameBg",
+		 "ImGuiCol_FrameBgHovered",
+		 "ImGuiCol_FrameBgActive",
+		 "ImGuiCol_TitleBg",
+		 "ImGuiCol_TitleBgActive",
+		 "ImGuiCol_TitleBgCollapsed",
+		 "ImGuiCol_MenuBarBg",
+		 "ImGuiCol_ScrollbarBg",
+		 "ImGuiCol_ScrollbarGrab",
+		 "ImGuiCol_ScrollbarGrabHovered",
+		 "ImGuiCol_ScrollbarGrabActive",
+		 "ImGuiCol_CheckMark",
+		 "ImGuiCol_SliderGrab",
+		 "ImGuiCol_SliderGrabActive",
+		 "ImGuiCol_Button",
+		 "ImGuiCol_ButtonHovered",
+		 "ImGuiCol_ButtonActive",
+		 "ImGuiCol_Header",
+		 "ImGuiCol_HeaderHovered",
+		 "ImGuiCol_HeaderActive",
+		 "ImGuiCol_Separator",
+		 "ImGuiCol_SeparatorHovered",
+		 "ImGuiCol_SeparatorActive",
+		 "ImGuiCol_ResizeGrip",
+		 "ImGuiCol_ResizeGripHovered",
+		 "ImGuiCol_ResizeGripActive",
+		 "ImGuiCol_Tab",
+		 "ImGuiCol_TabHovered",
+		 "ImGuiCol_TabActive",
+		 "ImGuiCol_TabUnfocused",
+		 "ImGuiCol_TabUnfocusedActive",
+		 "ImGuiCol_DockingPreview",
+		 "ImGuiCol_DockingEmptyBg",
+		 "ImGuiCol_PlotLines",
+		 "ImGuiCol_PlotLinesHovered",
+		 "ImGuiCol_PlotHistogram",
+		 "ImGuiCol_PlotHistogramHovered",
+		 "ImGuiCol_TableHeaderBg",
+		 "ImGuiCol_TableBorderStrong",
+		 "ImGuiCol_TableBorderLight",
+		 "ImGuiCol_TableRowBg",
+		 "ImGuiCol_TableRowBgAlt",
+		 "ImGuiCol_TextSelectedBg",
+		 "ImGuiCol_DragDropTarget",
+		 "ImGuiCol_NavHighlight",
+		 "ImGuiCol_NavWindowingHighlight",
+		 "ImGuiCol_NavWindowingDimBg",
+		 "ImGuiCol_ModalWindowDimBg"
+	};
+
 
 
 
 	Gui* Gui::instance = nullptr;
 
-	const std::string Gui::styleFile = "vendor/imgui/style.txt";
+	const std::string Gui::styleFile = "src/assets/styles/style.txt";
 
 
 	Gui::Gui(glm::ivec2 windowSize) {
@@ -30,7 +94,7 @@ namespace archt {
 	Gui::~Gui() {}
 
 	void Gui::init(GLWindow* window) {
-	
+
 		if (instance)
 			return;
 
@@ -47,48 +111,44 @@ namespace archt {
 		ImGui::StyleColorsDark();
 		glm::ivec2 windowSize = window->getSize();
 		instance = new Gui(windowSize);
-		
+
 		setStyle();
 	}
 
 	void Gui::setStyle() {
-	
+
+
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		style.Colors[ImGuiCol_WindowBg] = ImColor(50, 50, 50);
-		style.Colors[ImGuiCol_ChildBg] = ImColor(30, 30, 30);
-		style.Colors[ImGuiCol_Border] = ImColor(50, 50, 50);
-		
-		style.Colors[ImGuiCol_Tab] = ImColor(50, 50, 50);
-		style.Colors[ImGuiCol_TabHovered] = ImColor(100, 100, 100);
-		style.Colors[ImGuiCol_TabActive] = ImColor(100, 100, 100);
-		style.Colors[ImGuiCol_TabUnfocused] = ImColor(30, 30, 30);
-		style.Colors[ImGuiCol_TabUnfocusedActive] = ImColor(30, 30, 30);
-		
-		style.Colors[ImGuiCol_TitleBg] = ImColor(30, 30, 30);
-		style.Colors[ImGuiCol_TitleBgActive] = ImColor(100, 100, 100);
-		style.Colors[ImGuiCol_TitleBgCollapsed] = ImColor(102, 97, 177);
-		
-		style.Colors[ImGuiCol_FrameBg] = ImColor(30, 30, 30);
-		style.Colors[ImGuiCol_FrameBgHovered] = ImColor(30, 30, 30);
-		style.Colors[ImGuiCol_FrameBgActive] = ImColor(60, 60, 60);
-		
+		std::vector<std::string> values;
+		readFileSplit(styleFile, values);
 
-		style.Colors[ImGuiCol_SliderGrab] = ImColor(60, 60, 60);
-		style.Colors[ImGuiCol_SliderGrabActive] = ImColor(121, 128, 134);
+		for (int i = 0; i < values.size(); i++) {
 
-		style.Colors[ImGuiCol_ResizeGrip] = ImColor(30, 30, 30);
-		style.Colors[ImGuiCol_ResizeGripHovered] = ImColor(100, 100, 100);
-		style.Colors[ImGuiCol_ResizeGripActive] = ImColor(100, 100, 100);
+			std::string tokens[2];
+			split(values[i], '=', tokens, 2);
 
-		style.Colors[ImGuiCol_DockingPreview] = ImColor(100, 100, 100);
-		style.Colors[ImGuiCol_DockingEmptyBg] = ImColor(255, 255, 255);
+			int index = std::stoi(tokens[0]);
+			ImVec4 components;
+			std::string comps[4];
+			split(tokens[1], ',', comps, 4);
+
+			components.x = std::stof(comps[0]);
+			components.y = std::stof(comps[1]);
+			components.z = std::stof(comps[2]);
+			components.w = std::stof(comps[3]);
+
+			style.Colors[i] = components;
+			instance->defaultColors[i] = components;
+		}
+
+
 
 
 	}
 
 	void Gui::terminate() {
-	
+
 		if (instance) {
 			delete instance;
 			instance = nullptr;
@@ -99,21 +159,13 @@ namespace archt {
 	}
 
 	void Gui::render() {
-	
+
 		if (docked)
 			renderDocked();
 		else
 			renderUndocked();
 	}
 
-	//void Gui::submitWindowVoid(std::function<void()> renderFunc) {
-	//	perFrameWindows.push_back(new GuiWindowVoid(renderFunc));
-	//}
-	//
-	//GuiWindowBase* Gui::addGuiWindowVoid(std::function<void()> renderFunc) {
-	//	constantWindows.push_back(new GuiWindowVoid(renderFunc));
-	//	return constantWindows[constantWindows.size() - 1];
-	//}
 
 	void Gui::removeWindow(GuiWindow* window) {
 		for (int i = 0; i < constantWindows.size(); i++) {
@@ -129,80 +181,86 @@ namespace archt {
 		docked = mode;
 	}
 
-	void Gui::createStyleWindow() {
-	
-		auto lambda = [this]() {
-			
-			ImGuiStyle& style = ImGui::GetStyle();
-			ImGui::Begin("Style");
+	bool Gui::hasWindow(const char* name) const {
+		return false;
+	}
 
-			ImGui::SliderFloat4("Border", &style.Colors[ImGuiCol_Border].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("Text", &style.Colors[ImGuiCol_Text].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("TextDisabled", &style.Colors[ImGuiCol_TextDisabled].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("WindowBg", &style.Colors[ImGuiCol_WindowBg].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("ChildBg", &style.Colors[ImGuiCol_ChildBg].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("PopupBg", &style.Colors[ImGuiCol_PopupBg].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("Border", &style.Colors[ImGuiCol_Border].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("BorderShadow", &style.Colors[ImGuiCol_BorderShadow].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("FrameBg", &style.Colors[ImGuiCol_FrameBg].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("FrameBgHovered", &style.Colors[ImGuiCol_FrameBgHovered].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("FrameBgActive", &style.Colors[ImGuiCol_FrameBgActive].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("TitleBg", &style.Colors[ImGuiCol_TitleBg].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("TitleBgActive", &style.Colors[ImGuiCol_TitleBgActive].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("TitleBgCollapsed", &style.Colors[ImGuiCol_TitleBgCollapsed].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("MenuBarBg", &style.Colors[ImGuiCol_MenuBarBg].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("ScrollbarBg", &style.Colors[ImGuiCol_ScrollbarBg].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("ScrollbarGrab", &style.Colors[ImGuiCol_ScrollbarGrab].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("ScrollbarGrabHovered", &style.Colors[ImGuiCol_ScrollbarGrabHovered].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("ScrollbarGrabActive", &style.Colors[ImGuiCol_ScrollbarGrabActive].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("CheckMark", &style.Colors[ImGuiCol_CheckMark].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("SliderGrab", &style.Colors[ImGuiCol_SliderGrab].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("SliderGrabActive", &style.Colors[ImGuiCol_SliderGrabActive].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("Button", &style.Colors[ImGuiCol_Button].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("ButtonHovered", &style.Colors[ImGuiCol_ButtonHovered].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("ButtonActive", &style.Colors[ImGuiCol_ButtonActive].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("Header", &style.Colors[ImGuiCol_Header].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("HeaderHovered", &style.Colors[ImGuiCol_HeaderHovered].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("HeaderActive", &style.Colors[ImGuiCol_HeaderActive].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("Separator", &style.Colors[ImGuiCol_Separator].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("SeparatorHovered", &style.Colors[ImGuiCol_SeparatorHovered].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("SeparatorActive", &style.Colors[ImGuiCol_SeparatorActive].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("ResizeGrip", &style.Colors[ImGuiCol_ResizeGrip].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("ResizeGripHovered", &style.Colors[ImGuiCol_ResizeGripHovered].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("ResizeGripActive", &style.Colors[ImGuiCol_ResizeGripActive].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("Tab", &style.Colors[ImGuiCol_Tab].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("TabHovered", &style.Colors[ImGuiCol_TabHovered].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("TabActive", &style.Colors[ImGuiCol_TabActive].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("TabUnfocused", &style.Colors[ImGuiCol_TabUnfocused].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("TabUnfocusedActive", &style.Colors[ImGuiCol_TabUnfocusedActive].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("DockingPreview", &style.Colors[ImGuiCol_DockingPreview].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("DockingEmptyBg", &style.Colors[ImGuiCol_DockingEmptyBg].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("PlotLines", &style.Colors[ImGuiCol_PlotLines].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("PlotLinesHovered", &style.Colors[ImGuiCol_PlotLinesHovered].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("PlotHistogram", &style.Colors[ImGuiCol_PlotHistogram].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("PlotHistogramHovered", &style.Colors[ImGuiCol_PlotHistogramHovered].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("TableHeaderBg", &style.Colors[ImGuiCol_TableHeaderBg].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("TableBorderStrong", &style.Colors[ImGuiCol_TableBorderStrong].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("TableBorderLight", &style.Colors[ImGuiCol_TableBorderLight].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("TableRowBg", &style.Colors[ImGuiCol_TableRowBg].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("TableRowBgAlt", &style.Colors[ImGuiCol_TableRowBgAlt].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("TextSelectedBg", &style.Colors[ImGuiCol_TextSelectedBg].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("DragDropTarget", &style.Colors[ImGuiCol_DragDropTarget].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("NavHighlight", &style.Colors[ImGuiCol_NavHighlight].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("NavWindowingHighlight", &style.Colors[ImGuiCol_NavWindowingHighlight].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("NavWindowingDimBg", &style.Colors[ImGuiCol_NavWindowingDimBg].x, 0.0f, 1.0f);
-			ImGui::SliderFloat4("ModalWindowDimBg", &style.Colors[ImGuiCol_ModalWindowDimBg].x, 0.0f, 1.0f);
-		
+	void Gui::createStyleWindow() {
+
+		auto lambda = [this](bool* open) {
+
+			ImGuiStyle& style = ImGui::GetStyle();
+			ImGui::Begin("Style", open);
+
+
+			for (int i = 0; i < ImGuiCol_COUNT; i++) {
+				//ImGui::SliderFloat4(symbols[i].c_str(), &style.Colors[i].x, 0.0f, 1.0f);
+
+				ImVec2 buttonSize = ImGui::CalcTextSize(symbols[i].c_str());
+				buttonSize.x += 10;
+				buttonSize.y += 10;
+				if (ImGui::Button(symbols[i].c_str(), buttonSize)) {
+
+					auto colorPicker = [this](bool* open, int i) {
+						if (ImGui::Begin(symbols[i].c_str(), open)) {
+							ImGuiStyle& style = ImGui::GetStyle();
+							ImGui::ColorPicker4(symbols[i].c_str(), &style.Colors[i].x);
+						}
+						ImGui::End();
+					};
+					addGuiWindow_s(colorPicker, i);
+				}
+				ImGui::SameLine();
+				ImGui::ColorButton(symbols[i].c_str(), style.Colors[i], 0, buttonSize);
+				ImGui::SameLine();
+				std::string s = "Reset " + symbols[i];
+				buttonSize = ImGui::CalcTextSize(s.c_str());
+				buttonSize.y += 10;
+				if (ImGui::Button(s.c_str(), buttonSize)) {
+					style.Colors[i] = defaultColors[i];
+				}
+			}
+
+			ImVec2 buttonSize = ImGui::CalcTextSize("Reset to default");
+			buttonSize.x += 10;
+			buttonSize.y += 10;
+			if (ImGui::Button("Reset to default", buttonSize)) {
+				setStyle();
+			}
+
+			buttonSize = ImGui::CalcTextSize("Save to file");
+			buttonSize.x += 10;
+			buttonSize.y += 10;
+			if (ImGui::Button("Save to file", buttonSize)) {
+
+				auto getIndexSymbol = [](int value) {
+					for (int i = ImGuiCol_Text; i < ImGuiCol_COUNT; i++) {
+						if (i == value) {
+							return symbols[i];
+						}
+					}
+					return std::string("Unknown symbol");
+				};
+
+				std::stringstream ss;
+				for (int i = 0; i < ImGuiCol_COUNT; i++) {
+
+					ImVec4 v = style.Colors[i];
+					ss << i << "=" << v.x << "," << v.y << "," << v.z << "," << v.w << std::endl;
+				}
+
+				writeFile(styleFile, ss.str());
+			}
 
 
 			ImGui::End();
 		};
-		addGuiWindow(lambda);
-	
+		addGuiWindow_s(lambda);
+
 	}
 
 	void Gui::renderDocked() {
-	
+
 
 		ImGuiIO& io = ImGui::GetIO();
 		(void) io;
@@ -281,11 +339,28 @@ namespace archt {
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::BeginMenu("Settings")) {
+				if (ImGui::MenuItem("Style Window", "", nullptr)) {
+					createStyleWindow();
+				}
+				ImGui::EndMenu();
+			}
 
 			ImGui::EndMenuBar();
 
-			for (GuiWindow* w : constantWindows)
-				w->render();
+			for (int i = 0; i < constantWindows.size(); i++) {
+				if (constantWindows[i])
+					constantWindows[i]->render();
+			}
+
+			for (int i = constantWindows.size() - 1; i > -1; i--) {
+				if (!(*constantWindows[i])) {	// operator bool() : returns if the window is open
+					delete constantWindows[i];
+					constantWindows.erase(constantWindows.begin() + i);
+				}
+			}
+			constantWindows.shrink_to_fit();
+
 
 			for (GuiWindow* w : perFrameWindows) {
 				w->render();
@@ -310,7 +385,7 @@ namespace archt {
 	}
 
 	void Gui::renderUndocked() {
-	
+
 		ImGuiIO& io = ImGui::GetIO();
 		(void) io;
 

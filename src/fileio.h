@@ -17,4 +17,6 @@ namespace archt {
 	uint64_t requestFileSize(const std::string& path);
 	void listDirectoryEntries(const std::string& dir, std::vector<std::string>& dst);
 
+	void writeFile(const std::string& path, const std::string& src);
+
 }

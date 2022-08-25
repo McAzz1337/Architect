@@ -154,8 +154,7 @@ namespace archt {
 	void GLRenderAPI::createGuiInfoWindow() {
 	
 		auto window = []() {
-			static bool show = true;
-			ImGui::Begin("Video card info", &show);
+			ImGui::Begin("Video card info");
 
 			ImVec4 green = { 0.0f, 1.0f, 0.0f, 1.0f };
 			ImVec4 white = { 1.0f, 1.0f, 1.0f, 1.0f };

@@ -429,7 +429,7 @@ int main() {
 			std::string fileName = "";
 			extractFileName(__FILE__, fileName, '\\');
 			ImGui::Text("File: %s", fileName.c_str());
-
+			void name();
 			ImGui::Text("Frame count: %i", frames);
 			ImGui::Text("highestFps count: %i", highestFps);
 			ImGui::Text("delta time: %f\seconds", deltaTime);

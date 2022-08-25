@@ -15,4 +15,12 @@ namespace archt {
     void GuiWindowVoid::render() {
         f();
     }
+
+
+
+    GuiWindowVoid_s::GuiWindowVoid_s(std::function<void(bool*)> func) : f(func) {}
+
+    void GuiWindowVoid_s::render() {
+        f(&open);
+    }
 }
