@@ -8,6 +8,8 @@ namespace archt {
 
 	Gui* Gui::instance = nullptr;
 
+	const std::string Gui::styleFile = "vendor/imgui/style.txt";
+
 
 	Gui::Gui(glm::ivec2 windowSize) {
 		ImGuiIO& io = ImGui::GetIO();
@@ -22,6 +24,7 @@ namespace archt {
 			style.WindowRounding = 0.0f;
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
+		createStyleWindow();
 	}
 
 	Gui::~Gui() {}
@@ -52,17 +55,18 @@ namespace archt {
 	
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		style.Colors[ImGuiCol_WindowBg] = ImColor(43, 45, 47);
+		style.Colors[ImGuiCol_WindowBg] = ImColor(50, 50, 50);
 		style.Colors[ImGuiCol_ChildBg] = ImColor(30, 30, 30);
 		style.Colors[ImGuiCol_Border] = ImColor(50, 50, 50);
 		
 		style.Colors[ImGuiCol_Tab] = ImColor(50, 50, 50);
-		style.Colors[ImGuiCol_TabActive] = ImColor(121, 128, 134);
+		style.Colors[ImGuiCol_TabHovered] = ImColor(100, 100, 100);
+		style.Colors[ImGuiCol_TabActive] = ImColor(100, 100, 100);
 		style.Colors[ImGuiCol_TabUnfocused] = ImColor(30, 30, 30);
 		style.Colors[ImGuiCol_TabUnfocusedActive] = ImColor(30, 30, 30);
 		
 		style.Colors[ImGuiCol_TitleBg] = ImColor(30, 30, 30);
-		style.Colors[ImGuiCol_TitleBgActive] = ImColor(121, 128, 134);
+		style.Colors[ImGuiCol_TitleBgActive] = ImColor(100, 100, 100);
 		style.Colors[ImGuiCol_TitleBgCollapsed] = ImColor(102, 97, 177);
 		
 		style.Colors[ImGuiCol_FrameBg] = ImColor(30, 30, 30);
@@ -73,7 +77,14 @@ namespace archt {
 		style.Colors[ImGuiCol_SliderGrab] = ImColor(60, 60, 60);
 		style.Colors[ImGuiCol_SliderGrabActive] = ImColor(121, 128, 134);
 
-		printf("styles\n");
+		style.Colors[ImGuiCol_ResizeGrip] = ImColor(30, 30, 30);
+		style.Colors[ImGuiCol_ResizeGripHovered] = ImColor(100, 100, 100);
+		style.Colors[ImGuiCol_ResizeGripActive] = ImColor(100, 100, 100);
+
+		style.Colors[ImGuiCol_DockingPreview] = ImColor(100, 100, 100);
+		style.Colors[ImGuiCol_DockingEmptyBg] = ImColor(255, 255, 255);
+
+
 	}
 
 	void Gui::terminate() {
@@ -116,6 +127,78 @@ namespace archt {
 
 	void Gui::setDockingMode(bool mode) {
 		docked = mode;
+	}
+
+	void Gui::createStyleWindow() {
+	
+		auto lambda = [this]() {
+			
+			ImGuiStyle& style = ImGui::GetStyle();
+			ImGui::Begin("Style");
+
+			ImGui::SliderFloat4("Border", &style.Colors[ImGuiCol_Border].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("Text", &style.Colors[ImGuiCol_Text].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("TextDisabled", &style.Colors[ImGuiCol_TextDisabled].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("WindowBg", &style.Colors[ImGuiCol_WindowBg].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("ChildBg", &style.Colors[ImGuiCol_ChildBg].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("PopupBg", &style.Colors[ImGuiCol_PopupBg].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("Border", &style.Colors[ImGuiCol_Border].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("BorderShadow", &style.Colors[ImGuiCol_BorderShadow].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("FrameBg", &style.Colors[ImGuiCol_FrameBg].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("FrameBgHovered", &style.Colors[ImGuiCol_FrameBgHovered].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("FrameBgActive", &style.Colors[ImGuiCol_FrameBgActive].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("TitleBg", &style.Colors[ImGuiCol_TitleBg].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("TitleBgActive", &style.Colors[ImGuiCol_TitleBgActive].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("TitleBgCollapsed", &style.Colors[ImGuiCol_TitleBgCollapsed].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("MenuBarBg", &style.Colors[ImGuiCol_MenuBarBg].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("ScrollbarBg", &style.Colors[ImGuiCol_ScrollbarBg].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("ScrollbarGrab", &style.Colors[ImGuiCol_ScrollbarGrab].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("ScrollbarGrabHovered", &style.Colors[ImGuiCol_ScrollbarGrabHovered].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("ScrollbarGrabActive", &style.Colors[ImGuiCol_ScrollbarGrabActive].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("CheckMark", &style.Colors[ImGuiCol_CheckMark].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("SliderGrab", &style.Colors[ImGuiCol_SliderGrab].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("SliderGrabActive", &style.Colors[ImGuiCol_SliderGrabActive].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("Button", &style.Colors[ImGuiCol_Button].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("ButtonHovered", &style.Colors[ImGuiCol_ButtonHovered].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("ButtonActive", &style.Colors[ImGuiCol_ButtonActive].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("Header", &style.Colors[ImGuiCol_Header].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("HeaderHovered", &style.Colors[ImGuiCol_HeaderHovered].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("HeaderActive", &style.Colors[ImGuiCol_HeaderActive].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("Separator", &style.Colors[ImGuiCol_Separator].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("SeparatorHovered", &style.Colors[ImGuiCol_SeparatorHovered].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("SeparatorActive", &style.Colors[ImGuiCol_SeparatorActive].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("ResizeGrip", &style.Colors[ImGuiCol_ResizeGrip].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("ResizeGripHovered", &style.Colors[ImGuiCol_ResizeGripHovered].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("ResizeGripActive", &style.Colors[ImGuiCol_ResizeGripActive].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("Tab", &style.Colors[ImGuiCol_Tab].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("TabHovered", &style.Colors[ImGuiCol_TabHovered].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("TabActive", &style.Colors[ImGuiCol_TabActive].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("TabUnfocused", &style.Colors[ImGuiCol_TabUnfocused].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("TabUnfocusedActive", &style.Colors[ImGuiCol_TabUnfocusedActive].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("DockingPreview", &style.Colors[ImGuiCol_DockingPreview].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("DockingEmptyBg", &style.Colors[ImGuiCol_DockingEmptyBg].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("PlotLines", &style.Colors[ImGuiCol_PlotLines].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("PlotLinesHovered", &style.Colors[ImGuiCol_PlotLinesHovered].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("PlotHistogram", &style.Colors[ImGuiCol_PlotHistogram].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("PlotHistogramHovered", &style.Colors[ImGuiCol_PlotHistogramHovered].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("TableHeaderBg", &style.Colors[ImGuiCol_TableHeaderBg].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("TableBorderStrong", &style.Colors[ImGuiCol_TableBorderStrong].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("TableBorderLight", &style.Colors[ImGuiCol_TableBorderLight].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("TableRowBg", &style.Colors[ImGuiCol_TableRowBg].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("TableRowBgAlt", &style.Colors[ImGuiCol_TableRowBgAlt].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("TextSelectedBg", &style.Colors[ImGuiCol_TextSelectedBg].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("DragDropTarget", &style.Colors[ImGuiCol_DragDropTarget].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("NavHighlight", &style.Colors[ImGuiCol_NavHighlight].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("NavWindowingHighlight", &style.Colors[ImGuiCol_NavWindowingHighlight].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("NavWindowingDimBg", &style.Colors[ImGuiCol_NavWindowingDimBg].x, 0.0f, 1.0f);
+			ImGui::SliderFloat4("ModalWindowDimBg", &style.Colors[ImGuiCol_ModalWindowDimBg].x, 0.0f, 1.0f);
+		
+
+
+			ImGui::End();
+		};
+		addGuiWindow(lambda);
+	
 	}
 
 	void Gui::renderDocked() {

@@ -21,7 +21,10 @@ namespace archt {
 		std::vector<GuiWindow*> constantWindows;
 		std::vector<GuiWindow*> perFrameWindows;
 
-
+		static const std::string styleFile;
+		
+		bool writeToFile = false;
+		ImColor colors[ImGuiCol_COUNT];
 
 		bool docked = true;
 
@@ -66,6 +69,7 @@ namespace archt {
 		void setDockingMode(bool mode);
 
 
+		void createStyleWindow();
 
 	private:
 		void renderDocked();

@@ -105,12 +105,12 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;_USE_MATH_DEFINES;GLM_FORCE_RADIANS;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\vendor\glm;$(ProjectDir)\vendor\glfw\include;$(ProjectDir)\vendor\glew\include;$(ProjectDir)\vendor\assimp\include;$(ProjectDir)\vendor\openal\include;$(ProjectDir)\vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)vendor/glm;$(ProjectDir)vendor/glfw/include;$(ProjectDir)vendor/glew/include;$(ProjectDir)vendor/assimp/include;$(ProjectDir)vendor/openal/include;$(ProjectDir)vendor/entt/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)\vendor\openal\libs\Win64\EFX-Util_MT;$(ProjectDir)\vendor\openal\libs\Win64;$(ProjectDir)\vendor\glfw\lib-vc2022;$(ProjectDir)\vendor\glew\lib\Release\x64;$(ProjectDir)\vendor\assimp\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)vendor/openal/libs/Win64/EFX-Util_MT;$(ProjectDir)vendor/openal/libs/Win64;$(ProjectDir)vendor/glfw/lib-vc2022;$(ProjectDir)vendor/glew/lib/Release/x64;$(ProjectDir)vendor/assimp/lib/x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;assimp.lib;glew32s.lib;glfw3.lib;OpenAL32.lib;EFX-Util.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
