@@ -18,6 +18,8 @@ namespace archt {
 
 	private:
 
+		GuiWindow* styleWindow = nullptr;
+
 		std::vector<GuiWindow*> constantWindows;
 		std::vector<GuiWindow*> perFrameWindows;
 

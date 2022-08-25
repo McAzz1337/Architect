@@ -187,12 +187,18 @@ namespace archt {
 
 	void Gui::createStyleWindow() {
 
+
 		auto lambda = [this](bool* open) {
+
+			
 
 			ImGuiStyle& style = ImGui::GetStyle();
 			ImGui::Begin("Style", open);
 
-
+			if (!(*open)) {
+				styleWindow = nullptr;
+			}
+			
 			for (int i = 0; i < ImGuiCol_COUNT; i++) {
 				//ImGui::SliderFloat4(symbols[i].c_str(), &style.Colors[i].x, 0.0f, 1.0f);
 
@@ -200,11 +206,11 @@ namespace archt {
 				buttonSize.x += 10;
 				buttonSize.y += 10;
 				if (ImGui::Button(symbols[i].c_str(), buttonSize)) {
-
 					auto colorPicker = [this](bool* open, int i) {
 						if (ImGui::Begin(symbols[i].c_str(), open)) {
 							ImGuiStyle& style = ImGui::GetStyle();
 							ImGui::ColorPicker4(symbols[i].c_str(), &style.Colors[i].x);
+
 						}
 						ImGui::End();
 					};
@@ -255,8 +261,9 @@ namespace archt {
 
 			ImGui::End();
 		};
-		addGuiWindow_s(lambda);
-
+		if (!styleWindow) {
+			styleWindow = addGuiWindow_s(lambda);
+		}
 	}
 
 	void Gui::renderDocked() {
