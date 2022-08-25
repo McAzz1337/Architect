@@ -173,6 +173,7 @@
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\math\rayequation.cpp" />
     <ClCompile Include="src\math\soe2.cpp" />
+    <ClCompile Include="src\platform\windows\window.cpp" />
     <ClCompile Include="src\scene\component_s.cpp" />
     <ClCompile Include="src\scene\entity_s.cpp" />
     <ClCompile Include="src\scene\scene.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\math\rayequation.h" />
     <ClInclude Include="src\math\soe2.h" />
+    <ClInclude Include="src\platform\windows\window.h" />
     <ClInclude Include="src\scene\component_s.h" />
     <ClInclude Include="src\scene\entity_s.h" />
     <ClInclude Include="src\scene\scene.h" />

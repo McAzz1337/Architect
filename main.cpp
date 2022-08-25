@@ -7,6 +7,8 @@
 
 #include <entt/entt.hpp>
 
+//#define SPLASH_SCREEN
+
 //#define OLD_CODE
 #ifdef OLD_CODE
 
@@ -287,6 +289,10 @@ int main() {
 int main() {
 	using namespace archt;
 
+#ifdef SPLASH_SCREEN
+	Window* hWin = new Window();
+#endif
+
 	GLWindow* window = GLRenderAPI::init();
 	Gui::init(window);
 	GLRenderAPI::createGuiInfoWindow();
@@ -444,6 +450,19 @@ int main() {
 		};
 		Gui::instance->addGuiWindow(lambda);
 	}
+
+#ifdef SPLASH_SCREEN
+	{
+		delta::archt_time timer = delta::getTimePoint();
+		while (delta::getDelta<delta::seconds>(timer, false) < 5.0f) {
+			// just a artificial delay
+		}
+	}
+	delete hWin;
+	hWin = nullptr;
+#endif
+
+	window->show();
 
 	while (true) {
 

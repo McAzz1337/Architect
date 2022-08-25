@@ -2,6 +2,8 @@
 
 #include "ptr.h"
 
+#include "platform/windows/window.h"
+
 #include "chronos/deltatime.h"
 #include "chronos/delta.h"
 

@@ -83,6 +83,9 @@ namespace archt {
 		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 		refreshRate = mode->refreshRate;
 
+
+		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+
 		window = glfwCreateWindow(w, h, title, nullptr, nullptr);
 		glfwMakeContextCurrent(window);
 		glfwSetWindowPos(window, x, y);
@@ -173,6 +176,14 @@ namespace archt {
 		int y = (screen.bottom - h) / 2;
 
 		glfwSetWindowPos(window, x, y);
+	}
+
+	void GLWindow::hide() const {
+		glfwHideWindow(window);
+	}
+
+	void GLWindow::show() const {
+		glfwShowWindow(window);
 	}
 
 

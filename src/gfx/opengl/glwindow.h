@@ -36,6 +36,9 @@ namespace archt {
 		void toggleFullscreen() const;
 
 		void centerOnScreen()const;
+		void hide() const;
+		void show() const;
+
 
 		inline GLFWwindow* getHandle() const { return window; }
 		inline glm::ivec2 getSize() const { return glm::ivec2(w, h); }
