@@ -186,5 +186,9 @@ namespace archt {
 		glfwShowWindow(window);
 	}
 
+	void GLWindow::addViewportCallback(ViewportCallback callback) {
+		viewportCallbacks.push_back(callback);
+	}
+
 
 }

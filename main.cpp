@@ -334,6 +334,10 @@ int main() {
 		entity.addComponent<Material_s>(std::string("src/assets/img/item.png"),
 										std::string(""),
 										std::string("src/assets/shaders/fastshader/fastshader"));
+		Material_s& mat = entity.getComponent<Material_s>();
+		GLShader* shader = mat.getShader();
+		Uniformbuffer* uniformBuffer = new Uniformbuffer("matrices", nullptr, sizeof(glm::mat4) * 1000);
+		shader->registerUniformBuffer(uniformBuffer);
 	}
 
 
@@ -352,9 +356,9 @@ int main() {
 
 	{
 
-		auto lambda = [&entity, &cam]() {
+		auto lambda = [&entity, &cam](bool* open) {
 
-			ImGui::Begin("Entity");
+			ImGui::Begin("Entity", open);
 
 			if (entity.hasComponent<Transform_s>()) {
 
@@ -412,7 +416,7 @@ int main() {
 			ImGui::End();
 
 		};
-		Gui::instance->addGuiWindow(lambda);
+		Gui::instance->addGuiWindow_s(lambda);
 	}
 
 
@@ -430,12 +434,12 @@ int main() {
 	float targetDelta = 1.0f / targetFps;
 	{ 
 		renderTimer += deltaTime;
-		auto lambda = [&renderTimer, &targetFps, &targetDelta, &deltaTime, &frames, &highestFps]() {
-			ImGui::Begin("Frames");
+		auto lambda = [&renderTimer, &targetFps, &targetDelta, &deltaTime, &frames, &highestFps](bool* open) {
+			ImGui::Begin("Frames", open);
 			std::string fileName = "";
 			extractFileName(__FILE__, fileName, '\\');
 			ImGui::Text("File: %s", fileName.c_str());
-			void name();
+
 			ImGui::Text("Frame count: %i", frames);
 			ImGui::Text("highestFps count: %i", highestFps);
 			ImGui::Text("delta time: %f\seconds", deltaTime);
@@ -448,7 +452,7 @@ int main() {
 
 			ImGui::End();
 		};
-		Gui::instance->addGuiWindow(lambda);
+		Gui::instance->addGuiWindow_s(lambda);
 	}
 
 #ifdef SPLASH_SCREEN
@@ -480,27 +484,40 @@ int main() {
 		
 		window->pollEvents();
 
+		float cameraSpeed = 0.5f;
+		if (Input::isPress(GLFW_KEY_LEFT_CONTROL) || Input::isHeld(GLFW_KEY_LEFT_CONTROL)) {
+			cameraSpeed *= 0.5f;
+		}
+		else if (Input::isRelease(GLFW_KEY_LEFT_CONTROL)) {
+			cameraSpeed *= 2.0f;
+		}
+
+		if (Input::isPress(GLFW_KEY_LEFT_SHIFT) || Input::isHeld(GLFW_KEY_LEFT_SHIFT)) {
+			cameraSpeed *= 2.0f;
+		}
+		else if (Input::isRelease(GLFW_KEY_LEFT_SHIFT)) {
+			cameraSpeed *= 0.5f;
+		}
+
+		cameraSpeed *= deltaTime;
 
 		if (Input::isPress(GLFW_KEY_W) || Input::isHeld(GLFW_KEY_W)) {
-			cam->translate({ 0.0f, 0.0f, 0.03f });
+			cam->translate({ 0.0f, 0.0f, cameraSpeed });
 		}
 		else if (Input::isPress(GLFW_KEY_S) || Input::isHeld(GLFW_KEY_S)) {
-			cam->translate({ 0.0f, 0.0f, -0.03f });
+			cam->translate({ 0.0f, 0.0f, -cameraSpeed });
 		}
 		if (Input::isPress(GLFW_KEY_A) || Input::isHeld(GLFW_KEY_A)) {
-			cam->translate({ -0.03f, 0.0f, 0.0f });
+			cam->translate({ -cameraSpeed, 0.0f, 0.0f });
 		}
 		else if (Input::isPress(GLFW_KEY_D) || Input::isHeld(GLFW_KEY_D)) {
-			cam->translate({ 0.03f, 0.0f, 0.0f });
+			cam->translate({ cameraSpeed, 0.0f, 0.0f });
 		}
 
 
 		
 		if (renderTimer >= targetDelta) {
 			SceneRenderer::instance->setRendertarget(&fb);
-
-			Transform_s& t = entity.getComponent<Transform_s>();
-			t.rotate(M_PI * deltaTime, { 0.0f, 1.0f, 0.0f });
 
 			SceneRenderer::instance->clear();
 			SceneRenderer::instance->beginScene(&scene, cam);

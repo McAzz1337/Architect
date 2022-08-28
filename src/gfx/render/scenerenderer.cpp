@@ -244,16 +244,19 @@ namespace archt {
 		ibo->upload(0, currentIndex);
 
 		glm::mat4* ts = new glm::mat4[currentTransform];
-		int count = currentTransform;
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < currentTransform; i++) {
 			ts[i] = transforms[i];
 		}
 
-		auto window = [](glm::mat4* transforms, int count) {
+		auto window = [](glm::mat4* transforms, int transformCount, int vCount, int iCount) {
 
-			ImGui::Begin("Renderer transforms");
+			ImGui::Begin("Renderer stats");
 
-			for (int i = 0; i < count; i++) {
+			ImGui::Text("Vertex Count : %i", vCount);
+			ImGui::Text("Index Count : %i", iCount);
+
+
+			for (int i = 0; i < transformCount; i++) {
 				glm::mat4& m = transforms[i];
 				ImGui::Text("Transform [%i]", i);
 				for (int j = 0; j < 4; j++) {
@@ -266,7 +269,7 @@ namespace archt {
 			ImGui::End();
 		};
 		
-		Gui::instance->submitWindow(window, ts, count);
+		Gui::instance->submitWindow(window, ts, currentTransform, currentVertex, currentIndex);
 
 
 		CALL(glDrawElements(GL_TRIANGLES, currentIndex, GL_UNSIGNED_INT, nullptr));

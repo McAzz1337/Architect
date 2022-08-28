@@ -88,7 +88,7 @@ namespace archt {
 			style.WindowRounding = 0.0f;
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
-		createStyleWindow();
+		//createStyleWindow();
 	}
 
 	Gui::~Gui() {}

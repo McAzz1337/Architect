@@ -6,11 +6,15 @@
 
 namespace archt {
 
+	typedef void (*ViewportCallback) (int width, int height);
+
 	void keyCallback(GLFWwindow* window, int key, int scan, int action, int mod);
 
 	class GLWindow {
 
 		friend void keyCallback(GLFWwindow* window, int key, int scan, int action, int mod);
+
+		std::vector<ViewportCallback> viewportCallbacks;
 
 		GLFWwindow* window = nullptr;
 		const char* title;
@@ -39,6 +43,7 @@ namespace archt {
 		void hide() const;
 		void show() const;
 
+		void addViewportCallback(ViewportCallback callback);
 
 		inline GLFWwindow* getHandle() const { return window; }
 		inline glm::ivec2 getSize() const { return glm::ivec2(w, h); }
