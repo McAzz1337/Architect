@@ -1,5 +1,6 @@
 #pragma once
 
+#include "glwindow.h"
 #include "gltexture.h"
 #include "buffers.h"
 
@@ -33,6 +34,9 @@ namespace archt {
 
 		void bind() const;
 		void unbind() const;
+
+		void installViewPortCallback(GLWindow* window); 
+		void viewportCallback(int width, int height);
 
 		inline  operator const VBO& () const { return vbo; }
 		inline  operator const IBO& () const { return ibo; }

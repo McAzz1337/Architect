@@ -421,6 +421,7 @@ int main() {
 
 
 	Framebuffer fb(window->getSize());
+	fb.installViewPortCallback(window);
 	//window->toggleFullscreen();
 
 	int frames = 0;

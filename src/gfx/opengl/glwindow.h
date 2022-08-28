@@ -3,10 +3,11 @@
 #include <glm/vec2.hpp>
 #include <glm/vec4.hpp>
 #include <vector>
+#include <functional>
 
 namespace archt {
 
-	typedef void (*ViewportCallback) (int width, int height);
+	using ViewportCallback = std::function<void(int, int)>;
 
 	void keyCallback(GLFWwindow* window, int key, int scan, int action, int mod);
 
@@ -21,6 +22,7 @@ namespace archt {
 		int x, y, w, h;
 		mutable bool fullScreen = false;
 		int refreshRate = 0;
+		bool dispatchResizeEvent = false;
 
 	public:
 
@@ -44,6 +46,7 @@ namespace archt {
 		void show() const;
 
 		void addViewportCallback(ViewportCallback callback);
+		void invokeResizeCallbacks();
 
 		inline GLFWwindow* getHandle() const { return window; }
 		inline glm::ivec2 getSize() const { return glm::ivec2(w, h); }

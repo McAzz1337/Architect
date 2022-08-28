@@ -34,14 +34,14 @@ namespace archt {
 		}
 		else {
 			switch (action) {
-				case GLFW_PRESS: 
+				case GLFW_PRESS:
 					Input::press(key);
 					break;
 				case GLFW_REPEAT:
 					Input::hold(key);
 					break;
 				case GLFW_RELEASE:
-					Input::release(key); 
+					Input::release(key);
 					break;
 				default:
 					printf("Unimplemented key action : %i\n", action);
@@ -51,7 +51,7 @@ namespace archt {
 	}
 
 	void resizeCallback(GLFWwindow* window, int width, int height) {
-		GLWindow* w= (GLWindow*) glfwGetWindowUserPointer(window);
+		GLWindow* w = (GLWindow*) glfwGetWindowUserPointer(window);
 		w->setSize(width, height);
 	}
 
@@ -64,7 +64,7 @@ namespace archt {
 
 		__debugbreak();
 	}
-	
+
 
 
 	GLWindow::GLWindow() {
@@ -73,7 +73,7 @@ namespace archt {
 
 	GLWindow::GLWindow(const char* title, int x, int y, int w, int h)
 		: title(title), x(x), y(y), w(w), h(h) {
-		
+
 		int aElements[2] = { COLOR_WINDOW };
 		DWORD aNewColors[2];
 		aNewColors[0] = RGB(0x30, 0x30, 0x30);  // light gray 
@@ -89,11 +89,11 @@ namespace archt {
 		window = glfwCreateWindow(w, h, title, nullptr, nullptr);
 		glfwMakeContextCurrent(window);
 		glfwSetWindowPos(window, x, y);
-		
+
 		glfwSwapInterval(0);
 
 		//toggleFullscreen();
-		
+
 		glfwSetKeyCallback(window, keyCallback);
 		glfwSetWindowSizeCallback(window, resizeCallback);
 		glfwSetWindowUserPointer(window, this);
@@ -123,6 +123,10 @@ namespace archt {
 	}
 
 	void GLWindow::swapBuffer() {
+		if (dispatchResizeEvent) {
+			//invokeResizeCallbacks();
+			dispatchResizeEvent = false;
+		}
 		glfwSwapBuffers(window);
 	}
 
@@ -140,6 +144,7 @@ namespace archt {
 		h = height;
 
 		glViewport(0, 0, w, h);
+		dispatchResizeEvent = true;
 	}
 
 	void GLWindow::toggleFullscreen() const {
@@ -153,7 +158,7 @@ namespace archt {
 		else {
 			GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-			
+
 			glfwWindowHint(GLFW_RED_BITS, mode->redBits);
 			glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
 			glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
@@ -165,7 +170,7 @@ namespace archt {
 		}
 	}
 
-	
+
 
 	void GLWindow::centerOnScreen() const {
 
@@ -188,6 +193,14 @@ namespace archt {
 
 	void GLWindow::addViewportCallback(ViewportCallback callback) {
 		viewportCallbacks.push_back(callback);
+	}
+
+	void GLWindow::invokeResizeCallbacks() {
+	
+		printf("resize\n");
+		for (int i = 0; i < viewportCallbacks.size(); i++) {
+			viewportCallbacks[i](w, h);
+		}
 	}
 
 

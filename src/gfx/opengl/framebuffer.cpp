@@ -33,11 +33,12 @@ namespace archt {
 		}
 
 		uint32_t vSize = 4;
+		float aspect = (float) w / (float) h;
 		Vertex* verteces = new Vertex[4]{
-			Vertex({ -0.5f,  0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f }, 0.0f, 0.0f),
-			Vertex({  0.5f,  0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, 0.0f, 0.0f),
-			Vertex({  0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 0.0f }, 0.0f, 0.0f),
-			Vertex({ -0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f }, 0.0f, 0.0f)
+			Vertex({ -0.5f * aspect,  0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f }, 0.0f, 0.0f),
+			Vertex({  0.5f * aspect,  0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, 0.0f, 0.0f),
+			Vertex({  0.5f * aspect, -0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 0.0f }, 0.0f, 0.0f),
+			Vertex({ -0.5f * aspect, -0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f }, 0.0f, 0.0f)
 		};
 
 		uint32_t iSize = 6;
@@ -57,9 +58,9 @@ namespace archt {
 			ImGui::Begin(windowName.c_str());
 
 
-			glm::vec2 textureSize(w, h);
-			auto initialCursorPos = ImGui::GetCursorPos();
-			auto windowSize = ImGui::GetWindowSize();
+			ImVec2 textureSize(w, h);
+			ImVec2 initialCursorPos = ImGui::GetCursorPos();
+			ImVec2 windowSize = ImGui::GetWindowSize();
 			
 			ImVec2 centralizedCursorpos;
 			bool isCenter = true;
@@ -76,7 +77,7 @@ namespace archt {
 			}
 
 			
-			ImGui::Image((ImTextureID) tex->getId(), ImVec2(w, h), { 0, 1 }, { 1, 0});
+			ImGui::Image((ImTextureID) tex->getId(), textureSize, { 0, 1 }, { 1, 0});
 
 			ImGui::End();
 
@@ -99,5 +100,35 @@ namespace archt {
 	}
 	void Framebuffer::unbind() const {
 		CALL(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+	}
+	
+	
+	void Framebuffer::installViewPortCallback(GLWindow* window) {
+		//std::function<void(int, int)> s = std::bind(&Framebuffer::viewportCallback, this, std::placeholders::_1, std::placeholders::_2);
+		window->addViewportCallback(std::bind(&Framebuffer::viewportCallback, this, std::placeholders::_1, std::placeholders::_2));
+	}
+
+	void Framebuffer::viewportCallback(int width, int height) {
+
+		w = width;
+		h = height;
+
+		CALL(glBindFramebuffer(GL_FRAMEBUFFER, id));
+
+	
+		CALL(glDeleteRenderbuffers(1, &rbo));
+		delete tex;
+
+		tex = GLTexture::createEmptyTexture(w, h);
+
+
+		CALL(glGenRenderbuffers(1, &rbo));
+		CALL(glBindRenderbuffer(GL_RENDERBUFFER, rbo));
+
+		CALL(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, w, h));
+
+		CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex->getId(), 0));
+
+		CALL(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo));
 	}
 }
