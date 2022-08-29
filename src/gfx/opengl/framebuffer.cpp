@@ -35,10 +35,10 @@ namespace archt {
 		uint32_t vSize = 4;
 		float aspect = (float) w / (float) h;
 		Vertex* verteces = new Vertex[4]{
-			Vertex({ -0.5f * aspect,  0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f }, 0.0f, 0.0f),
-			Vertex({  0.5f * aspect,  0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, 0.0f, 0.0f),
-			Vertex({  0.5f * aspect, -0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 0.0f }, 0.0f, 0.0f),
-			Vertex({ -0.5f * aspect, -0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f }, 0.0f, 0.0f)
+			Vertex({ -0.5f,  0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f }, 0.0f, 0.0f),
+			Vertex({  0.5f,  0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, 0.0f, 0.0f),
+			Vertex({  0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 0.0f }, 0.0f, 0.0f),
+			Vertex({ -0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f }, 0.0f, 0.0f)
 		};
 
 		uint32_t iSize = 6;
