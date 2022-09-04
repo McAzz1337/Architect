@@ -240,6 +240,7 @@
     <ClInclude Include="src\scene\component_s.h" />
     <ClInclude Include="src\scene\entity_s.h" />
     <ClInclude Include="src\scene\scene.h" />
+    <ClInclude Include="src\scheduler\scheduledtask.h" />
     <ClInclude Include="src\stb\stb\stbi_image_write.h" />
     <ClInclude Include="src\stb\stb\stb_image.h" />
     <ClInclude Include="src\system\systeminfo.h" />

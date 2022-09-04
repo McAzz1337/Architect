@@ -2,6 +2,7 @@
 
 
 #include "../audio/openal/audiobuffer.h"
+#include "../audio/openal/audiosource.h"
 
 #include "../gfx/opengl/buffers.h"
 #include "../gfx/opengl/gltexture.h"
@@ -16,7 +17,7 @@
 #include <string>
 
 namespace archt {
-	
+
 	struct Transform_s {
 
 		glm::mat4 transform = glm::mat4(1.0f);
@@ -57,7 +58,7 @@ namespace archt {
 		~Mesh_s();
 	};
 
-	
+
 
 	struct Material_s {
 
@@ -87,15 +88,20 @@ namespace archt {
 	};
 
 
-	struct AudioSource_s {
+	struct AudioComponent {
 
-		ptr<AudioBuffer> buffer = nullptr;
+		AudioSource source;
+		std::vector<ptr<AudioBuffer>> buffers;
 
+		AudioComponent();
+		AudioComponent(const std::string& path);
+		AudioComponent(const std::vector<const std::string&>& paths);
 
-		AudioSource_s();
-		AudioSource_s(ptr<AudioBuffer> buffer);
-		~AudioSource_s();
+		~AudioComponent();
+
 
 	};
+
+	
 
 }

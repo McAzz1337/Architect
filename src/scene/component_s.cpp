@@ -2,6 +2,8 @@
 
 #include "../fileio.h"
 
+#include "../audio/openal/aldebug.h"
+
 #include <glm/gtx/transform.hpp>
 
 #include "../filesystem/filemanager.h"
@@ -164,15 +166,27 @@ namespace archt {
 
 
 
-	AudioSource_s::AudioSource_s() {
+	AudioComponent::AudioComponent() {
+	}
+
+	AudioComponent::AudioComponent(const std::string& path) {
+		
+		Filemanager& fm = Filemanager::getInstance();
+		buffers.push_back(fm.loadFile<AudioBuffer>(path));
+	}
+
+	AudioComponent::AudioComponent(const std::vector<const std::string&>& paths) {
+		Filemanager& fm = Filemanager::getInstance();
+
+		buffers.reserve(paths.size());
+		for (const std::string& path : paths) {
+			buffers.push_back(fm.loadFile<AudioBuffer>(path));
+		}
+	}
+
+	AudioComponent::~AudioComponent() {
 	
 	}
 
-	AudioSource_s::AudioSource_s(ptr<AudioBuffer> buffer) : buffer(buffer) {
-	
-	}
-
-	AudioSource_s::~AudioSource_s() {
-	}
 
 }

@@ -386,6 +386,9 @@
     <ClInclude Include="src\platform\windows\window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\scheduler\scheduledtask.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\assets\shaders\shader\shader.frag" />
