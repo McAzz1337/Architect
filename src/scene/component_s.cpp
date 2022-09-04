@@ -4,6 +4,8 @@
 
 #include <glm/gtx/transform.hpp>
 
+#include "../filesystem/filemanager.h"
+
 namespace archt {
 
 
@@ -63,12 +65,18 @@ namespace archt {
 
 	Material_s::Material_s() {}
 
-	Material_s::Material_s(const Material_s& other) : shader(other.shader.getFileName()) {
-		uniformCount = other.uniformCount;
-		for (int i = 0; i < uniformCount; i++) {
-			uniforms[i] = other.uniforms[i];
+	Material_s::Material_s(const Material_s& other)  {
+
+		shader = other.shader;
+		tex = other.tex;
+
+		//tex = new GLTexture(other.tex->getFilePath());
+		if (other.uniforms) {
+			uniformCount = other.uniformCount;
+			for (int i = 0; i < uniformCount; i++) {
+				uniforms[i] = other.uniforms[i];
+			}
 		}
-		tex = new GLTexture(other.tex->getFilePath());
 	}
 
 	//Material_s::Material_s(Material_s&& other) noexcept : shader(other.shader.getFileName()) {
@@ -81,12 +89,19 @@ namespace archt {
 	//	tex = new GLTexture(other.tex->getFilePath());
 	//}
 
-	Material_s::Material_s(const std::string& texturePath, const std::string& uniformsPath, const std::string& shaderPath)
-		: shader(shaderPath) {
+	Material_s::Material_s(const std::string& texturePath, const std::string& uniformsPath, const std::string& shaderPath) {
 
-		tex = new GLTexture(texturePath);
+		//tex = new GLTexture(texturePath);
+		
+		Filemanager& fm = Filemanager::getInstance();
+
+		shader = fm.loadFile<GLShader>(shaderPath);
+		tex = fm.loadFile<GLTexture>(texturePath);
+		
 		std::vector<std::string> uniformsRaw;
 		readFileSplit(uniformsPath, uniformsRaw);
+
+
 		
 		if (uniformsRaw.size() == 0)
 			return;
@@ -143,6 +158,21 @@ namespace archt {
 	Tag::Tag(const std::string& tag) : tag(tag) {}
 
 	Tag::~Tag() {
+	}
+
+
+
+
+
+	AudioSource_s::AudioSource_s() {
+	
+	}
+
+	AudioSource_s::AudioSource_s(ptr<AudioBuffer> buffer) : buffer(buffer) {
+	
+	}
+
+	AudioSource_s::~AudioSource_s() {
 	}
 
 }

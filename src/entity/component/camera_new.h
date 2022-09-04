@@ -33,6 +33,7 @@ namespace archt {
 		void resetMatrix();
 
 
+		inline glm::vec3 getPosition() const { return glm::vec3(view.getMatrix()[3]); };
 
 		inline const Transform& getProjection() const { return projection; }
 		inline const Transform& getView() const { return view; }

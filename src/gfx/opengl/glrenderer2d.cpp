@@ -218,7 +218,7 @@ namespace archt {
 
 		activeShader->bind();
 		std::string shaderName = "";
-		extractFileName(activeShader->getFileName(), shaderName);
+		extractFileName(activeShader->getFilePath(), shaderName);
 		const std::vector<Uniformbuffer*>& buffers = activeShader->getUniformBuffers();
 		if (buffers.size() > 0) {
 			for (int i = 0; i < buffers.size(); i++) {

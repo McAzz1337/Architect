@@ -1,5 +1,6 @@
 #include "gui.h"
 
+#include "../../filesystem/filemanager.h"
 
 #include "../../fileio.h"
 
@@ -91,7 +92,16 @@ namespace archt {
 		//createStyleWindow();
 	}
 
-	Gui::~Gui() {}
+	Gui::~Gui() {
+		for (GuiWindow* w : constantWindows)
+			delete w;
+
+		for (GuiWindow* w : perFrameWindows)
+			delete w;
+
+		if (styleWindow)
+			delete styleWindow;
+	}
 
 	void Gui::init(GLWindow* window) {
 
@@ -169,7 +179,13 @@ namespace archt {
 
 	void Gui::removeWindow(GuiWindow* window) {
 		for (int i = 0; i < constantWindows.size(); i++) {
+			
 			if (constantWindows[i] == window) {
+				
+				if (constantWindows[i] == focusedWindow) {
+					focusedWindow = nullptr;
+				}
+			
 				constantWindows.erase(constantWindows.begin() + i);
 				constantWindows.shrink_to_fit();
 				break;
@@ -188,7 +204,7 @@ namespace archt {
 	void Gui::createStyleWindow() {
 
 
-		auto lambda = [this](bool* open) {
+		auto lambda = [this](bool* open, GuiWindow* handle) {
 
 			
 
@@ -206,7 +222,7 @@ namespace archt {
 				buttonSize.x += 10;
 				buttonSize.y += 10;
 				if (ImGui::Button(symbols[i].c_str(), buttonSize)) {
-					auto colorPicker = [this](bool* open, int i) {
+					auto colorPicker = [this](bool* open, GuiWindow* handle,  int i) {
 						if (ImGui::Begin(symbols[i].c_str(), open)) {
 							ImGuiStyle& style = ImGui::GetStyle();
 							ImGui::ColorPicker4(symbols[i].c_str(), &style.Colors[i].x);
@@ -239,15 +255,7 @@ namespace archt {
 			buttonSize.y += 10;
 			if (ImGui::Button("Save to file", buttonSize)) {
 
-				auto getIndexSymbol = [](int value) {
-					for (int i = ImGuiCol_Text; i < ImGuiCol_COUNT; i++) {
-						if (i == value) {
-							return symbols[i];
-						}
-					}
-					return std::string("Unknown symbol");
-				};
-
+				
 				std::stringstream ss;
 				for (int i = 0; i < ImGuiCol_COUNT; i++) {
 
@@ -264,6 +272,11 @@ namespace archt {
 		if (!styleWindow) {
 			styleWindow = addGuiWindow_s(lambda);
 		}
+	}
+
+	void Gui::setFocusedWindow(GuiWindow* window) {
+	
+		focusedWindow = window;
 	}
 
 	void Gui::renderDocked() {
@@ -350,6 +363,9 @@ namespace archt {
 				if (ImGui::MenuItem("Style Window", "", nullptr)) {
 					createStyleWindow();
 				}
+				if (ImGui::MenuItem("Filemanager", "", nullptr)) {
+					Filemanager::getInstance().createGuiWindow();
+				}
 				ImGui::EndMenu();
 			}
 
@@ -367,6 +383,8 @@ namespace archt {
 				}
 			}
 			constantWindows.shrink_to_fit();
+
+			//ImGui::ShowDemoWindow();
 
 
 			for (GuiWindow* w : perFrameWindows) {

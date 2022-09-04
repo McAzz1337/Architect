@@ -32,6 +32,8 @@ namespace archt {
 
 	public:
 		GLShader();
+		GLShader(const GLShader& other);
+		GLShader(GLShader&& other) noexcept;
 		GLShader(const std::string& path);
 		GLShader(const std::string& vsrc, const std::string& gsrc, const std::string& fsrc);
 		~GLShader();
@@ -62,8 +64,16 @@ namespace archt {
 		void logShaderSource() const;
 
 		inline uint32_t getProgramId() const { return id; }
+		inline const std::string& getVertexSource() const { return vsrc; }
+		inline const std::string& getGeometrySource() const { return gsrc; }
+		inline const std::string& getFragmentSource() const { return fsrc; }
+
 		inline const std::vector<Uniformbuffer*>& getUniformBuffers() const { return uniformBuffers; }
-		inline const std::string& getFileName() const { return file; }
+		inline const std::string& getFilePath() const { return file; }
+
+		GLShader operator=(const GLShader& ohter) {
+			return GLShader(ohter);
+		}
 
 	private:
 		static void compileShader(const std::string& src, int type, int& id);

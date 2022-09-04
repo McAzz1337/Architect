@@ -51,12 +51,15 @@ namespace archt {
 		vbo.setVerteces(verteces, vSize);
 		ibo.setIndeces(indeces, iSize);
 
-		auto lambda = [this]() {
+		auto lambda = [this](bool* open, GuiWindow* handle) {
 
 
 			std::string windowName = "Framebuffer " + std::to_string(id);
 			ImGui::Begin(windowName.c_str());
 
+			if (ImGui::IsWindowFocused()) {
+				Gui::instance->setFocusedWindow(handle);
+			}
 
 			ImVec2 textureSize(w, h);
 			ImVec2 initialCursorPos = ImGui::GetCursorPos();
@@ -83,12 +86,12 @@ namespace archt {
 
 
 		};
-		guiWindow = Gui::instance->addGuiWindow(lambda);
+		guiWindow = Gui::instance->addGuiWindow_s(lambda);
 	}
 
 	Framebuffer::~Framebuffer() {
-		if (Gui::instance)
-			Gui::instance->removeWindow(guiWindow);
+		//if (Gui::instance)
+		//	Gui::instance->removeWindow(guiWindow);
 
 		delete tex;
 

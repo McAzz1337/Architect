@@ -3,10 +3,20 @@
 
 #include <sstream>
 
+
+#ifdef ARCHT_DEBUG
+
 #define GL_ASSERT(x) if (!x) { __debugbreak(); }
 
 #define CALL(x) archt::clearError(); x; GL_ASSERT(archt::checkError(#x, __FILE__, __LINE__))
 #define CHECK_ERROR(x) checkError(#x, __FILE__, __LINE__)
+
+#else
+
+#define CALL(x) x;
+#define CHECK_ERROR(x)
+
+#endif
 
 namespace archt {
 

@@ -5,6 +5,8 @@
 #include "../gfx/opengl/glshader.h"
 #include "component_s.h"
 
+#include "../filesystem/filemanager.h"
+
 namespace archt {
 
 
@@ -14,6 +16,7 @@ namespace archt {
 	}
 
 	Scene::~Scene() {
+		Filemanager::getInstance().issueCleanup();
 		printf("Deleted Scene\n");
 	}
 
@@ -22,7 +25,7 @@ namespace archt {
 	}
 
 	void Scene::deleteEntity(Entity_s entity) {
-
+		registry.destroy(entity);
 	}
 	
 

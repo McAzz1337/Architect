@@ -66,10 +66,10 @@ namespace archt {
 
 	class GuiWindowVoid_s : public GuiWindow {
 
-		std::function<void(bool*)> f;
+		std::function<void(bool*, GuiWindow*)> f;
 	public:
 		GuiWindowVoid_s() = default;
-		GuiWindowVoid_s(std::function<void(bool*)> func);
+		GuiWindowVoid_s(std::function<void(bool*, GuiWindow*)> func);
 
 		void render() override;
 	};
@@ -79,14 +79,14 @@ namespace archt {
 		static_assert(!(std::is_rvalue_reference_v<Ts> && ...));
 	private:
 		F f;
-		std::tuple<bool*, Ts...> args;
+		std::tuple<bool*, GuiWindow*, Ts...> args;
 	public:
 
 		template <typename FwdF, typename... FwdTs,
 			typename = std::enable_if_t<(std::is_convertible_v<FwdTs&&, Ts> && ...)>>
 			GuiWindowArgs_s(FwdF&& func, FwdTs&&... args)
 			: f(std::forward<FwdF>(func)),
-			args{&open, std::forward<FwdTs>(args)... } {
+			args{&open, this, std::forward<FwdTs>(args)... } {
 			
 		}
 

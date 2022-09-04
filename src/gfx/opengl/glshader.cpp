@@ -13,6 +13,7 @@
 
 #include <glm/ext.hpp>
 
+
 namespace archt {
 
 	const std::string GLShader::VS_EXT = ".vert";
@@ -20,6 +21,33 @@ namespace archt {
 	const std::string GLShader::FS_EXT = ".frag";
 
 	GLShader::GLShader() {}
+
+	GLShader::GLShader(const GLShader& other) {
+		id = other.id;
+		file = other.file;
+		vsrc = other.vsrc;
+		gsrc = other.gsrc;
+		fsrc = other.fsrc;
+
+		uniforms = other.uniforms;
+		uniformBufferNames = other.uniformBufferNames;
+
+		uniformBuffers = other.uniformBuffers;
+	}
+
+	GLShader::GLShader(GLShader&& other) noexcept {
+		id = other.id;
+		file = other.file;
+		vsrc = other.vsrc;
+		gsrc = other.gsrc;
+		fsrc = other.fsrc;
+
+		uniforms = other.uniforms;
+		uniformBufferNames = other.uniformBufferNames;
+
+		uniformBuffers = other.uniformBuffers;
+
+	}
 
 	GLShader::GLShader(const std::string& path) : file(path) {
 		readFile(path + VS_EXT, vsrc, true);

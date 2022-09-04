@@ -299,11 +299,24 @@ int main() {
 	system_info::createSysteminfoWindow();
 
 
+
 	Input::init();
 
-	//Renderer::createInstance();
-
 	Scene scene;
+
+	ptr<Camera_new> cam;
+	ptr<Camera_new> cam1;
+
+	Entity_s camEnt = scene.createEntity();
+	camEnt.addComponent<Transform_s>();
+	{
+		glm::ivec2 windowSize = window->getSize();
+		cam = make_ptr<Camera_new>(M_PI / 3.0f, windowSize.x / windowSize.y, 0.01f, 100.0f);
+		cam1 = make_ptr<Camera_new>(M_PI / 3.0f, windowSize.x / windowSize.y, 0.01f, 100.0f);
+		cam1->translate({ -0.8f, 0.0f, -1.0f });
+		cam1->rotate(M_PI / 12.0f, { 0.0f, 1.0f, 0.0f });
+	}
+
 #pragma region ENTITY_SETUP
 	Entity_s entity = scene.createEntity();
 	entity.addComponent<Transform_s>();
@@ -335,9 +348,15 @@ int main() {
 										std::string(""),
 										std::string("src/assets/shaders/fastshader/fastshader"));
 		Material_s& mat = entity.getComponent<Material_s>();
-		GLShader* shader = mat.getShader();
 		Uniformbuffer* uniformBuffer = new Uniformbuffer("matrices", nullptr, sizeof(glm::mat4) * 1000);
-		shader->registerUniformBuffer(uniformBuffer);
+		mat.shader->registerUniformBuffer(uniformBuffer);
+
+		camEnt.addComponent<Mesh_s>(verteces, vSize, indeces, iSize);
+		camEnt.addComponent<Material_s>(std::string("src/assets/img/camera.png"),
+										std::string(""),
+										std::string("src/assets/shaders/fastshader/fastshader"));
+		Material_s& camMat = camEnt.getComponent<Material_s>();
+		camMat.shader->registerUniformBuffer(uniformBuffer);
 	}
 
 
@@ -346,17 +365,14 @@ int main() {
 
 
 	SceneRenderer::createInstance();
-	SceneRenderer::instance->setRenderSettings();
+	SceneRenderer* renderer = SceneRenderer::getInstance();
+	renderer->setRenderSettings();
 
-	ptr<Camera_new> cam;
-	{
-		glm::ivec2 windowSize = window->getSize();
-		cam = make_ptr<Camera_new>(M_PI / 3.0f, windowSize.x / windowSize.y, 0.01f, 100.0f);
-	}
+	
 
 	{
 
-		auto lambda = [&entity, &cam](bool* open) {
+		auto lambda = [&entity, &cam](bool* open, GuiWindow* handle) {
 
 			ImGui::Begin("Entity", open);
 
@@ -422,6 +438,9 @@ int main() {
 
 	Framebuffer fb(window->getSize());
 	fb.installViewPortCallback(window);
+
+	Framebuffer fb1(window->getSize());
+	fb1.installViewPortCallback(window);
 	//window->toggleFullscreen();
 
 	int frames = 0;
@@ -435,7 +454,8 @@ int main() {
 	float targetDelta = 1.0f / targetFps;
 	{ 
 		renderTimer += deltaTime;
-		auto lambda = [&renderTimer, &targetFps, &targetDelta, &deltaTime, &frames, &highestFps](bool* open) {
+		auto lambda = [&renderTimer, &targetFps, &targetDelta, &deltaTime, &frames, &highestFps]
+											(bool* open, GuiWindow* handle) {
 			ImGui::Begin("Frames", open);
 			std::string fileName = "";
 			extractFileName(__FILE__, fileName, '\\');
@@ -484,51 +504,85 @@ int main() {
 		}
 		
 		window->pollEvents();
-
-		float cameraSpeed = 0.5f;
-		if (Input::isPress(GLFW_KEY_LEFT_CONTROL) || Input::isHeld(GLFW_KEY_LEFT_CONTROL)) {
-			cameraSpeed *= 0.5f;
+		
+		if (window->shouldClose()) {
+			break;
 		}
-		else if (Input::isRelease(GLFW_KEY_LEFT_CONTROL)) {
-			cameraSpeed *= 2.0f;
+#pragma region CAMERA_CONTROLS
+		
+		ptr<Camera_new> controlledCamera = nullptr;
+		if (fb.getGuiWindow() == Gui::instance->getFocusedWindow()) {
+			controlledCamera = cam;
 		}
-
-		if (Input::isPress(GLFW_KEY_LEFT_SHIFT) || Input::isHeld(GLFW_KEY_LEFT_SHIFT)) {
-			cameraSpeed *= 2.0f;
-		}
-		else if (Input::isRelease(GLFW_KEY_LEFT_SHIFT)) {
-			cameraSpeed *= 0.5f;
+		else if (fb1.getGuiWindow() == Gui::instance->getFocusedWindow()) {
+			controlledCamera = cam1;
 		}
 
-		cameraSpeed *= deltaTime;
+		if (controlledCamera) {
+			float cameraSpeed = 0.5f;
+			if (Input::isPress(GLFW_KEY_LEFT_CONTROL) || Input::isHeld(GLFW_KEY_LEFT_CONTROL)) {
+				cameraSpeed *= 0.5f;
+			}
+			else if (Input::isRelease(GLFW_KEY_LEFT_CONTROL)) {
+				cameraSpeed *= 2.0f;
+			}
 
-		if (Input::isPress(GLFW_KEY_W) || Input::isHeld(GLFW_KEY_W)) {
-			cam->translate({ 0.0f, 0.0f, cameraSpeed });
-		}
-		else if (Input::isPress(GLFW_KEY_S) || Input::isHeld(GLFW_KEY_S)) {
-			cam->translate({ 0.0f, 0.0f, -cameraSpeed });
-		}
-		if (Input::isPress(GLFW_KEY_A) || Input::isHeld(GLFW_KEY_A)) {
-			cam->translate({ -cameraSpeed, 0.0f, 0.0f });
-		}
-		else if (Input::isPress(GLFW_KEY_D) || Input::isHeld(GLFW_KEY_D)) {
-			cam->translate({ cameraSpeed, 0.0f, 0.0f });
-		}
+			if (Input::isPress(GLFW_KEY_LEFT_SHIFT) || Input::isHeld(GLFW_KEY_LEFT_SHIFT)) {
+				cameraSpeed *= 2.0f;
+			}
+			else if (Input::isRelease(GLFW_KEY_LEFT_SHIFT)) {
+				cameraSpeed *= 0.5f;
+			}
 
+			cameraSpeed *= deltaTime;
+
+			if (Input::isPress(GLFW_KEY_W) || Input::isHeld(GLFW_KEY_W)) {
+				controlledCamera->translate({ 0.0f, 0.0f, cameraSpeed });
+			}
+			else if (Input::isPress(GLFW_KEY_S) || Input::isHeld(GLFW_KEY_S)) {
+				controlledCamera->translate({ 0.0f, 0.0f, -cameraSpeed });
+			}
+			if (Input::isPress(GLFW_KEY_A) || Input::isHeld(GLFW_KEY_A)) {
+				controlledCamera->translate({ -cameraSpeed, 0.0f, 0.0f });
+			}
+			else if (Input::isPress(GLFW_KEY_D) || Input::isHeld(GLFW_KEY_D)) {
+				controlledCamera->translate({ cameraSpeed, 0.0f, 0.0f });
+			}
+		}
+#pragma endregion CAMERA_CONTROLS
 
 		
 		if (renderTimer >= targetDelta) {
-			SceneRenderer::instance->setRendertarget(&fb);
+			renderer->setRendertarget(&fb);
+			
+			renderer->clear();
+			renderer->beginScene(&scene, cam);
+			
+			renderer->submit(entity);
+			
+			renderer->render();
+			renderer->endScene();
+			renderer->flush();
 
-			SceneRenderer::instance->clear();
-			SceneRenderer::instance->beginScene(&scene, cam);
 
-			SceneRenderer::instance->submit(entity);
+			camEnt.getComponent<Transform_s>() = cam->getView().inverse().getMatrix();
 
-			SceneRenderer::instance->render();
+			float angle = getAngle(cam->getPosition(), cam->getPosition() + glm::vec3(0.0f, 0.0f, 0.1f), cam1->getPosition());
+			camEnt.getComponent<Transform_s>().rotate(-angle, { 0.0f, 1.0f, 0.0f });
 
-			SceneRenderer::instance->endScene();
-			SceneRenderer::instance->flush();
+
+			renderer->setRendertarget(&fb1);
+			
+			renderer->clear();
+			renderer->beginScene(&scene, cam1);
+			
+			renderer->submit(entity);
+			renderer->submit(camEnt);
+			
+			renderer->render();
+			renderer->endScene();
+			renderer->flush();
+
 
 
 			Gui::instance->render();
@@ -539,19 +593,17 @@ int main() {
 			renderTimer -= targetDelta;
 		}
 
-		if (window->shouldClose()) {
-			break;
-		}
+
 	}
 
-	SceneRenderer::deleteInstance();
 
 
 	delete window;
-
-	Renderer::deleteInstance();
 	Gui::terminate();
+
+	SceneRenderer::deleteInstance();
 	Input::terminate();
+	
 	GLRenderAPI::terminate();
 
 	return 0;

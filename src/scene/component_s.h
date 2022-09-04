@@ -1,9 +1,13 @@
 #pragma once
 
 
+#include "../audio/openal/audiobuffer.h"
+
 #include "../gfx/opengl/buffers.h"
 #include "../gfx/opengl/gltexture.h"
 #include "../gfx/opengl/glshader.h"
+
+#include "../ptr.h"
 
 #include "../entity/component/material/uniform.h"
 
@@ -57,10 +61,10 @@ namespace archt {
 
 	struct Material_s {
 
-		GLTexture* tex;
+		ptr<GLTexture>tex;
 		Uniform* uniforms = nullptr;
 		int uniformCount = 0;
-		GLShader shader;
+		ptr<GLShader> shader;
 
 		Material_s();
 		Material_s(const Material_s& other);
@@ -68,7 +72,6 @@ namespace archt {
 		Material_s(const std::string& texturePath, const std::string& uniformsPath, const std::string& shaderPath);
 		~Material_s();
 
-		inline  GLShader* getShader()  { return &shader; }
 	};
 
 	struct Tag {
@@ -80,6 +83,18 @@ namespace archt {
 		//Tag(Tag&& other) noexcept;
 		Tag(const std::string& tag);
 		~Tag();
+
+	};
+
+
+	struct AudioSource_s {
+
+		ptr<AudioBuffer> buffer = nullptr;
+
+
+		AudioSource_s();
+		AudioSource_s(ptr<AudioBuffer> buffer);
+		~AudioSource_s();
 
 	};
 

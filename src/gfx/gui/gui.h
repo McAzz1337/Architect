@@ -19,6 +19,7 @@ namespace archt {
 	private:
 
 		GuiWindow* styleWindow = nullptr;
+		GuiWindow* focusedWindow = nullptr;
 
 		std::vector<GuiWindow*> constantWindows;
 		std::vector<GuiWindow*> perFrameWindows;
@@ -66,10 +67,10 @@ namespace archt {
 		}
 
 		// closable windows------------------------------------------------
-		template <typename F, typename = void, typename = bool*>
+		template <typename F, typename = void, typename = bool*, typename = GuiWindow*>
 		GuiWindow* addGuiWindow_s(F&& f) {
 
-			constantWindows.push_back(new GuiWindowVoid_s(((std::function<void(bool*)>) f)));
+			constantWindows.push_back(new GuiWindowVoid_s(((std::function<void(bool*, GuiWindow*)>) f)));
 			return constantWindows[constantWindows.size() - 1];
 		}
 
@@ -88,6 +89,10 @@ namespace archt {
 		bool hasWindow(const char* name) const;
 
 		void createStyleWindow();
+
+		inline GuiWindow* getFocusedWindow() const { return focusedWindow; }
+
+		void setFocusedWindow(GuiWindow* window);
 
 	private:
 		void renderDocked();

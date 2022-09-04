@@ -4,8 +4,16 @@
 #include <sstream>
 #include <iostream>
 
+#ifdef ARCHT_DEBUG
+
 #define AL_ASSERT(x) if (x) {__debugbreak();}
 #define AL_CALL(x) archt::clearAlError(); x; AL_ASSERT(archt::checkAlError(#x, __FILE__, __LINE__))
+
+#else
+
+#define AL_CALL(x) x;
+
+#endif
 
 namespace archt {
 

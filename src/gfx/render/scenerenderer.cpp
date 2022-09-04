@@ -46,9 +46,15 @@ namespace archt {
 		if (!instance) instance = new SceneRenderer();
 	}
 
+	SceneRenderer* SceneRenderer::getInstance() {
+		return instance;
+	}
+
 	void SceneRenderer::deleteInstance() {
-		delete instance;
-		instance = nullptr;
+		if (instance) {
+			delete instance;
+			instance = nullptr;
+		}
 	}
 
 	void SceneRenderer::setRenderSettings() {
@@ -136,7 +142,7 @@ namespace archt {
 
 
 	
-		activeShader = (entities[0].getComponent<Material_s>()).getShader();
+		activeShader = entities[0].getComponent<Material_s>().shader;
 		Transform_s projectionView = cam->getProjectionView().getMatrix(); // todo switch camera
 		
 		for (int i = 0; i < currentEntity; i++) {
@@ -144,7 +150,7 @@ namespace archt {
 			Entity_s* entity = &entities[i];
 			Mesh_s& mesh = entity->getComponent<Mesh_s>();
 			Material_s& material = entity->getComponent<Material_s>();
-			GLTexture* tex = material.tex;
+			ptr<GLTexture> tex = material.tex;
 		
 			VBO* vb = mesh.vbo;
 			IBO* ib = mesh.ibo;
@@ -154,14 +160,14 @@ namespace archt {
 		
 			int texSlot = fetchTextureSlot(tex->getId());
 		
-			if (activeShader != material.getShader() ||
+			if (activeShader != material.shader ||
 				(texSlot == RENDERER_NONE_FOUND && currentTexture == GLRenderAPI::maxTextures) ||
 				currentVertex + vSize >= MAX_VERTECES ||
 				currentIndex + iSize >= MAX_INDECES) {
 		
 				draw();
 				endBatch();
-				activeShader = material.getShader();
+				activeShader = material.shader;
 			}
 		
 			if (texSlot == -1) {
@@ -199,8 +205,8 @@ namespace archt {
 		
 
 		for (int i = 0; i < currentEntity - 1; i++) {
-			GLShader* shader = entities[i].getComponent<Material_s>().getShader();
-			GLShader* nextShader = entities[i].getComponent<Material_s>().getShader();
+			ptr<GLShader> shader = entities[i].getComponent<Material_s>().shader;
+			ptr<GLShader> nextShader = entities[i].getComponent<Material_s>().shader;
 
 			if (nextShader == shader)
 				continue;
@@ -215,10 +221,10 @@ namespace archt {
 		}
 	}
 
-	int SceneRenderer::findShaderMatch(int start, GLShader* shader) {
+	int SceneRenderer::findShaderMatch(int start, ptr<GLShader> shader) {
 		
 		for (int i = start; i < currentEntity; i++) {
-			GLShader* nextShader = entities[i].getComponent<Material_s>().getShader();
+			ptr<GLShader> nextShader = entities[i].getComponent<Material_s>().shader;
 			if (nextShader == shader) {
 				return i;
 			}

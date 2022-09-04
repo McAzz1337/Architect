@@ -44,7 +44,7 @@ namespace archt {
 		inline const VBO& getVBO() const { return vbo; }
 		inline const IBO& getIBO() const { return ibo; }
 		inline GLTexture* getTexture() const { return tex; }
-
+		inline GuiWindow* getGuiWindow() const { return guiWindow; }
 
 	};
 

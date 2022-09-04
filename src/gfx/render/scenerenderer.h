@@ -17,8 +17,8 @@ namespace archt {
 
 	class SceneRenderer {
 
-	public:
 		static SceneRenderer* instance;
+
 
 		static const int MAX_ENTITIES;
 		static const int MAX_VERTECES;
@@ -42,7 +42,7 @@ namespace archt {
 		uint32_t currentVertex = 0;
 		uint32_t currentIndex = 0;
 
-		GLShader* activeShader = nullptr;
+		ptr<GLShader> activeShader = nullptr;
 
 		VBO* vbo = nullptr;
 		IBO* ibo = nullptr;
@@ -55,6 +55,7 @@ namespace archt {
 	public:
 
 		static void createInstance();
+		static SceneRenderer* getInstance();
 		static void deleteInstance();
 
 		void setRenderSettings();
@@ -76,7 +77,7 @@ namespace archt {
 		void endBatch();
 
 		void sort();
-		int findShaderMatch(int start, GLShader* shader);
+		int findShaderMatch(int start, ptr<GLShader> shader);
 
 		void draw();
 

@@ -36,6 +36,7 @@ namespace archt {
 
 	GLWindow* GLRenderAPI::init() {
 
+		
 		if (glfwInit() != GLFW_TRUE) {
 			printf("Failed to initialize GLFW!\n");
 			__debugbreak();
@@ -96,7 +97,7 @@ namespace archt {
 	}
 
 	void GLRenderAPI::terminate() {
-		glfwTerminate();
+		CALL(glfwTerminate());
 	}
 
 	void GLRenderAPI::enable(uint32_t feature) {

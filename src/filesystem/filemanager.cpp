@@ -1,146 +1,103 @@
 #include "filemanager.h"
+
 #include "../fileio.h"
 
+#include "../gfx/gui/gui.h"
 
 namespace archt {
-#define MAKE_ENTRY_STATIC(path, type) std::make_pair(path, std::make_pair(type(path), 1))
-#define MAKE_ENTTRY_DYNAMIC(path, type) std::make_pair(path, std::make_pair(new type(path), 1))
-
-//#define TRACK_ALLOCATED_MEMORY
-#ifdef TRACK_ALLOCATED_MEMORY
-
-#define INCREASE_ALLOCATED_MEMORY(ref, path) if (ref)\
-												allocatedMemory += requestFileSize(path)
-
-#define DECREASE_ALLOCATED_MEMORY(ref, path) if (ref)\
-												allocatedMemory -= requestFileSize(path)
-
-#else
-
-#define INCREASE_ALLOCATED_MEMORY(ref, path)
-#define DECREASE_ALLOCATED_MEMORY(ref, path)
-
-#endif
+	
+	Filemanager Filemanager::instance;
 
 
-	FileManager FileManager::instance;
-
-
-	FileManager::FileManager() {
+	Filemanager::Filemanager() {
+	
+	}
+	
+	Filemanager::~Filemanager() {
+		
 	}
 
-	FileManager::~FileManager() {
-
-	}
-
-
-
-	void* FileManager::loadFile(const std::string& path, FileType type) {
-
-		void* ref = nullptr;
-		switch (type) {
-			
-			case GL_SHADER_T: 
-			if (!shaderFiles.contains(path)) {
-				shaderFiles.insert(MAKE_ENTRY_STATIC(path, GLShader));
-			}
-			else {
-				shaderFiles[path].second++;
-			}
-			ref = (void*) &shaderFiles[path].first;
-			break;
-			
-			case GL_TEXTURE_T: 
-			if (!textureFiles.contains(path)) {
-				textureFiles.insert(MAKE_ENTTRY_DYNAMIC(path, GLTexture));
-			}
-			else {
-				textureFiles[path].second++;
-			}
-			ref = (void*) textureFiles[path].first;
-			break;
-
-			default: 
-				return ref;
-
+	void Filemanager::deleteUnusedFiles() {
+		
+		for (auto& shader : shaderFiles) {
+			if (shader.second.use_count() == 1)
+				shaderFiles.erase(shader.first);
 		}
 
-		INCREASE_ALLOCATED_MEMORY(ref, path);
+		for (auto& texture : textureFiles) {
+			if (texture.second.use_count() == 1)
+				textureFiles.erase(texture.first);
+		}
 
+		for (auto& buffer : audioFiles) {
+			if (buffer.second.use_count() == 1)
+				audioFiles.erase(buffer.first);
+		}
 
-		return ref;
 	}
 
-	void FileManager::deleteFile(const std::string& path, FileType type) {
+	void Filemanager::createGuiWindow() {
 		
-		void* ref = nullptr;
-		switch (type) {
+		auto lambda = [this](bool* open, GuiWindow* window) {
+
+			ImGui::Begin("Filemanager", open);
+
+			ImGui::BeginTabBar("Tabs");
+
 			
-			case GL_SHADER_T:
-			if (shaderFiles.contains(path)) {
-				if (shaderFiles[path].second == 1) {
-					ref = &shaderFiles[path].first;
-					shaderFiles.erase(path);
-				}
-				else {
-					shaderFiles[path].second--;
-				}
-			}
-			break;
+			if (ImGui::BeginTabItem("Shaders")) {
+				
+				ImGui::Text("Count = %i", shaderFiles.size());
 
-			case GL_TEXTURE_T:
-			if (textureFiles.contains(path)) {
-				if (textureFiles[path].second == 1) {
-					ref = &textureFiles[path].first;
-					textureFiles.erase(path);
-				}
-				else {
-					textureFiles[path].second--;
-				}
-			}
-			break;
-		}
+				for (auto& shader : shaderFiles) {
+					std::string header = "";
+					extractFileName(shader.second->getFilePath(), header, '/');
 
-		DECREASE_ALLOCATED_MEMORY(ref, path);
+					if (ImGui::CollapsingHeader(header.c_str())) {
+						if (ImGui::CollapsingHeader("Vertex source")) {
+							ImGui::Text(shader.second->getVertexSource().c_str());
+						}
+						const std::string& gsrc = shader.second->getGeometrySource();
+						if (gsrc.size() > 0) {
+							if (ImGui::CollapsingHeader("Geometry source")) {
+								ImGui::Text(gsrc.c_str());
+							}
+						}
+						if (ImGui::CollapsingHeader("Fragment source")) {
+							ImGui::Text(shader.second->getFragmentSource().c_str());
+						}
+					}
+
+				}
+
+				ImGui::EndTabItem();
+			}
+			
+			if (ImGui::BeginTabItem("Textures")) {
+
+				ImGui::Text("Count = %i", textureFiles.size());
+
+				for (auto& tex : textureFiles) {
+					std::string header = "";
+					extractFileName(tex.second->getFilePath(), header, '/');
+					if (ImGui::CollapsingHeader(header.c_str())) {
+						glm::vec2 s = tex.second->getSize();
+						ImVec2 size = { s.x, s.y };
+						ImGui::Image((ImTextureID) tex.second->getId(), size, { 0, 1 }, { 1, 0 });
+					}
+				}
+
+				ImGui::EndTabItem();
+			}
+			ImGui::EndTabBar();
+
+			ImGui::End();
+
+		};
+		Gui::instance->addGuiWindow_s(lambda);
 	}
-
-	void FileManager::deleteAllFiles() {
-		
-		shaderFiles.erase(shaderFiles.begin(), shaderFiles.end());
-		
-		textureFiles.erase(textureFiles.begin(), textureFiles.end());
+	
+	Filemanager& Filemanager::getInstance() {
+		return instance;
 	}
-
-	void FileManager::logAllocateMemory(DataType type) const {
-		
-#ifdef TRACK_ALLOCATED_MEMORY
-		printf("Total allocated memory from files : ");
-
-		switch (type) {
-			case BYTES:
-			{
-				printf("%ui bytes\n", (uint32_t)allocatedMemory);
-				break;
-			}
-			case KILO_BYTES: {
-				double size = allocatedMemory / 1000.0;
-				printf("%f kilobytes\n", size);
-				break;
-			}
-			case MEGA_BYTES: {
-				double size = allocatedMemory / 1000000.0f;
-				printf("%f megabytes\n", size);
-				break;
-			}
-			case GIGA_BYTES: {
-				double size = allocatedMemory / 1000000000.0f;
-				printf("%f gigabytes\n", size);
-				break;
-			}
-		}
-#endif
-
-	}
-
-
 }

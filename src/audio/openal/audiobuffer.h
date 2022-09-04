@@ -39,6 +39,7 @@ namespace archt {
 
 
 		inline uint32_t getId() const { return id; }
+		inline std::string getFilePath() const { return file; }
 
 	private:
 		static uint16_t* loadWaveFile(const std::string& path, WaveHeader& header);
