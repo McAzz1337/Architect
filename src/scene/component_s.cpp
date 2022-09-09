@@ -175,12 +175,13 @@ namespace archt {
 		buffers.push_back(fm.loadFile<AudioBuffer>(path));
 	}
 
-	AudioComponent::AudioComponent(const std::vector<const std::string&>& paths) {
+	AudioComponent::AudioComponent(const std::vector<std::string>& paths) {
 		Filemanager& fm = Filemanager::getInstance();
 
-		buffers.reserve(paths.size());
-		for (const std::string& path : paths) {
-			buffers.push_back(fm.loadFile<AudioBuffer>(path));
+		//buffers.reserve(paths.size());
+		for (const auto& path : paths) {
+			ptr<AudioBuffer> buf = fm.loadFile<AudioBuffer>(path);
+			buffers.emplace_back(buf);
 		}
 	}
 

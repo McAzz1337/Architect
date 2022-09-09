@@ -2,10 +2,9 @@
 
 
 namespace archt {
-
-
+    
+    
     GuiWindow::~GuiWindow() {
-
     }
 
    
@@ -18,7 +17,8 @@ namespace archt {
 
 
 
-    GuiWindowVoid_s::GuiWindowVoid_s(std::function<void(bool*, GuiWindow*)> func) : f(func) {}
+    GuiWindowVoid_s::GuiWindowVoid_s(std::function<void(bool*, GuiWindow*)> func) 
+        : f(func) {}
 
     void GuiWindowVoid_s::render() {
         f(&open, this);

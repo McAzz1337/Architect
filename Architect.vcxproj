@@ -106,6 +106,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)vendor/glm;$(ProjectDir)vendor/glfw/include;$(ProjectDir)vendor/glew/include;$(ProjectDir)vendor/assimp/include;$(ProjectDir)vendor/openal/include;$(ProjectDir)vendor/entt/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerOutput>All</AssemblerOutput>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,6 +154,8 @@
     <ClCompile Include="src\filesystem\filemanager.cpp" />
     <ClCompile Include="src\gfx\gui\guiwindow.cpp" />
     <ClCompile Include="src\gfx\gui\gui.cpp" />
+    <ClCompile Include="src\gfx\gui\guiwindow_s.cpp" />
+    <ClCompile Include="src\gfx\gui\gui_s.cpp" />
     <ClCompile Include="src\gfx\opengl\buffers.cpp" />
     <ClCompile Include="src\gfx\opengl\camera.cpp" />
     <ClCompile Include="src\gfx\opengl\framebuffer.cpp" />
@@ -173,10 +176,13 @@
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\math\rayequation.cpp" />
     <ClCompile Include="src\math\soe2.cpp" />
+    <ClCompile Include="src\math\vectormath.cpp" />
     <ClCompile Include="src\platform\windows\window.cpp" />
     <ClCompile Include="src\scene\component_s.cpp" />
     <ClCompile Include="src\scene\entity_s.cpp" />
     <ClCompile Include="src\scene\scene.cpp" />
+    <ClCompile Include="src\scheduler\scheduledtask.cpp" />
+    <ClCompile Include="src\scheduler\scheduler.cpp" />
     <ClCompile Include="src\stb\stb\stbi_image_write.c" />
     <ClCompile Include="src\stb\stb\stb_image.c" />
     <ClCompile Include="src\chronos\timer.cpp" />
@@ -214,6 +220,8 @@
     <ClInclude Include="src\filesystem\filemanager.h" />
     <ClInclude Include="src\gfx\gui\guiwindow.h" />
     <ClInclude Include="src\gfx\gui\gui.h" />
+    <ClInclude Include="src\gfx\gui\guiwindow_s.h" />
+    <ClInclude Include="src\gfx\gui\gui_s.h" />
     <ClInclude Include="src\gfx\opengl\buffers.h" />
     <ClInclude Include="src\gfx\opengl\camera.h" />
     <ClInclude Include="src\gfx\opengl\gldebug.h" />
@@ -236,11 +244,13 @@
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\math\rayequation.h" />
     <ClInclude Include="src\math\soe2.h" />
+    <ClInclude Include="src\math\vectormath.h" />
     <ClInclude Include="src\platform\windows\window.h" />
     <ClInclude Include="src\scene\component_s.h" />
     <ClInclude Include="src\scene\entity_s.h" />
     <ClInclude Include="src\scene\scene.h" />
     <ClInclude Include="src\scheduler\scheduledtask.h" />
+    <ClInclude Include="src\scheduler\scheduler.h" />
     <ClInclude Include="src\stb\stb\stbi_image_write.h" />
     <ClInclude Include="src\stb\stb\stb_image.h" />
     <ClInclude Include="src\system\systeminfo.h" />

@@ -294,11 +294,15 @@ int main() {
 #endif
 
 	GLWindow* window = GLRenderAPI::init();
-	Gui::init(window);
+	Gui_s::init(window);
 	GLRenderAPI::createGuiInfoWindow();
 	system_info::createSysteminfoWindow();
 
+	auto task = []() {
+		printf("scheduled task invoked::void\n");
+	};
 
+	Scheduler::getInstance().submitTask(10000.0f, task);
 
 	Input::init();
 
@@ -334,6 +338,8 @@ int main() {
 			Vertex({  0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 1.0f, 1.0f}, 0.0f, 0.0f),
 			Vertex({ -0.5f, -0.5f, 0.0f }, {0.0f, 0.0f, 0.0f}, { 0.0f, 1.0f}, 0.0f, 0.0f)
 		};
+
+
 
 
 		uint32_t iSize = 6;
@@ -372,7 +378,7 @@ int main() {
 
 	{
 
-		auto lambda = [&entity, &cam](bool* open, GuiWindow* handle) {
+		auto lambda = [&entity, &cam](bool* open, GuiWindow_s* handle) {
 
 			ImGui::Begin("Entity", open);
 
@@ -432,7 +438,7 @@ int main() {
 			ImGui::End();
 
 		};
-		Gui::instance->addGuiWindow_s(lambda);
+		Gui_s::getInstance()->addGuiWindow_void(lambda);
 	}
 
 
@@ -455,7 +461,7 @@ int main() {
 	{ 
 		renderTimer += deltaTime;
 		auto lambda = [&renderTimer, &targetFps, &targetDelta, &deltaTime, &frames, &highestFps]
-											(bool* open, GuiWindow* handle) {
+											(bool* open, GuiWindow_s* handle) {
 			ImGui::Begin("Frames", open);
 			std::string fileName = "";
 			extractFileName(__FILE__, fileName, '\\');
@@ -473,7 +479,7 @@ int main() {
 
 			ImGui::End();
 		};
-		Gui::instance->addGuiWindow_s(lambda);
+		Gui_s::getInstance()->addGuiWindow_void(lambda);
 	}
 
 #ifdef SPLASH_SCREEN
@@ -511,10 +517,10 @@ int main() {
 #pragma region CAMERA_CONTROLS
 		
 		ptr<Camera_new> controlledCamera = nullptr;
-		if (fb.getGuiWindow() == Gui::instance->getFocusedWindow()) {
+		if (fb.getGuiWindow() == Gui_s::getInstance()->getFocusedWindow()) {
 			controlledCamera = cam;
 		}
-		else if (fb1.getGuiWindow() == Gui::instance->getFocusedWindow()) {
+		else if (fb1.getGuiWindow() == Gui_s::getInstance()->getFocusedWindow()) {
 			controlledCamera = cam1;
 		}
 
@@ -585,13 +591,17 @@ int main() {
 
 
 
-			Gui::instance->render();
+			Gui_s::getInstance()->render();
 
 
 			window->swapBuffer();
 			frames++;
 			renderTimer -= targetDelta;
+			
+			
 		}
+		
+		Scheduler::getInstance().dispatchTasks();
 
 
 	}
@@ -599,7 +609,7 @@ int main() {
 
 
 	delete window;
-	Gui::terminate();
+	Gui_s::terminate();
 
 	SceneRenderer::deleteInstance();
 	Input::terminate();

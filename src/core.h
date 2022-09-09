@@ -17,13 +17,13 @@
 #include "gfx/render/renderer2d.h"
 #include "gfx/render/scenerenderer.h"
 
-#include "gfx/gui/gui.h"
-#include "gfx/gui/guiwindow.h"
+#include "gfx/gui/gui_s.h"
+#include "gfx/gui/guiwindow_s.h"
 
 #include "input/input.h"
 
 #include "math/rayequation.h"
-
+#include "math/vectormath.h"
 
 
 #include "entity/entity.h"
@@ -35,6 +35,8 @@
 #include "scene/scene.h"
 #include "scene/entity_s.h"
 #include "scene/component_s.h"
+
+#include "scheduler/scheduler.h"
 
 #include "system/systeminfo.h"
 

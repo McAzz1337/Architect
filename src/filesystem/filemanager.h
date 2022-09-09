@@ -9,10 +9,14 @@
 
 #include "../ptr.h"
 
+#include "../gfx/gui/guiwindow_s.h"
+
 
 namespace archt {
 
+
 	class Filemanager {
+
 
 		static Filemanager instance;
 
@@ -23,6 +27,7 @@ namespace archt {
 		std::unordered_map<std::string, ptr<GLTexture>> textureFiles;
 		std::unordered_map<std::string, ptr<AudioBuffer>> audioFiles;
 
+		GuiWindow_s* guiWindow = nullptr;
 
 		Filemanager();
 		~Filemanager();

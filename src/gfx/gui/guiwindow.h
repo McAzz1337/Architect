@@ -8,6 +8,8 @@
 
 namespace archt {
 
+	using Closecallback = void(*)();
+
 	class GuiWindow {
 
 	protected:
@@ -15,7 +17,9 @@ namespace archt {
 
 	public:
 		GuiWindow() = default;
+
 		virtual ~GuiWindow();
+		
 		virtual void render() = 0;
 
 		inline operator bool() const { return open; }
@@ -68,7 +72,6 @@ namespace archt {
 
 		std::function<void(bool*, GuiWindow*)> f;
 	public:
-		GuiWindowVoid_s() = default;
 		GuiWindowVoid_s(std::function<void(bool*, GuiWindow*)> func);
 
 		void render() override;
@@ -82,10 +85,13 @@ namespace archt {
 		std::tuple<bool*, GuiWindow*, Ts...> args;
 	public:
 
-		template <typename FwdF, typename... FwdTs,
+		template <typename FwdF, 
+			typename... FwdTs,
 			typename = std::enable_if_t<(std::is_convertible_v<FwdTs&&, Ts> && ...)>>
+			
 			GuiWindowArgs_s(FwdF&& func, FwdTs&&... args)
-			: f(std::forward<FwdF>(func)),
+			
+			:f(std::forward<FwdF>(func)),
 			args{&open, this, std::forward<FwdTs>(args)... } {
 			
 		}

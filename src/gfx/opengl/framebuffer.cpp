@@ -3,7 +3,7 @@
 #include "glinclude.h"
 #include "gldebug.h"
 #include "glrenderapi.h"
-#include "../gui/gui.h"
+#include "../gui/gui_s.h"
 
 namespace archt {
 
@@ -51,14 +51,14 @@ namespace archt {
 		vbo.setVerteces(verteces, vSize);
 		ibo.setIndeces(indeces, iSize);
 
-		auto lambda = [this](bool* open, GuiWindow* handle) {
+		auto lambda = [this](bool* open, GuiWindow_s* handle) {
 
 
 			std::string windowName = "Framebuffer " + std::to_string(id);
 			ImGui::Begin(windowName.c_str());
 
 			if (ImGui::IsWindowFocused()) {
-				Gui::instance->setFocusedWindow(handle);
+				Gui_s::getInstance()->setFocusedWindow(handle);
 			}
 
 			ImVec2 textureSize(w, h);
@@ -86,7 +86,7 @@ namespace archt {
 
 
 		};
-		guiWindow = Gui::instance->addGuiWindow_s(lambda);
+		guiWindow = Gui_s::getInstance()->addGuiWindow_void(lambda);
 	}
 
 	Framebuffer::~Framebuffer() {

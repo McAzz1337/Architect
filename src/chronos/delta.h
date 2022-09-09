@@ -41,14 +41,14 @@ namespace archt {
 		float getDelta(archt_time& time, bool outputNewTime = true) {
 
 			archt_time now = std::chrono::system_clock::now();
-			uint64_t delta = (float) std::chrono::duration_cast<nanos>(now - time).count();
+			float delta = (float) std::chrono::duration_cast<nanos>(now - time).count();
 			
 			if (outputNewTime) {
 				time = now;
 			}
 
 			if (typeid(T) == typeid(nanos)) {
-				return (float) delta;
+				return delta;
 			}
 			else if (typeid(T) == typeid(micros)) {
 				return (float) delta * 0.001f;

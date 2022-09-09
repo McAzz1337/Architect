@@ -5,7 +5,7 @@
 
 #include "../../scene/component_s.h"
 
-#include "../gui/gui.h"
+#include "../gui/gui_s.h"
 
 namespace archt {
 
@@ -275,7 +275,7 @@ namespace archt {
 			ImGui::End();
 		};
 		
-		Gui::instance->submitWindow(window, ts, currentTransform, currentVertex, currentIndex);
+		//Gui_s::getInstance()->submitWindow(window, ts, currentTransform, currentVertex, currentIndex);
 
 
 		CALL(glDrawElements(GL_TRIANGLES, currentIndex, GL_UNSIGNED_INT, nullptr));

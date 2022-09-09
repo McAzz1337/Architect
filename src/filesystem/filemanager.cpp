@@ -2,10 +2,11 @@
 
 #include "../fileio.h"
 
-#include "../gfx/gui/gui.h"
+#include "../gfx/gui/gui_s.h"
 
 namespace archt {
 	
+
 	Filemanager Filemanager::instance;
 
 
@@ -38,12 +39,17 @@ namespace archt {
 
 	void Filemanager::createGuiWindow() {
 		
-		auto lambda = [this](bool* open, GuiWindow* window) {
+		if (guiWindow) {
+			return;
+		}
+
+		auto lambda = [this](bool* open, GuiWindow_s* window) {
 
 			ImGui::Begin("Filemanager", open);
 
 			ImGui::BeginTabBar("Tabs");
 
+			
 			
 			if (ImGui::BeginTabItem("Shaders")) {
 				
@@ -94,7 +100,8 @@ namespace archt {
 			ImGui::End();
 
 		};
-		Gui::instance->addGuiWindow_s(lambda);
+
+		guiWindow = Gui_s::getInstance()->addGuiWindow_void(lambda);
 	}
 	
 	Filemanager& Filemanager::getInstance() {

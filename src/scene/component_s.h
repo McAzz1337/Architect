@@ -95,7 +95,7 @@ namespace archt {
 
 		AudioComponent();
 		AudioComponent(const std::string& path);
-		AudioComponent(const std::vector<const std::string&>& paths);
+		AudioComponent(const std::vector<std::string>& paths);
 
 		~AudioComponent();
 

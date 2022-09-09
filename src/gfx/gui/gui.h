@@ -77,7 +77,7 @@ namespace archt {
 		template <typename F, typename... Args>
 		GuiWindow* addGuiWindow_s(F&& f, Args&&... args) {
 
-			constantWindows.push_back(createGuiWindowArgs_s(f, std::forward<Args>(args)...));
+			constantWindows.push_back(createGuiWindowArgs_s(f,  std::forward<Args>(args)...));
 			return constantWindows[constantWindows.size() - 1];
 		}
 

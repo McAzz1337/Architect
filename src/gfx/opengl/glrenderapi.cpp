@@ -7,7 +7,7 @@
 
 #include "../../vendor/imgui/imgui.h"
 
-#include "../gui/gui.h"
+#include "../gui/gui_s.h"
 
 #include "../../stb/stb/stb_image.h"
 
@@ -154,7 +154,7 @@ namespace archt {
 
 	void GLRenderAPI::createGuiInfoWindow() {
 	
-		auto window = []() {
+		auto window = [](bool* open, GuiWindow_s* handle) {
 			ImGui::Begin("Video card info");
 
 			ImVec4 green = { 0.0f, 1.0f, 0.0f, 1.0f };
@@ -194,7 +194,7 @@ namespace archt {
 			ImGui::End();
 		};
 
-		Gui::instance->addGuiWindow(window);
+		Gui_s::getInstance()->addGuiWindow_void(window);
 	}
 
 	void GLRenderAPI::setViewport(const glm::vec4& v) {

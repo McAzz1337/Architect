@@ -1,6 +1,6 @@
 #include "camera_new.h"
 
-#include "../../gfx/gui/gui.h"
+#include "../../gfx/gui/gui_s.h"
 #include "../../entity/component/mesh.h"
 
 namespace archt {
@@ -17,7 +17,7 @@ namespace archt {
 		translate({ 0.0f, 0.0f, -1.0f });
 
 
-		auto lambda = [this]() {
+		auto lambda = [this](bool* open, GuiWindow_s* handle) {
 			ImGui::Begin("Camera");
 
 			ImGui::Text("Matrix:");
@@ -32,7 +32,7 @@ namespace archt {
 
 			ImGui::End();
 		};
-		Gui::instance->addGuiWindow(lambda);
+		Gui_s::getInstance()->addGuiWindow_void(lambda);
 
 	}
 

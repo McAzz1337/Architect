@@ -13,7 +13,7 @@
 #include "../../fileio.h"
 
 
-#include "../gui/gui.h"
+#include "../gui/gui_s.h"
 
 namespace archt {
 
@@ -63,7 +63,7 @@ namespace archt {
 		}
 
 
-		auto lambda = [this]() {
+		auto lambda = [this](bool* open, GuiWindow_s* handle) {
 			if (!t || !v || !ibo_ptr) {
 				return;
 			}
@@ -85,7 +85,7 @@ namespace archt {
 
 			ImGui::End();
 		};
-		Gui::instance->addGuiWindow(lambda);
+		Gui_s::getInstance()->addGuiWindow_void(lambda);
 	}
 
 	Renderer2D::~Renderer2D() {

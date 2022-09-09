@@ -1,4 +1,4 @@
-#include "gui.h"
+#include "gui_s.h"
 
 #include "../../filesystem/filemanager.h"
 
@@ -6,11 +6,10 @@
 
 #include <sstream>
 
-#define ARCHT_VALUE_TO_SYMBOL(x) #x
 
 namespace archt {
 
-	std::string symbols_old[ImGuiCol_COUNT] = {
+	std::string symbols[ImGuiCol_COUNT] = {
 		 "ImGuiCol_Text",
 		 "ImGuiCol_TextDisabled",
 		 "ImGuiCol_WindowBg",
@@ -71,12 +70,12 @@ namespace archt {
 
 
 
-	Gui* Gui::instance = nullptr;
+	Gui_s* Gui_s::instance = nullptr;
 
-	const std::string Gui::styleFile = "src/assets/styles/style.txt";
+	const std::string Gui_s::styleFile = "src/assets/styles/style.txt";
 
 
-	Gui::Gui(glm::ivec2 windowSize) {
+	Gui_s::Gui_s(glm::ivec2 windowSize) {
 		ImGuiIO& io = ImGui::GetIO();
 		(void) io;
 		io.DisplaySize.x = windowSize.x;
@@ -92,18 +91,18 @@ namespace archt {
 		//createStyleWindow();
 	}
 
-	Gui::~Gui() {
-		for (GuiWindow* w : constantWindows)
+	Gui_s::~Gui_s() {
+		for (GuiWindow_s* w : constantWindows)
 			delete w;
 
-		for (GuiWindow* w : perFrameWindows)
+		for (GuiWindow_s* w : perFrameWindows)
 			delete w;
 
 		if (styleWindow)
 			delete styleWindow;
 	}
 
-	void Gui::init(GLWindow* window) {
+	void Gui_s::init(GLWindow* window) {
 
 		if (instance)
 			return;
@@ -120,12 +119,16 @@ namespace archt {
 		ImGui_ImplGlfw_InitForOpenGL(window->getHandle(), true);
 		ImGui::StyleColorsDark();
 		glm::ivec2 windowSize = window->getSize();
-		instance = new Gui(windowSize);
+		instance = new Gui_s(windowSize);
 
 		setStyle();
 	}
 
-	void Gui::setStyle() {
+	Gui_s* Gui_s::getInstance() {
+		return instance;
+	}
+
+	void Gui_s::setStyle() {
 
 
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -157,7 +160,7 @@ namespace archt {
 
 	}
 
-	void Gui::terminate() {
+	void Gui_s::terminate() {
 
 		if (instance) {
 			delete instance;
@@ -168,7 +171,7 @@ namespace archt {
 		ImGui_ImplOpenGL3_Shutdown();
 	}
 
-	void Gui::render() {
+	void Gui_s::render() {
 
 		if (docked)
 			renderDocked();
@@ -177,15 +180,15 @@ namespace archt {
 	}
 
 
-	void Gui::removeWindow(GuiWindow* window) {
+	void Gui_s::removeWindow(GuiWindow_s* window) {
 		for (int i = 0; i < constantWindows.size(); i++) {
-			
+
 			if (constantWindows[i] == window) {
-				
+
 				if (constantWindows[i] == focusedWindow) {
 					focusedWindow = nullptr;
 				}
-			
+
 				constantWindows.erase(constantWindows.begin() + i);
 				constantWindows.shrink_to_fit();
 				break;
@@ -193,20 +196,21 @@ namespace archt {
 		}
 	}
 
-	void Gui::setDockingMode(bool mode) {
+	void Gui_s::setDockingMode(bool mode) {
 		docked = mode;
 	}
 
-	bool Gui::hasWindow(const char* name) const {
+	bool Gui_s::hasWindow(const char* name) const {
 		return false;
 	}
 
-	void Gui::createStyleWindow() {
+	void Gui_s::createStyleWindow() {
+
+		
+
+		auto lambda = [this](bool* open, GuiWindow_s* handle) {
 
 
-		auto lambda = [this](bool* open, GuiWindow* handle) {
-
-			
 
 			ImGuiStyle& style = ImGui::GetStyle();
 			ImGui::Begin("Style", open);
@@ -214,28 +218,33 @@ namespace archt {
 			if (!(*open)) {
 				styleWindow = nullptr;
 			}
-			
+
 			for (int i = 0; i < ImGuiCol_COUNT; i++) {
 				//ImGui::SliderFloat4(symbols[i].c_str(), &style.Colors[i].x, 0.0f, 1.0f);
 
-				ImVec2 buttonSize = ImGui::CalcTextSize(symbols_old[i].c_str());
+				ImVec2 buttonSize = ImGui::CalcTextSize(symbols[i].c_str());
 				buttonSize.x += 10;
 				buttonSize.y += 10;
-				if (ImGui::Button(symbols_old[i].c_str(), buttonSize)) {
-					auto colorPicker = [this](bool* open, GuiWindow* handle,  int i) {
-						if (ImGui::Begin(symbols_old[i].c_str(), open)) {
+				if (ImGui::Button(symbols[i].c_str(), buttonSize)) {
+					
+
+					auto colorPicker = [this](bool* open, GuiWindow_s* handle, int index) {
+
+						if (ImGui::Begin(symbols[index].c_str(), open)) {
+
 							ImGuiStyle& style = ImGui::GetStyle();
-							ImGui::ColorPicker4(symbols_old[i].c_str(), &style.Colors[i].x);
+							ImGui::ColorPicker4(symbols[index].c_str(), &style.Colors[index].x);
 
 						}
+
 						ImGui::End();
 					};
-					addGuiWindow_s(colorPicker, i);
+					addGuiWindow_args(colorPicker, nullptr, i);
 				}
 				ImGui::SameLine();
-				ImGui::ColorButton(symbols_old[i].c_str(), style.Colors[i], 0, buttonSize);
+				ImGui::ColorButton(symbols[i].c_str(), style.Colors[i], 0, buttonSize);
 				ImGui::SameLine();
-				std::string s = "Reset " + symbols_old[i];
+				std::string s = "Reset " + symbols[i];
 				buttonSize = ImGui::CalcTextSize(s.c_str());
 				buttonSize.y += 10;
 				if (ImGui::Button(s.c_str(), buttonSize)) {
@@ -255,7 +264,7 @@ namespace archt {
 			buttonSize.y += 10;
 			if (ImGui::Button("Save to file", buttonSize)) {
 
-				
+
 				std::stringstream ss;
 				for (int i = 0; i < ImGuiCol_COUNT; i++) {
 
@@ -269,17 +278,18 @@ namespace archt {
 
 			ImGui::End();
 		};
+
 		if (!styleWindow) {
-			styleWindow = addGuiWindow_s(lambda);
+			styleWindow = addGuiWindow_void(lambda);
 		}
 	}
 
-	void Gui::setFocusedWindow(GuiWindow* window) {
-	
+	void Gui_s::setFocusedWindow(GuiWindow_s* window) {
+
 		focusedWindow = window;
 	}
 
-	void Gui::renderDocked() {
+	void Gui_s::renderDocked() {
 
 
 		ImGuiIO& io = ImGui::GetIO();
@@ -373,7 +383,7 @@ namespace archt {
 
 			for (int i = 0; i < constantWindows.size(); i++) {
 				if (constantWindows[i])
-					constantWindows[i]->render();
+					(*constantWindows[i])();
 			}
 
 			for (int i = constantWindows.size() - 1; i > -1; i--) {
@@ -387,8 +397,8 @@ namespace archt {
 			//ImGui::ShowDemoWindow();
 
 
-			for (GuiWindow* w : perFrameWindows) {
-				w->render();
+			for (GuiWindow_s* w : perFrameWindows) {
+				(*w)();
 			}
 			perFrameWindows.erase(perFrameWindows.begin(), perFrameWindows.end());
 			perFrameWindows.shrink_to_fit();
@@ -409,7 +419,7 @@ namespace archt {
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	void Gui::renderUndocked() {
+	void Gui_s::renderUndocked() {
 
 		ImGuiIO& io = ImGui::GetIO();
 		(void) io;
@@ -418,11 +428,11 @@ namespace archt {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		for (GuiWindow* w : constantWindows)
-			w->render();
+		for (GuiWindow_s* w : constantWindows)
+			(*w)();
 
-		for (GuiWindow* w : perFrameWindows) {
-			w->render();
+		for (GuiWindow_s* w : perFrameWindows) {
+			(*w)();
 		}
 		perFrameWindows.erase(perFrameWindows.begin(), perFrameWindows.end());
 		perFrameWindows.shrink_to_fit();

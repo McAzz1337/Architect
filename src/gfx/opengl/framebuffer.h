@@ -7,7 +7,7 @@
 #include <glm/vec2.hpp>
 #include <typeindex>
 
-#include "../gui/guiwindow.h"
+#include "../gui/guiwindow_s.h"
 
 namespace archt {
 
@@ -24,7 +24,7 @@ namespace archt {
 		VBO vbo;
 		IBO ibo;
 
-		GuiWindow* guiWindow = nullptr;
+		GuiWindow_s* guiWindow = nullptr;
 
 	public:
 		Framebuffer() = delete;
@@ -44,7 +44,7 @@ namespace archt {
 		inline const VBO& getVBO() const { return vbo; }
 		inline const IBO& getIBO() const { return ibo; }
 		inline GLTexture* getTexture() const { return tex; }
-		inline GuiWindow* getGuiWindow() const { return guiWindow; }
+		inline GuiWindow_s* getGuiWindow() const { return guiWindow; }
 
 	};
 
