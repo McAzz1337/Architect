@@ -41,7 +41,7 @@ namespace archt {
 		GuiWindow_W(Tw&& func, CloseCallback callback, Argsw&&... arguments)
 			: GuiWindow_s(callback),
 				function(std::forward<Tw>(func)),
-				args{ &open, (GuiWindow_s*) this, std::forward<Argsw>(arguments)... } {
+				args{ &open, this, std::forward<Argsw>(arguments)... } {
 		}
 
 		~GuiWindow_W() {
